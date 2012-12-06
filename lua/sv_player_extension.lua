@@ -90,15 +90,22 @@ end
 -- buy/sell items
 
 function Player:PS_BuyItem(item_id)
-	if not PS.Items[item_id] then return false end
-	if not self:PS_HasPoints(PS.Items[item_id].Price) then return false end
 	
-	if not self:IsAdmin() and PS.Items[item_id].AdminOnly then
+	local ITEM = PS.Items[item_id]
+
+	if not ITEM then return false end
+
+	if not self:PS_HasPoints(ITEM.Price) then return false end
+	
+	if not self:IsAdmin() and ITEM.AdminOnly then
 		self:PS_Notify('This item is Admin only!')
 		return false
 	end
-	
-	local ITEM = PS.Items[item_id]
+
+	if ITEM.SingleShipment and ITEM.VerifySingleShipment and not ITEM:VerifySingleShipment(self) then
+		self:PS_Notify('This item can not be bought right now!')
+		return false
+	end
 	
 	self:PS_TakePoints(ITEM.Price)
 	
@@ -106,6 +113,10 @@ function Player:PS_BuyItem(item_id)
 	
 	ITEM:OnBuy(self)
 	
+	if ITEM.SingleShipment then
+		ITEM:OnEquip(self)
+		return true
+	end
 	return self:PS_GiveItem(item_id)
 end
 
