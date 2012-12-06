@@ -102,9 +102,13 @@ function Player:PS_BuyItem(item_id)
 		return false
 	end
 
-	if ITEM.SingleShipment and ITEM.VerifySingleShipment and not ITEM:VerifySingleShipment(self) then
-		self:PS_Notify('This item can not be bought right now!')
-		return false
+	if ITEM.SingleShipment and ITEM.VerifySingleShipment then -- Is a single shipment and has a func to verify if it's okay to ship right now
+		local verifybool, verifymsg = ITEM:VerifySingleShipment(self)
+		if not verifybool then
+			local msg = verifymsg or 'This item can not be bought right now!' -- If verifymsg wasn't returned we use the default one
+			self:PS_Notify(msg)
+			return false
+		end
 	end
 	
 	self:PS_TakePoints(ITEM.Price)
@@ -113,7 +117,7 @@ function Player:PS_BuyItem(item_id)
 	
 	ITEM:OnBuy(self)
 	
-	if ITEM.SingleShipment then
+	if ITEM.SingleShipment then -- It was a single shipment so we'll ship right away and forget about it
 		ITEM:OnEquip(self)
 		return true
 	end
