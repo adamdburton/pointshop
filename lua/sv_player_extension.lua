@@ -14,7 +14,7 @@ function Player:PS_PlayerSpawn()
 	end)
 end
 
-function Player:PS_PlayerDeath(rar)
+function Player:PS_PlayerDeath()
 	for item_id, item in pairs(self.PS_Items) do
 		if item.Equipped then
 			local ITEM = PS.Items[item_id]
@@ -40,6 +40,10 @@ function Player:PS_PlayerInitialSpawn()
 	if PS.Config.NotifyOnJoin then
 		timer.Simple(5, function() -- Give them time to load up
 			self:PS_Notify('Press ' .. PS.Config.ShopKey .. ' to open PointShop!')
+		end)
+		
+		timer.Simple(10, function() -- Give them time to load up
+			self:PS_Notify('You have ' .. self:PS_GetPoint() .. ' points to spend!')
 		end)
 	end
 	
@@ -188,6 +192,7 @@ function Player:PS_EquipItem(item_id)
 	if not self:PS_HasItem(item_id) then return false end
 	if not self:Alive() then return false end
 	
+	
 	self.PS_Items[item_id].Equipped = true
 	
 	local ITEM = PS.Items[item_id]
@@ -219,6 +224,7 @@ function Player:PS_ModifyItem(item_id, modifications)
 	if not PS.Items[item_id] then return false end
 	if not self:PS_HasItem(item_id) then return false end
 	if not type(modifications) == "table" then return false end
+	if not self:Alive() then return false end
 	
 	local ITEM = PS.Items[item_id]
 	

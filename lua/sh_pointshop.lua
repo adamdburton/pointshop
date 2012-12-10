@@ -59,10 +59,10 @@ function PS:LoadItems()
 					ITEM.Category = CATEGORY.Name
 					ITEM.Price = 0
 					
-					-- model and material are missing
+					-- model and material are missing but there's no way around it, there's a check below anyway
 					
 					ITEM.AdminOnly = false
-					ITEM.AllowedUserGroups = {} -- thie will fail the #ITEM.AllowedUserGroups test and continue
+					ITEM.AllowedUserGroups = {} -- this will fail the #ITEM.AllowedUserGroups test and continue
 					ITEM.SingleUse = false
 					
 					ITEM.OnBuy = function() end
@@ -70,7 +70,7 @@ function PS:LoadItems()
 					ITEM.OnEquip = function() end
 					ITEM.OnHolster = function() end
 					ITEM.CanPlayerBuy = function() return true end
-					ITEM.ModifyClientsideModel = function(s, ply, model, pos, ang)
+					ITEM.ModifyClientsideModel = function(ply, model, pos, ang)
 						return model, pos, ang
 					end
 					
@@ -78,13 +78,18 @@ function PS:LoadItems()
 					
 					if not ITEM.Name then
 						ErrorNoHalt("[POINTSHOP] Item missing name: " .. category .. '/' .. name .. "\n")
+						continue
 					elseif not ITEM.Price then
 						ErrorNoHalt("[POINTSHOP] Item missing price: " .. category .. '/' .. name .. "\n")
+						continue
 					elseif not ITEM.Model and not ITEM.Material then
 						ErrorNoHalt("[POINTSHOP] Item missing model or material: " .. category .. '/' .. name .. "\n")
-					else
-						self.Items[ITEM.ID] = ITEM
+						continue
 					end
+					
+					-- item hooks
+					
+					self.Items[ITEM.ID] = ITEM
 					
 					ITEM = nil
 				end
