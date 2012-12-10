@@ -5,4 +5,6 @@ PointShop is a shop system for Garry's Mod developed by _Undefined. The original
 
 See http://pointshop.burt0n.net for more information.
 
+Feel free to send a pull request.
+
 ![PointShop](http://puu.sh/1zkWC)
