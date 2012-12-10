@@ -69,21 +69,40 @@ net.Receive('PS_RemoveClientsideModel', function(length)
 	ply:PS_RemoveClientsideModel(item_id)
 end)
 
+local invalidplayeritems = {}
+
 net.Receive('PS_SendClientsideModels', function(length)
 	local itms = net.ReadTable()
 	
-	timer.Simple(2, function()
-		for ply, items in pairs(itms) do
+	for ply, items in pairs(itms) do
+		if not IsValid(ply) then -- skip if the player isn't valid yet and add them to the table to sort out later
+			invalidplayeritems[ply] = items
+			continue
+		end
+			
+		for _, item_id in pairs(items) do
+			if PS.Items[item_id] then
+				ply:PS_AddClientsideModel(item_id)
+			end
+		end
+	end
+end)
+
+-- hooks
+
+hook.Add('Think', 'PS_Think', function()
+	for ply, items in pairs(invalidplayeritems) do
+		if IsValid(ply) then
 			for _, item_id in pairs(items) do
 				if PS.Items[item_id] then
 					ply:PS_AddClientsideModel(item_id)
 				end
 			end
+			
+			invalidplayeritems[ply] = nil
 		end
-	end)
+	end
 end)
-
--- hooks
 
 hook.Add('PostPlayerDraw', 'PS_PostPlayerDraw', function(ply)
 	if not ply:Alive() then return end
