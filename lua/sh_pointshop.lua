@@ -77,18 +77,14 @@ function PS:LoadItems()
 					include('items/' .. category .. '/' .. name)
 					
 					if not ITEM.Name then
-						ErrorNoHalt("Item missing name: " .. category .. '/' .. name)
+						ErrorNoHalt("[POINTSHOP] Item missing name: " .. category .. '/' .. name .. "\n")
+					elseif not ITEM.Price then
+						ErrorNoHalt("[POINTSHOP] Item missing price: " .. category .. '/' .. name .. "\n")
+					elseif not ITEM.Model and not ITEM.Material then
+						ErrorNoHalt("[POINTSHOP] Item missing model or material: " .. category .. '/' .. name .. "\n")
+					else
+						self.Items[ITEM.ID] = ITEM
 					end
-					
-					if not ITEM.Price then
-						ErrorNoHalt("Item missing price: " .. category .. '/' .. name)
-					end
-					
-					if not ITEM.Model and not ITEM.Material then
-						ErrorNoHalt("Item missing model or material: " .. category .. '/' .. name)
-					end
-					
-					self.Items[ITEM.ID] = ITEM
 					
 					ITEM = nil
 				end
