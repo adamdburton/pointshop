@@ -1,8 +1,7 @@
 local Player = FindMetaTable('Player')
 
 function Player:PS_PlayerSpawn()
-	if not self:Alive() then return end
-	if self.IsSpec and self:IsSpec() then return end -- ttt stuff, horrible
+	if not self:PS_CanPerformAction() then return end
 	
 	timer.Simple(1, function()
 		for item_id, item in pairs(self.PS_Items) do
@@ -69,6 +68,12 @@ function Player:PS_Save()
 	self:SetPData('PS_Points', self.PS_Points)
 end
 
+function Player:PS_CanPerformAction()
+	if self.IsSpec and self:IsSpec() then return false end
+	
+	return self:Alive()
+end
+
 -- points
 
 function Player:PS_GivePoints(points)
@@ -123,6 +128,7 @@ function Player:PS_BuyItem(item_id)
 	local ITEM = PS.Items[item_id]
 	if not ITEM then return false end
 	if not self:PS_HasPoints(ITEM.Price) then return false end
+	if not self:PS_CanPerformAction() then return end
 	
 	if ITEM.AdminOnly and not self:IsAdmin() then
 		self:PS_Notify('This item is Admin only!')
@@ -194,8 +200,7 @@ end
 function Player:PS_EquipItem(item_id)
 	if not PS.Items[item_id] then return false end
 	if not self:PS_HasItem(item_id) then return false end
-	if not self:Alive() then return false end
-	
+	if not self:PS_CanPerformAction() then return false end
 	
 	self.PS_Items[item_id].Equipped = true
 	
@@ -210,7 +215,7 @@ end
 function Player:PS_HolsterItem(item_id)
 	if not PS.Items[item_id] then return false end
 	if not self:PS_HasItem(item_id) then return false end
-	if not self:Alive() then return false end
+	if not self:PS_CanPerformAction() then return false end
 	
 	self.PS_Items[item_id].Equipped = false
 	
@@ -228,7 +233,7 @@ function Player:PS_ModifyItem(item_id, modifications)
 	if not PS.Items[item_id] then return false end
 	if not self:PS_HasItem(item_id) then return false end
 	if not type(modifications) == "table" then return false end
-	if not self:Alive() then return false end
+	if not self:PS_CanPerformAction() then return false end
 	
 	local ITEM = PS.Items[item_id]
 	
