@@ -7,6 +7,7 @@ function Player:PS_GetItems()
 end
 
 function Player:PS_HasItem(item_id)
+	if not self.PS_Items or #self.PS_Items < 1 then return false end
 	return self.PS_Items[item_id] and true or false
 end
 
