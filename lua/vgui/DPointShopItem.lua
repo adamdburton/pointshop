@@ -167,7 +167,7 @@ function PANEL:PaintOver()
 	
 	draw.SimpleText(self.Info, "DefaultSmall", self:GetWide() / 2, self:GetTall() - (self.InfoHeight / 2), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	
-	if LocalPlayer().PS_Items[self.Data.ID] and LocalPlayer().PS_Items[self.Data.ID].Modifiers and LocalPlayer().PS_Items[self.Data.ID].Modifiers.color then
+	if LocalPlayer().PS_Items and LocalPlayer().PS_Items[self.Data.ID] and LocalPlayer().PS_Items[self.Data.ID].Modifiers and LocalPlayer().PS_Items[self.Data.ID].Modifiers.color then
 		surface.SetDrawColor(LocalPlayer().PS_Items[self.Data.ID].Modifiers.color)
 		surface.DrawRect(self:GetWide() - 5 - 16, self:GetTall() - self.InfoHeight - 5 - 16, 16, 16)
 	end
