@@ -75,8 +75,6 @@ function PANEL:Init()
 	ClientsList.OnClickLine = function(parent, line, selected)
 		local ply = player.GetByUniqueID(line:GetValue(1))
 		
-		if not ply then MsgN('[PS] Invalid player?') return end
-		
 		local menu = DermaMenu()
 		
 		menu:AddOption('Set Points...', function()
@@ -85,7 +83,7 @@ function PANEL:Init()
 				"Set points to...",
 				"",
 				function(str)
-					if not str then return end
+					if not str or not tonumber(str) then return end
 					
 					net.Start('PS_SetPoints')
 						net.WriteEntity(ply)
@@ -101,7 +99,7 @@ function PANEL:Init()
 				"Give points...",
 				"",
 				function(str)
-					if not str then return end
+					if not str or not tonumber(str) then return end
 					
 					net.Start('PS_GivePoints')
 						net.WriteEntity(ply)
@@ -117,7 +115,7 @@ function PANEL:Init()
 				"Take points...",
 				"",
 				function(str)
-					if not str then return end
+					if not str or not tonumber(str) then return end
 					
 					net.Start('PS_TakePoints')
 						net.WriteEntity(ply)
