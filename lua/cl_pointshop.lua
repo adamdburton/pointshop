@@ -1,6 +1,8 @@
 PS.ShopMenu = nil
 PS.ClientsideModels = {}
 
+local invalidplayeritems = {}
+
 -- menu stuff
 
 function PS:ToggleMenu()
@@ -59,6 +61,15 @@ net.Receive('PS_AddClientsideModel', function(length)
 	local ply = net.ReadEntity()
 	local item_id = net.ReadString()
 	
+	if not IsValid(ply) then
+		if not invalidplayeritems[ply] then
+			invalidplayeritems[ply] = {}
+		end
+		
+		table.insert(invalidplayeritems[ply], item_id)
+		return
+	end
+	
 	ply:PS_AddClientsideModel(item_id)
 end)
 
@@ -68,8 +79,6 @@ net.Receive('PS_RemoveClientsideModel', function(length)
 	
 	ply:PS_RemoveClientsideModel(item_id)
 end)
-
-local invalidplayeritems = {}
 
 net.Receive('PS_SendClientsideModels', function(length)
 	local itms = net.ReadTable()
