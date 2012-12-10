@@ -70,7 +70,7 @@ function PS:LoadItems()
 					ITEM.OnEquip = function() end
 					ITEM.OnHolster = function() end
 					ITEM.CanPlayerBuy = function() return true end
-					ITEM.ModifyClientsideModel = function(ply, model, pos, ang)
+					ITEM.ModifyClientsideModel = function(ITEM, ply, model, pos, ang)
 						return model, pos, ang
 					end
 					
