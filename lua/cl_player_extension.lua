@@ -76,6 +76,7 @@ end
 
 function Player:PS_RemoveClientsideModel(item_id)
 	if not PS.Items[item_id] then return false end
+	if not PS.ClientsideModels[self] then return false end
 	if not PS.ClientsideModels[self][item_id] then return false end
 	
 	PS.ClientsideModels[self][item_id] = nil
