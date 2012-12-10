@@ -43,7 +43,7 @@ function Player:PS_PlayerInitialSpawn()
 		end)
 		
 		timer.Simple(10, function() -- Give them time to load up
-			self:PS_Notify('You have ' .. self:PS_GetPoint() .. ' points to spend!')
+			self:PS_Notify('You have ' .. self:PS_GetPoints() .. ' points to spend!')
 		end)
 	end
 	
@@ -84,6 +84,10 @@ end
 function Player:PS_SetPoints(points)
 	self.PS_Points = points
 	self:PS_SendPoints()
+end
+
+function Player:PS_GetPoints()
+	return self.PS_Points and self.PS_Points or 0
 end
 
 function Player:PS_HasPoints(points)
