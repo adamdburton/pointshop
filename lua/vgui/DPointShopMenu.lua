@@ -85,6 +85,8 @@ function PANEL:Init()
 				"Set points to...",
 				"",
 				function(str)
+					if not str then return end
+					
 					net.Start('PS_SetPoints')
 						net.WriteEntity(ply)
 						net.WriteInt(tonumber(str), 32)
@@ -99,6 +101,8 @@ function PANEL:Init()
 				"Give points...",
 				"",
 				function(str)
+					if not str then return end
+					
 					net.Start('PS_GivePoints')
 						net.WriteEntity(ply)
 						net.WriteInt(tonumber(str), 32)
@@ -113,6 +117,8 @@ function PANEL:Init()
 				"Take points...",
 				"",
 				function(str)
+					if not str then return end
+					
 					net.Start('PS_TakePoints')
 						net.WriteEntity(ply)
 						net.WriteInt(tonumber(str), 32)
