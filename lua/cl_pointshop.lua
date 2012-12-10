@@ -70,13 +70,17 @@ net.Receive('PS_RemoveClientsideModel', function(length)
 end)
 
 net.Receive('PS_SendClientsideModels', function(length)
-	for ply, items in pairs(net.ReadTable()) do
-		for _, item_id in pairs(items) do
-			if PS.Items[item_id] then
-				ply:PS_AddClientsideModel(item_id)
+	local itms = net.ReadTable()
+	
+	timer.Simple(2, function()
+		for ply, items in pairs(itms) do
+			for _, item_id in pairs(items) do
+				if PS.Items[item_id] then
+					ply:PS_AddClientsideModel(item_id)
+				end
 			end
 		end
-	end
+	end)
 end)
 
 -- hooks
@@ -97,11 +101,17 @@ hook.Add('PostPlayerDraw', 'PS_PostPlayerDraw', function(ply)
 		local ang = Angle()
 		
 		if ITEM.Attachment then
-			local attach = ply:GetAttachment(ply:LookupAttachment(ITEM.Attachment))
+			local attach_id = ply:LookupAttachment(ITEM.Attachment)
+			if not attach_id then return end
+			
+			local attach = ply:GetAttachment(attach_id)
 			pos = attach.Pos
 			ang = attach.Ang
 		else
-			pos, ang = ply:GetBonePosition(ply:LookupBone(ITEM.Bone))
+			local bone_id = ply:LookupBone(ITEM.Bone)
+			if not bone_id then return end
+			
+			pos, ang = ply:GetBonePosition(bone_id)
 		end
 		
 		model, pos, ang = ITEM:ModifyClientsideModel(ply, model, pos, ang)

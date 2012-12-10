@@ -59,15 +59,34 @@ function PS:LoadItems()
 					ITEM.Category = CATEGORY.Name
 					ITEM.Price = 0
 					
+					-- model and material are missing
+					
+					ITEM.AdminOnly = false
+					ITEM.AllowedUserGroups = {} -- thie will fail the #ITEM.AllowedUserGroups test and continue
+					ITEM.SingleUse = false
+					
 					ITEM.OnBuy = function() end
 					ITEM.OnSell = function() end
 					ITEM.OnEquip = function() end
 					ITEM.OnHolster = function() end
+					ITEM.CanPlayerBuy = function() return true end
 					ITEM.ModifyClientsideModel = function(s, ply, model, pos, ang)
 						return model, pos, ang
 					end
 					
 					include('items/' .. category .. '/' .. name)
+					
+					if not ITEM.Name then
+						ErrorNoHalt("Item missing name: " .. category .. '/' .. name)
+					end
+					
+					if not ITEM.Price then
+						ErrorNoHalt("Item missing price: " .. category .. '/' .. name)
+					end
+					
+					if not ITEM.Model and not ITEM.Material then
+						ErrorNoHalt("Item missing model or material: " .. category .. '/' .. name)
+					end
 					
 					self.Items[ITEM.ID] = ITEM
 					

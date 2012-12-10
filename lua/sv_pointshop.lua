@@ -26,6 +26,7 @@ net.Receive('PS_GivePoints', function(length, ply)
 	
 	if ply:IsAdmin() and other and points and IsValid(other) and other:IsPlayer() then
 		other:PS_GivePoints(points)
+		other:PS_Notify(ply:Nick(), ' gave you ', points, ' points.')
 	end
 end)
 
@@ -35,6 +36,7 @@ net.Receive('PS_TakePoints', function(length, ply)
 	
 	if ply:IsAdmin() and other and points and IsValid(other) and other:IsPlayer() then
 		other:PS_TakePoints(points)
+		other:PS_Notify(ply:Nick(), ' took ', points, ' points from you.')
 	end
 end)
 
@@ -44,6 +46,7 @@ net.Receive('PS_SetPoints', function(length, ply)
 	
 	if ply:IsAdmin() and other and points and IsValid(other) and other:IsPlayer() then
 		other:PS_SetPoints(points)
+		other:PS_Notify(ply:Nick(), ' set your points to ', points, '.')
 	end
 end)
 
@@ -63,8 +66,8 @@ end)
 
 hook.Add('PlayerSpawn', 'PS_PlayerSpawn', function(ply) ply:PS_PlayerSpawn() end)
 hook.Add('PlayerDeath', 'PS_PlayerDeath', function(ply) ply:PS_PlayerDeath() end)
-hook.Add('PlayerInitialSpawn', 'PS_PlayerInitialSpawn', function(ply) ply:PS_Initialize() end)
-hook.Add('PlayerDisconnected', 'PS_PlayerDisconnected', function(ply) ply:PS_Save() PS.ClientsideModels[ply] = nil end)
+hook.Add('PlayerInitialSpawn', 'PS_PlayerInitialSpawn', function(ply) ply:PS_PlayerInitialSpawn() end)
+hook.Add('PlayerDisconnected', 'PS_PlayerDisconnected', function(ply) ply:PS_PlayerDisconnected() end)
 
 -- ugly networked strings
 

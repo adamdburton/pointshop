@@ -2,7 +2,7 @@ local Player = FindMetaTable('Player')
 
 function Player:PS_PlayerSpawn()
 	if not self:Alive() then return end
-	if self.IsSpec and self:IsSpec() then return end
+	if self.IsSpec and self:IsSpec() then return end -- ttt stuff, horrible
 	
 	timer.Simple(1, function()
 		for item_id, item in pairs(self.PS_Items) do
@@ -23,7 +23,7 @@ function Player:PS_PlayerDeath(rar)
 	end
 end
 
-function Player:PS_Initialize()
+function Player:PS_PlayerInitialSpawn()
 	self.PS_Items = {}
 	self.PS_Points = 0
 	
@@ -36,6 +36,28 @@ function Player:PS_Initialize()
 		self:PS_SendPoints()
 		self:PS_SendClientsideModels()
 	end)
+	
+	if PS.Config.NotifyOnJoin then
+		timer.Simple(5, function() -- Give them time to load up
+			self:PS_Notify('Press ' .. PS.Config.ShopKey .. ' to open PointShop!')
+		end)
+	end
+	
+	if PS.Config.PointsOverTime then
+		timer.Create('PS_PointsOverTime_' .. self:UniqueID(), PS.Config.PointsOverTimeDelay * 60, 0, function()
+			self:PS_GivePoints(PS.Config.PointsOverTimeAmount)
+			self:PS_Notify("You've been given ", PS.Config.PointsOverTimeAmount, " points for playing on the server!")
+		end)
+	end
+end
+
+function Player:PS_PlayerDisconnected()
+	self:PS_Save()
+	PS.ClientsideModels[self] = nil
+	
+	if timer.Exists('PS_PointsOverTime_' .. self:UniqueID()) then
+		timer.Destroy('PS_PointsOverTime_' .. self:UniqueID())
+	end
 end
 
 function Player:PS_Save()
@@ -90,23 +112,35 @@ end
 -- buy/sell items
 
 function Player:PS_BuyItem(item_id)
-	
 	local ITEM = PS.Items[item_id]
-
 	if not ITEM then return false end
-
 	if not self:PS_HasPoints(ITEM.Price) then return false end
 	
-	if not self:IsAdmin() and ITEM.AdminOnly then
+	if ITEM.AdminOnly and not self:IsAdmin() then
 		self:PS_Notify('This item is Admin only!')
 		return false
 	end
-
-	if ITEM.SingleShipment and ITEM.VerifySingleShipment then -- Is a single shipment and has a func to verify if it's okay to ship right now
-		local verifybool, verifymsg = ITEM:VerifySingleShipment(self)
-		if not verifybool then
-			local msg = verifymsg or 'This item can not be bought right now!' -- If verifymsg wasn't returned we use the default one
-			self:PS_Notify(msg)
+	
+	if ITEM.AllowedUserGroups and #ITEM.AllowedUserGroups > 0 then
+		local allowed = false
+		
+		for _, ug in pairs(ITEM.AllowedUserGroups) do
+			if self:IsUserGroup(ug) then
+				allowed = true
+			end
+		end
+		
+		if not allowed then
+			self:PS_Notify('You\'re not allowed to buy this item!')
+			return false
+		end
+	end
+	
+	if ITEM.CanPlayerBuy then -- should exist but we'll check anyway
+		local allowed, message = ITEM:CanPlayerBuy(self)
+		
+		if not allowed then
+			self:PS_Notify(message or 'You\'re not allowed to buy this item!')
 			return false
 		end
 	end
@@ -117,11 +151,13 @@ function Player:PS_BuyItem(item_id)
 	
 	ITEM:OnBuy(self)
 	
-	if ITEM.SingleShipment then -- It was a single shipment so we'll ship right away and forget about it
-		ITEM:OnEquip(self)
-		return true
+	if ITEM.SingleUse then
+		self:PS_Notify('Single use item. You\'ll have to buy this item again next time!')
+		return
 	end
-	return self:PS_GiveItem(item_id)
+
+	self:PS_GiveItem(item_id)
+	self:PS_EquipItem(item_id)
 end
 
 function Player:PS_SellItem(item_id)
@@ -157,6 +193,8 @@ function Player:PS_EquipItem(item_id)
 	local ITEM = PS.Items[item_id]
 	ITEM:OnEquip(self, self.PS_Items[item_id].Modifiers)
 	
+	self:PS_Notify('Equipped ', ITEM.Name, '.')
+	
 	self:PS_SendItems()
 end
 
@@ -170,6 +208,8 @@ function Player:PS_HolsterItem(item_id)
 	local ITEM = PS.Items[item_id]
 	ITEM:OnHolster(self)
 	
+	self:PS_Notify('Holstered ', ITEM.Name, '.')
+	
 	self:PS_SendItems()
 end
 
@@ -178,6 +218,7 @@ end
 function Player:PS_ModifyItem(item_id, modifications)
 	if not PS.Items[item_id] then return false end
 	if not self:PS_HasItem(item_id) then return false end
+	if not type(modifications) == "table" then return false end
 	
 	local ITEM = PS.Items[item_id]
 	
@@ -255,6 +296,6 @@ end
 -- notifications
 
 function Player:PS_Notify(...)
-	local str = table.concat({...}, ' ')
+	local str = table.concat({...}, '')
 	self:SendLua('notification.AddLegacy("' .. str .. '", NOTIFY_GENERIC, 5)')
 end

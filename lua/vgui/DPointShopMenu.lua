@@ -28,6 +28,8 @@ function PANEL:Init()
 	tabs:SetSize(self:GetWide() - 60, self:GetTall() - 150)
 	tabs:SetPos((self:GetWide() / 2) - (tabs:GetWide() / 2), 120)
 	
+	table.sort(PS.Categories)
+	
 	-- items
 	for _, CATEGORY in pairs(PS.Categories) do
 		local ShopCategoryTab = vgui.Create('DPanel')
