@@ -2,6 +2,7 @@ local PANEL = {}
 
 local adminicon = Material("icon16/shield.png")
 local equippedicon = Material("icon16/eye.png")
+local groupicon = Material("icon16/group.png")
 
 local canbuycolor = Color(0, 100, 0, 125)
 local cantbuycolor = Color(100, 0, 0, 125)
@@ -150,6 +151,12 @@ function PANEL:PaintOver()
 		surface.SetMaterial(equippedicon)
 		surface.SetDrawColor(Color(255, 255, 255, 255))
 		surface.DrawTexturedRect(self:GetWide() - 5 - 16, 5, 16, 16)
+	end
+	
+	if self.Data.AllowedUserGroups and #self.Data.AllowedUserGroups > 0 then
+		surface.SetMaterial(groupicon)
+		surface.SetDrawColor(Color(255, 255, 255, 255))
+		surface.DrawTexturedRect(5, self:GetTall() - self.InfoHeight - 5 - 16, 16, 16)
 	end
 	
 	if LocalPlayer():PS_HasPoints(self.Data.Price) then

@@ -69,9 +69,16 @@ function Player:PS_Save()
 end
 
 function Player:PS_CanPerformAction()
-	if self.IsSpec and self:IsSpec() then return false end
+	local allowed = true
 	
-	return self:Alive()
+	if self.IsSpec and self:IsSpec() then allowed = false end
+	if not self:Alive() then allowed = false end
+	
+	if not allowed then
+		self:PS_Notify('You\'re not allowed to do that at the moment!')
+	end
+	
+	return allowed
 end
 
 -- points
@@ -145,7 +152,7 @@ function Player:PS_BuyItem(item_id)
 		end
 		
 		if not allowed then
-			self:PS_Notify('You\'re not allowed to buy this item!')
+			self:PS_Notify('You\'re not in the right group to buy this item!')
 			return false
 		end
 	end
