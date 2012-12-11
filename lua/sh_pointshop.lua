@@ -89,6 +89,18 @@ function PS:LoadItems()
 					
 					-- item hooks
 					
+					for prop, val in pairs(ITEM) do
+						if type(val) == "function" then -- although this hooks every function, it doesn't matter because the non-hook functions will never get called
+							hook.Add(prop, 'PS_Item_' .. ITEM.Name .. '_' .. prop, function(...)
+								for _, ply in pairs(player.GetAll()) do
+									if ply:PS_HasItemEquipped(ITEM.ID) then -- hooks are only called if the player has the item equipped
+										ITEM[prop](ITEM, ply, unpack({...}))
+									end
+								end
+							end)
+						end
+					end
+					
 					self.Items[ITEM.ID] = ITEM
 					
 					ITEM = nil
