@@ -17,3 +17,7 @@ function ITEM:ModifyClientsideModel(ply, model, pos, ang)
 	
 	return model, pos, ang
 end
+
+function ITEM:CanPlayerBuy(ply)
+	return os.date("%m") == "12" and true or false, 'It\'s not winter!'
+end
