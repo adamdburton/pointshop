@@ -28,8 +28,25 @@ function PANEL:Init()
 	tabs:SetSize(self:GetWide() - 60, self:GetTall() - 150)
 	tabs:SetPos((self:GetWide() / 2) - (tabs:GetWide() / 2), 120)
 	
+	-- sorting
+	local categories = {}
+	
+	for _, i in pairs(PS.Categories) do
+		table.insert(categories, i)
+	end
+	
+	table.SortByMember(categories, "Name", function(a, b) return a > b end)
+	
+	local items = {}
+	
+	for _, i in pairs(PS.Items) do
+		table.insert(items, i)
+	end
+	
+	table.SortByMember(items, "Name", function(a, b) return a > b end)
+	
 	-- items
-	for _, CATEGORY in pairs(PS.Categories) do
+	for _, CATEGORY in pairs(categories) do
 		local ShopCategoryTab = vgui.Create('DPanel')
 		
 		local DScrollPanel = vgui.Create('DScrollPanel', ShopCategoryTab)
@@ -43,8 +60,7 @@ function PANEL:Init()
 		
 		DScrollPanel:AddItem(ShopCategoryTabLayout)
 		
-		for _, ITEM in pairs(PS.Items) do
-			
+		for _, ITEM in pairs(items) do
 			if ITEM.Category == CATEGORY.Name then
 				local model = vgui.Create('DPointShopItem')
 				model:SetData(ITEM)
