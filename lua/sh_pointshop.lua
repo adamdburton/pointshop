@@ -87,6 +87,12 @@ function PS:LoadItems()
 						continue
 					end
 					
+					-- precache
+					
+					if ITEM.Model then
+						util.PrecacheModel(ITEM.Model)
+					end
+					
 					-- item hooks
 					
 					for prop, val in pairs(ITEM) do

@@ -77,7 +77,7 @@ net.Receive('PS_RemoveClientsideModel', function(length)
 	local ply = net.ReadEntity()
 	local item_id = net.ReadString()
 	
-	if not IsValid(ply) then return end
+	if not ply or not IsValid(ply) or not ply:IsPlayer() then return end
 	
 	ply:PS_RemoveClientsideModel(item_id)
 end)
