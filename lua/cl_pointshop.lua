@@ -135,6 +135,9 @@ hook.Add('PostPlayerDraw', 'PS_PostPlayerDraw', function(ply)
 			if not attach_id then return end
 			
 			local attach = ply:GetAttachment(attach_id)
+			
+			if not attach then return end
+			
 			pos = attach.Pos
 			ang = attach.Ang
 		else
