@@ -83,13 +83,12 @@ function PANEL:Init()
 	ClientsList:Dock(FILL)
 	
 	ClientsList:SetMultiSelect(false)
-	ClientsList:AddColumn('ID'):SetFixedWidth(100)
 	ClientsList:AddColumn('Name')
 	ClientsList:AddColumn('Points'):SetFixedWidth(60)
 	ClientsList:AddColumn('Items'):SetFixedWidth(60)
 	
 	ClientsList.OnClickLine = function(parent, line, selected)
-		local ply = player.GetByUniqueID(line:GetValue(1))
+		local ply = line.Player
 		
 		local menu = DermaMenu()
 		
@@ -163,7 +162,7 @@ function PANEL:Think()
 			end
 			
 			if not found then
-				self.ClientsList:AddLine(ply:UniqueID(), ply:GetName(), ply:PS_GetPoints(), table.Count(ply:PS_GetItems())).Player = ply
+				self.ClientsList:AddLine(ply:GetName(), ply:PS_GetPoints(), table.Count(ply:PS_GetItems())).Player = ply
 			end
 		end
 		
@@ -171,9 +170,9 @@ function PANEL:Think()
 			if IsValid(line.Player) then
 				local ply = line.Player
 				
-				line:SetValue(2, ply:GetName())
-				line:SetValue(3, ply:PS_GetPoints())
-				line:SetValue(4, table.Count(ply:PS_GetItems()))
+				line:SetValue(1, ply:GetName())
+				line:SetValue(2, ply:PS_GetPoints())
+				line:SetValue(3, table.Count(ply:PS_GetItems()))
 			else
 				self.ClientsList:RemoveLine(i)
 			end
