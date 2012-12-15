@@ -21,11 +21,15 @@ function PANEL:DoClick()
 	local menu = DermaMenu(self)
 	
 	if LocalPlayer():PS_HasItem(self.Data.ID) then
-		menu:AddOption('Sell', function()
-			LocalPlayer():PS_SellItem(self.Data.ID)
-		end)
+
+		if not self.Data.Hidden then
+			menu:AddOption('Sell', function()
+				LocalPlayer():PS_SellItem(self.Data.ID)
+			end)
+		end
+
 	elseif LocalPlayer():PS_HasPoints(self.Data.Price) then
-		if not self.Data.AdminOnly or (self.Data.AdminOnly and LocalPlayer():IsAdmin()) then
+		if not self.Data.Hidden and (not self.Data.AdminOnly or (self.Data.AdminOnly and LocalPlayer():IsAdmin())) then
 			menu:AddOption('Buy', function()
 				LocalPlayer():PS_BuyItem(self.Data.ID)
 			end)
