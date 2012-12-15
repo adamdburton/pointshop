@@ -134,6 +134,7 @@ end
 function Player:PS_BuyItem(item_id)
 	local ITEM = PS.Items[item_id]
 	if not ITEM then return false end
+	if ITEM.Hidden then return false end
 	if not self:PS_HasPoints(ITEM.Price) then return false end
 	if not self:PS_CanPerformAction() then return end
 	
@@ -186,6 +187,9 @@ function Player:PS_SellItem(item_id)
 	if not self:PS_HasItem(item_id) then return false end
 	
 	local ITEM = PS.Items[item_id]
+
+	if ITEM.Hidden then return false end
+
 	local points = PS.Config.CalculateSellPrice(ITEM.Price)
 	
 	self:PS_GivePoints(points)

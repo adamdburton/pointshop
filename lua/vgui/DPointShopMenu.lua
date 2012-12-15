@@ -61,7 +61,7 @@ function PANEL:Init()
 		DScrollPanel:AddItem(ShopCategoryTabLayout)
 		
 		for _, ITEM in pairs(items) do
-			if ITEM.Category == CATEGORY.Name then
+			if ITEM.Category == CATEGORY.Name and (not ITEM.Hidden or LocalPlayer():PS_HasItem(ITEM.ID)) then
 				local model = vgui.Create('DPointShopItem')
 				model:SetData(ITEM)
 				model:SetSize(126, 126)
