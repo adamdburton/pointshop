@@ -202,6 +202,12 @@ function Player:PS_HasItem(item_id)
 	return self.PS_Items[item_id] or false
 end
 
+function Player:PS_HasItemEquipped(item_id)
+	if not self:PS_HasItem(item_id) then return false end
+	
+	return self.PS_Items[item_id].Equipped or false
+end
+
 -- equip/hoster items
 
 function Player:PS_EquipItem(item_id)
