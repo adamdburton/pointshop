@@ -117,7 +117,7 @@ end)
 
 hook.Add('PostPlayerDraw', 'PS_PostPlayerDraw', function(ply)
 	if not ply:Alive() then return end
-	if ply == LocalPlayer() and GetViewEntity():GetClass() == 'player' then return end
+	if ply == LocalPlayer() and GetViewEntity():GetClass() == 'player' and (GetConVar('thirdperson') and GetConVar('thirdperson'):GetInt() == 0) then return end
 	if not PS.ClientsideModels[ply] then return end
 	
 	for item_id, model in pairs(PS.ClientsideModels[ply]) do
