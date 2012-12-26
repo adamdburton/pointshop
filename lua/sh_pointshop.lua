@@ -30,7 +30,7 @@ end
 
 function PS:FindCategoryByName(cat_name)
 	for id, cat in pairs(self.Categories) do
-		if cat.Name = cat_name then
+		if cat.Name == cat_name then
 			return cat
 		end
 	end

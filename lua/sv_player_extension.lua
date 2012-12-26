@@ -208,11 +208,12 @@ function Player:PS_HasItemEquipped(item_id)
 	return self.PS_Items[item_id].Equipped or false
 end
 
-function Player:PS_NumItemsFromCategory(cat_name)
+function Player:PS_NumItemsEquippedFromCategory(cat_name)
 	local count = 0
 	
-	for _, item in pairs(self.PS_Items) do
-		if item.Category == cat_name then
+	for item_id, item in pairs(self.PS_Items) do
+		local ITEM = PS.Items[item_id]
+		if ITEM.Category == cat_name and item.Equipped then
 			count = count + 1
 		end
 	end
@@ -233,8 +234,8 @@ function Player:PS_EquipItem(item_id)
 	local CATEGORY = PS:FindCategoryByName(cat_name)
 	
 	if CATEGORY and CATEGORY.AllowedEquipped > -1 then
-		if self:PS_NumItemsFromCategory(cat_name) + 1 >= CATEGORY.AllowedEquipped then
-			self:PS_Notify('Only ' .. CATEGORY.AllowedEquipped .. ' item' .. (CATEGORY.AllowedEquipped == 1 and '' or 's') .. ' allowed equipped from this category!')
+		if self:PS_NumItemsEquippedFromCategory(cat_name) + 1 > CATEGORY.AllowedEquipped then
+			self:PS_Notify('Only ' .. CATEGORY.AllowedEquipped .. ' item' .. (CATEGORY.AllowedEquipped == 1 and '' or 's') .. ' can be equipped from this category!')
 			return false
 		end
 	end
