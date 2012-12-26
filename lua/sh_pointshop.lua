@@ -26,6 +26,20 @@ function PS:ValidatePoints(points)
 	return points >= 0 and points or 0
 end
 
+-- Utils
+
+function PS:FindCategoryByName(cat_name)
+	for id, cat in pairs(self.Categories) do
+		if cat.Name = cat_name then
+			return cat
+		end
+	end
+	
+	return false
+end
+
+-- Loading
+
 function PS:LoadItems()	
 	local _, dirs = file.Find('items/*', 'LUA')
 	
@@ -37,7 +51,7 @@ function PS:LoadItems()
 			
 			CATEGORY.Name = ''
 			CATEGORY.Icon = ''
-			CATEGORY.AllowedEquiped = -1
+			CATEGORY.AllowedEquipped = -1
 			
 			if SERVER then AddCSLuaFile('items/' .. category .. '/__category.lua') end
 			include('items/' .. category .. '/__category.lua')
