@@ -84,6 +84,7 @@ function PS:LoadItems()
 					ITEM.OnEquip = function() end
 					ITEM.OnHolster = function() end
 					ITEM.CanPlayerBuy = function() return true end
+					ITEM.OnModify = function() end
 					ITEM.ModifyClientsideModel = function(ITEM, ply, model, pos, ang)
 						return model, pos, ang
 					end
@@ -115,7 +116,7 @@ function PS:LoadItems()
 							hook.Add(prop, 'PS_Item_' .. item.Name .. '_' .. prop, function(...)
 								for _, ply in pairs(player.GetAll()) do
 									if ply:PS_HasItemEquipped(item.ID) then -- hooks are only called if the player has the item equipped
-										item[prop](item, ply, unpack({...}))
+										item[prop](item, ply, ply.PS_Items[item.ID].Modifiers, unpack({...}))
 									end
 								end
 							end)

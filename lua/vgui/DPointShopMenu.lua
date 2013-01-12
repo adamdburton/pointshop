@@ -73,79 +73,79 @@ function PANEL:Init()
 		tabs:AddSheet(CATEGORY.Name, ShopCategoryTab, 'icon16/' .. CATEGORY.Icon .. '.png', false, false, '')
 	end
 	
-	if not LocalPlayer():IsAdmin() then return end
-	
-	-- admin tab
-	local AdminTab = vgui.Create('DPanel')
-	
-	local ClientsList = vgui.Create('DListView', AdminTab)
-	ClientsList:DockMargin(10, 10, 10, 10)
-	ClientsList:Dock(FILL)
-	
-	ClientsList:SetMultiSelect(false)
-	ClientsList:AddColumn('Name')
-	ClientsList:AddColumn('Points'):SetFixedWidth(60)
-	ClientsList:AddColumn('Items'):SetFixedWidth(60)
-	
-	ClientsList.OnClickLine = function(parent, line, selected)
-		local ply = line.Player
+	if (PS.Config.AdminCanAccessAdminTab and LocalPlayer():IsAdmin()) or (PS.Config.SuperAdminCanAccessAdminTab and LocalPlayer():IsSuperAdmin()) then
+		-- admin tab
+		local AdminTab = vgui.Create('DPanel')
 		
-		local menu = DermaMenu()
+		local ClientsList = vgui.Create('DListView', AdminTab)
+		ClientsList:DockMargin(10, 10, 10, 10)
+		ClientsList:Dock(FILL)
 		
-		menu:AddOption('Set Points...', function()
-			Derma_StringRequest(
-				"Set Points for " .. ply:GetName(),
-				"Set points to...",
-				"",
-				function(str)
-					if not str or not tonumber(str) then return end
-					
-					net.Start('PS_SetPoints')
-						net.WriteEntity(ply)
-						net.WriteInt(tonumber(str), 32)
-					net.SendToServer()
-				end
-			)
-		end)
+		ClientsList:SetMultiSelect(false)
+		ClientsList:AddColumn('Name')
+		ClientsList:AddColumn('Points'):SetFixedWidth(60)
+		ClientsList:AddColumn('Items'):SetFixedWidth(60)
 		
-		menu:AddOption('Give Points...', function()
-			Derma_StringRequest(
-				"Give Points to " .. ply:GetName(),
-				"Give points...",
-				"",
-				function(str)
-					if not str or not tonumber(str) then return end
-					
-					net.Start('PS_GivePoints')
-						net.WriteEntity(ply)
-						net.WriteInt(tonumber(str), 32)
-					net.SendToServer()
-				end
-			)
-		end)
+		ClientsList.OnClickLine = function(parent, line, selected)
+			local ply = line.Player
+			
+			local menu = DermaMenu()
+			
+			menu:AddOption('Set Points...', function()
+				Derma_StringRequest(
+					"Set Points for " .. ply:GetName(),
+					"Set points to...",
+					"",
+					function(str)
+						if not str or not tonumber(str) then return end
+						
+						net.Start('PS_SetPoints')
+							net.WriteEntity(ply)
+							net.WriteInt(tonumber(str), 32)
+						net.SendToServer()
+					end
+				)
+			end)
+			
+			menu:AddOption('Give Points...', function()
+				Derma_StringRequest(
+					"Give Points to " .. ply:GetName(),
+					"Give points...",
+					"",
+					function(str)
+						if not str or not tonumber(str) then return end
+						
+						net.Start('PS_GivePoints')
+							net.WriteEntity(ply)
+							net.WriteInt(tonumber(str), 32)
+						net.SendToServer()
+					end
+				)
+			end)
+			
+			menu:AddOption('Take Points...', function()
+				Derma_StringRequest(
+					"Take Points from " .. ply:GetName(),
+					"Take points...",
+					"",
+					function(str)
+						if not str or not tonumber(str) then return end
+						
+						net.Start('PS_TakePoints')
+							net.WriteEntity(ply)
+							net.WriteInt(tonumber(str), 32)
+						net.SendToServer()
+					end
+				)
+			end)
+			
+			menu:Open()
+		end
 		
-		menu:AddOption('Take Points...', function()
-			Derma_StringRequest(
-				"Take Points from " .. ply:GetName(),
-				"Take points...",
-				"",
-				function(str)
-					if not str or not tonumber(str) then return end
-					
-					net.Start('PS_TakePoints')
-						net.WriteEntity(ply)
-						net.WriteInt(tonumber(str), 32)
-					net.SendToServer()
-				end
-			)
-		end)
+		self.ClientsList = ClientsList
 		
-		menu:Open()
+		tabs:AddSheet('Admin', AdminTab, 'icon16/shield.png', false, false, '')
 	end
-	
-	self.ClientsList = ClientsList
-	
-	tabs:AddSheet('Admin', AdminTab, 'icon16/shield.png', false, false, '')
 end
 
 function PANEL:Think()

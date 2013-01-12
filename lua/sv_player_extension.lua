@@ -134,7 +134,10 @@ end
 function Player:PS_BuyItem(item_id)
 	local ITEM = PS.Items[item_id]
 	if not ITEM then return false end
-	if not self:PS_HasPoints(ITEM.Price) then return false end
+	
+	local points = PS.Config.CalculateBuyPrice(self, ITEM)
+	
+	if not self:PS_HasPoints(points) then return false end
 	if not self:PS_CanPerformAction() then return end
 	
 	if ITEM.AdminOnly and not self:IsAdmin() then
@@ -166,9 +169,9 @@ function Player:PS_BuyItem(item_id)
 		end
 	end
 	
-	self:PS_TakePoints(ITEM.Price)
+	self:PS_TakePoints(points)
 	
-	self:PS_Notify('Bought ', ITEM.Name, ' for ', ITEM.Price, ' points.')
+	self:PS_Notify('Bought ', ITEM.Name, ' for ', points, ' points.')
 	
 	ITEM:OnBuy(self)
 	
@@ -186,7 +189,7 @@ function Player:PS_SellItem(item_id)
 	if not self:PS_HasItem(item_id) then return false end
 	
 	local ITEM = PS.Items[item_id]
-	local points = PS.Config.CalculateSellPrice(ITEM.Price)
+	local points = PS.Config.CalculateSellPrice(self, ITEM)
 	
 	self:PS_GivePoints(points)
 	

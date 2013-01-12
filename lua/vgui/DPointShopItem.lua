@@ -14,7 +14,9 @@ function PANEL:Init()
 end
 
 function PANEL:DoClick()
-	if not LocalPlayer():PS_HasItem(self.Data.ID) and not LocalPlayer():PS_HasPoints(self.Data.Price) then
+	local points = PS.Config.CalculateBuyPrice(LocalPlayer(), self.Data)
+	
+	if not LocalPlayer():PS_HasItem(self.Data.ID) and not LocalPlayer():PS_HasPoints(points) then
 		notification.AddLegacy("You don't have enough points for this!", NOTIFY_GENERIC, 5)
 	end
 
@@ -24,7 +26,7 @@ function PANEL:DoClick()
 		menu:AddOption('Sell', function()
 			LocalPlayer():PS_SellItem(self.Data.ID)
 		end)
-	elseif LocalPlayer():PS_HasPoints(self.Data.Price) then
+	elseif LocalPlayer():PS_HasPoints(points) then
 		if not self.Data.AdminOnly or (self.Data.AdminOnly and LocalPlayer():IsAdmin()) then
 			menu:AddOption('Buy', function()
 				LocalPlayer():PS_BuyItem(self.Data.ID)
@@ -159,7 +161,9 @@ function PANEL:PaintOver()
 		surface.DrawTexturedRect(5, self:GetTall() - self.InfoHeight - 5 - 16, 16, 16)
 	end
 	
-	if LocalPlayer():PS_HasPoints(self.Data.Price) then
+	local points = PS.Config.CalculateBuyPrice(LocalPlayer(), self.Data)
+	
+	if LocalPlayer():PS_HasPoints(points) then
 		self.BarColor = canbuycolor
 	else
 		self.BarColor = cantbuycolor
@@ -176,7 +180,7 @@ function PANEL:PaintOver()
 	
 	if LocalPlayer().PS_Items and LocalPlayer().PS_Items[self.Data.ID] and LocalPlayer().PS_Items[self.Data.ID].Modifiers and LocalPlayer().PS_Items[self.Data.ID].Modifiers.color then
 		surface.SetDrawColor(LocalPlayer().PS_Items[self.Data.ID].Modifiers.color)
-		surface.DrawRect(self:GetWide() - 5 - 16, self:GetTall() - self.InfoHeight - 5 - 16, 16, 16)
+		surface.DrawRect(self:GetWide() - 5 - 16, 26, 16, 16)
 	end
 end
 
@@ -184,9 +188,9 @@ function PANEL:OnCursorEntered()
 	self.Hovered = true
 	
 	if LocalPlayer():PS_HasItem(self.Data.ID) then
-		self.Info = '+' .. PS.Config.CalculateSellPrice(self.Data.Price)
+		self.Info = '+' .. PS.Config.CalculateSellPrice(LocalPlayer(), self.Data)
 	else
-		self.Info = '-' .. self.Data.Price
+		self.Info = '-' .. PS.Config.CalculateBuyPrice(LocalPlayer(), self.Data)
 	end
 end
 
