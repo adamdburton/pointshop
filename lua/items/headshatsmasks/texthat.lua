@@ -3,7 +3,7 @@ ITEM.Price = 1000
 ITEM.Model = 'models/extras/info_speech.mdl'
 
 function ITEM:PostPlayerDraw(ply, modifications, ply2)
-	if not ply == ply then return end
+	if not ply == ply2 then return end
 	
 	local offset = Vector(0, 0, 79)
 	local ang = LocalPlayer():EyeAngles()
