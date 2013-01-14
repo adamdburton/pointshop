@@ -3,6 +3,9 @@ local Player = FindMetaTable('Player')
 function Player:PS_PlayerSpawn()
 	if not self:PS_CanPerformAction() then return end
 	
+	-- TTT ( and others ) Fix
+	if ( ( TEAM_SPECTATOR != nil ) and ( self:Team() == TEAM_SPECTATOR ) ) then return end
+	
 	timer.Simple(1, function()
 		for item_id, item in pairs(self.PS_Items) do
 			local ITEM = PS.Items[item_id]
