@@ -1,6 +1,9 @@
 PS.ShopMenu = nil
 PS.ClientsideModels = {}
 
+PS.HoverModel = nil
+PS.HoverModelClientsideModel = nil
+
 local invalidplayeritems = {}
 
 -- menu stuff
@@ -18,6 +21,22 @@ function PS:ToggleMenu()
 		PS.ShopMenu:Show()
 		gui.EnableScreenClicker(true)
 	end
+end
+
+function PS:SetHoverItem(item_id)
+	local ITEM = PS.Items[item_id]
+	
+	if ITEM.Model then
+		self.HoverModel = item_id
+	
+		self.HoverModelClientsideModel = ClientsideModel(ITEM.Model, RENDERGROUP_OPAQUE)
+		self.HoverModelClientsideModel:SetNoDraw(true)
+	end
+end
+
+function PS:RemoveHoverItem()
+	self.HoverModel = nil
+	self.HoverModelClientsideModel = nil
 end
 
 -- modification stuff

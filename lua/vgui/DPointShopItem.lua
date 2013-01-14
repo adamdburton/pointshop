@@ -192,11 +192,15 @@ function PANEL:OnCursorEntered()
 	else
 		self.Info = '-' .. PS.Config.CalculateBuyPrice(LocalPlayer(), self.Data)
 	end
+	
+	PS:SetHoverItem(self.Data.ID)
 end
 
 function PANEL:OnCursorExited()
 	self.Hovered = false
 	self.Info = self.Data.Name
+	
+	PS:RemoveHoverItem()
 end
 
 vgui.Register('DPointShopItem', PANEL, 'DPanel')
