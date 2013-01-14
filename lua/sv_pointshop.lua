@@ -85,9 +85,11 @@ hook.Add('PlayerInitialSpawn', 'PS_PlayerInitialSpawn', function(ply) ply:PS_Pla
 hook.Add('PlayerDisconnected', 'PS_PlayerDisconnected', function(ply) ply:PS_PlayerDisconnected() end)
 
 hook.Add('PlayerSay', 'PS_PlayerSay', function(ply, text)
-	if string.sub(text, 0, string.len(PS.Config.ShopChatCommand)) == PS.Config.ShopChatCommand then
-		ply:PS_ToggleMenu()
-		return ''
+	if string.len(PS.Config.ShopChatCommand) > 0 then
+		if string.sub(text, 0, string.len(PS.Config.ShopChatCommand)) == PS.Config.ShopChatCommand then
+			ply:PS_ToggleMenu()
+			return ''
+		end
 	end
 end)
 
