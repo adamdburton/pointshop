@@ -85,3 +85,26 @@ util.AddNetworkString('PS_AddClientsideModel')
 util.AddNetworkString('PS_RemoveClientsideModel')
 util.AddNetworkString('PS_SendClientsideModels')
 util.AddNetworkString('PS_ToggleMenu')
+
+-- console commands for resetting
+
+concommand.Add('ps_clear_points', function(ply, cmd, args)
+	if IsValid(ply) then return end -- only allowed from server console
+	
+	for _, ply in pairs(player.GetAll()) do
+		ply:PS_SetPoints(0)
+	end
+	
+	sql.Query("DELETE FROM playerpdata WHERE infoid LIKE '%PS_Points%'")
+end)
+
+concommand.Add('ps_clear_points', function(ply, cmd, args)
+	if IsValid(ply) then return end -- only allowed from server console
+	
+	for _, ply in pairs(player.GetAll()) do
+		ply.PS_Items = {}
+		ply:PS_SendItems()
+	end
+	
+	sql.Query("DELETE FROM playerpdata WHERE infoid LIKE '%PS_Items%'")
+end)
