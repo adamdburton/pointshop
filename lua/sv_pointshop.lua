@@ -24,7 +24,12 @@ net.Receive('PS_GivePoints', function(length, ply)
 	local other = net.ReadEntity()
 	local points = net.ReadInt(32)
 	
-	if ply:IsAdmin() and other and points and IsValid(other) and other:IsPlayer() then
+	if not PS.Config.AdminCanAccessAdminTab and not PS.Config.SuperAdminCanAccessAdminTab then return end
+	
+	local admin_allowed = PS.Config.AdminCanAccessAdminTab and ply:IsAdmin()
+	local super_admin_allowed = PS.Config.SuperAdminCanAccessAdminTab and ply:IsSuperAdmin()
+	
+	if (admin_allowed or super_admin_allowed) and other and points and IsValid(other) and other:IsPlayer() then
 		other:PS_GivePoints(points)
 		other:PS_Notify(ply:Nick(), ' gave you ', points, ' points.')
 	end
@@ -34,7 +39,12 @@ net.Receive('PS_TakePoints', function(length, ply)
 	local other = net.ReadEntity()
 	local points = net.ReadInt(32)
 	
-	if ply:IsAdmin() and other and points and IsValid(other) and other:IsPlayer() then
+	if not PS.Config.AdminCanAccessAdminTab and not PS.Config.SuperAdminCanAccessAdminTab then return end
+	
+	local admin_allowed = PS.Config.AdminCanAccessAdminTab and ply:IsAdmin()
+	local super_admin_allowed = PS.Config.SuperAdminCanAccessAdminTab and ply:IsSuperAdmin()
+	
+	if (admin_allowed or super_admin_allowed) and other and points and IsValid(other) and other:IsPlayer() then
 		other:PS_TakePoints(points)
 		other:PS_Notify(ply:Nick(), ' took ', points, ' points from you.')
 	end
@@ -44,7 +54,12 @@ net.Receive('PS_SetPoints', function(length, ply)
 	local other = net.ReadEntity()
 	local points = net.ReadInt(32)
 	
-	if ply:IsAdmin() and other and points and IsValid(other) and other:IsPlayer() then
+	if not PS.Config.AdminCanAccessAdminTab and not PS.Config.SuperAdminCanAccessAdminTab then return end
+	
+	local admin_allowed = PS.Config.AdminCanAccessAdminTab and ply:IsAdmin()
+	local super_admin_allowed = PS.Config.SuperAdminCanAccessAdminTab and ply:IsSuperAdmin()
+	
+	if (admin_allowed or super_admin_allowed) and other and points and IsValid(other) and other:IsPlayer() then
 		other:PS_SetPoints(points)
 		other:PS_Notify(ply:Nick(), ' set your points to ', points, '.')
 	end
@@ -109,7 +124,7 @@ concommand.Add('ps_clear_points', function(ply, cmd, args)
 	sql.Query("DELETE FROM playerpdata WHERE infoid LIKE '%PS_Points%'")
 end)
 
-concommand.Add('ps_clear_points', function(ply, cmd, args)
+concommand.Add('ps_clear_items', function(ply, cmd, args)
 	if IsValid(ply) then return end -- only allowed from server console
 	
 	for _, ply in pairs(player.GetAll()) do
