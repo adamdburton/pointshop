@@ -2,7 +2,9 @@ PS.Config = {}
 
 -- Edit below
 
-PS.Config.ShopKey = "F3" -- F1, F2, F3 or F4
+PS.Config.ShopKey = "F3" -- F1, F2, F3 or F4, or blank to disable
+PS.Config.ShopCommand = 'ps_shop' -- Console command to open the shop, set to blank to disable
+PS.Config.ShopChatCommand = '!shop' -- Chat command to open the shop, set to blank to disable
 
 PS.Config.NotifyOnJoin = true -- Should players be notified about opening the shop when they spawn?
 

@@ -69,6 +69,13 @@ hook.Add('PlayerDeath', 'PS_PlayerDeath', function(ply) ply:PS_PlayerDeath() end
 hook.Add('PlayerInitialSpawn', 'PS_PlayerInitialSpawn', function(ply) ply:PS_PlayerInitialSpawn() end)
 hook.Add('PlayerDisconnected', 'PS_PlayerDisconnected', function(ply) ply:PS_PlayerDisconnected() end)
 
+hook.Add('PlayerSay', 'PS_PlayerSay', function(ply, text)
+	if string.sub(text, 0, string.len(PS.Config.ShopChatCommand)) == PS.Config.ShopChatCommand then
+		ply:PS_ToggleMenu()
+		return ''
+	end
+end)
+
 -- ugly networked strings
 
 util.AddNetworkString('PS_Items')
@@ -86,7 +93,11 @@ util.AddNetworkString('PS_RemoveClientsideModel')
 util.AddNetworkString('PS_SendClientsideModels')
 util.AddNetworkString('PS_ToggleMenu')
 
--- console commands for resetting
+-- console commands
+
+concommand.Add(PS.Config.ShopCommand, function(ply, cmd, args)
+	ply:PS_ToggleMenu()
+end)
 
 concommand.Add('ps_clear_points', function(ply, cmd, args)
 	if IsValid(ply) then return end -- only allowed from server console

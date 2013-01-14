@@ -37,9 +37,23 @@ function Player:PS_PlayerInitialSpawn()
 	end)
 	
 	if PS.Config.NotifyOnJoin then
-		timer.Simple(5, function() -- Give them time to load up
-			self:PS_Notify('Press ' .. PS.Config.ShopKey .. ' to open PointShop!')
-		end)
+		if PS.Config.ShopKey ~= '' then
+			timer.Simple(5, function() -- Give them time to load up
+				self:PS_Notify('Press ' .. PS.Config.ShopKey .. ' to open PointShop!')
+			end)
+		end
+		
+		if PS.Config.ShopCommand ~= '' then
+			timer.Simple(5, function() -- Give them time to load up
+				self:PS_Notify('Type ' .. PS.Config.ShopCommand .. ' in console to open PointShop!')
+			end)
+		end
+		
+		if PS.Config.ShopChatCommand ~= '' then
+			timer.Simple(5, function() -- Give them time to load up
+				self:PS_Notify('Type ' .. PS.Config.ShopChatCommand .. ' in chat to open PointShop!')
+			end)
+		end
 		
 		timer.Simple(10, function() -- Give them time to load up
 			self:PS_Notify('You have ' .. self:PS_GetPoints() .. ' points to spend!')
