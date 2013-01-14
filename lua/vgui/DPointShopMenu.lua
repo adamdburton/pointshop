@@ -22,7 +22,7 @@ function PANEL:Init()
 	
 	local tabs = vgui.Create('DPropertySheet', self)
 	
-	tabs:DockMargin(10, 80, 10, 10)
+	tabs:DockMargin(10, 80, 410, 10)
 	tabs:Dock(FILL)
 	
 	tabs:SetSize(self:GetWide() - 60, self:GetTall() - 150)
@@ -146,6 +146,17 @@ function PANEL:Init()
 		
 		tabs:AddSheet('Admin', AdminTab, 'icon16/shield.png', false, false, '')
 	end
+	
+	-- preview panel
+	
+	local preview = vgui.Create('DPanel', self)
+	
+	preview:DockMargin(self:GetWide() - 400, 100, 10, 10)
+	preview:Dock(FILL)
+	
+	local previewpanel = vgui.Create('DPointShopPreview', preview)
+	
+	previewpanel:Dock(FILL)
 end
 
 function PANEL:Think()
