@@ -47,7 +47,8 @@ function PS:ShowColorChooser(item, modifications)
 	chooser:SetColor(modifications.color)
 	
 	chooser.OnChoose = function(color)
-		self:SendModifications(item.ID, {color = color})
+		modifications.color = color
+		self:SendModifications(item.ID, modifications)
 	end
 end
 
