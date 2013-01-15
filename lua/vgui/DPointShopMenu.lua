@@ -47,6 +47,21 @@ function PANEL:Init()
 	
 	-- items
 	for _, CATEGORY in pairs(categories) do
+		
+		if CATEGORY.AllowedUserGroups and #CATEGORY.AllowedUserGroups > 0 then
+			local allowed = false
+			
+			for _, ug in pairs(CATEGORY.AllowedUserGroups) do
+				if LocalPlayer():IsUserGroup(ug) then
+					allowed = true
+				end
+			end
+			
+			if not allowed then
+				continue
+			end
+		end
+		
 		local ShopCategoryTab = vgui.Create('DPanel')
 		
 		local DScrollPanel = vgui.Create('DScrollPanel', ShopCategoryTab)
