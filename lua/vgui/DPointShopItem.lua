@@ -81,6 +81,10 @@ function PANEL:SetData(data)
 			if self:GetParent().Hovered then
 				ent:SetAngles(Angle(0, ent:GetAngles().y + 2, 0))
 			end
+			
+			local ITEM = PS.Items[data.ID]
+			
+			ITEM:ModifyClientsideModel(LocalPlayer(), ent, Vector(), Angle())
 		end
 		
 		function DModelPanel:DoClick()

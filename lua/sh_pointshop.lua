@@ -52,6 +52,7 @@ function PS:LoadItems()
 			CATEGORY.Name = ''
 			CATEGORY.Icon = ''
 			CATEGORY.AllowedEquipped = -1
+			CATEGORY.AllowedUserGroups = {}
 			
 			if SERVER then AddCSLuaFile('items/' .. category .. '/__category.lua') end
 			include('items/' .. category .. '/__category.lua')
