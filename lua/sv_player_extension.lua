@@ -181,15 +181,14 @@ function Player:PS_BuyItem(item_id)
 	local CATEGORY = PS:FindCategoryByName(cat_name)
 	
 	if CATEGORY.AllowedUserGroups and #CATEGORY.AllowedUserGroups > 0 then
-		local allowed = false
-		
-		for _, ug in pairs(CATEGORY.AllowedUserGroups) do
-			if self:IsUserGroup(ug) then
-				allowed = true
-			end
+		if ( !table.HasValue( CATEGORY.AllowedUserGroups, self:GetNWString("UserGroup", "user") ) ) then
+			self:PS_Notify('You\'re not in the right group to buy this item!')
+			return false
 		end
-		
-		if not allowed then
+	end
+
+	if ( CATEGORY.AllowedCallback and type(CATEGORY.AllowedCallback) == "function" ) then
+		if ( CATEGORY.AllowedCallback( self ) == false ) then
 			self:PS_Notify('You\'re not in the right group to buy this item!')
 			return false
 		end

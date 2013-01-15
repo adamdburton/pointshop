@@ -49,17 +49,13 @@ function PANEL:Init()
 	for _, CATEGORY in pairs(categories) do
 		
 		if CATEGORY.AllowedUserGroups and #CATEGORY.AllowedUserGroups > 0 then
-			local allowed = false
-			
-			for _, ug in pairs(CATEGORY.AllowedUserGroups) do
-				if LocalPlayer():IsUserGroup(ug) then
-					allowed = true
-				end
-			end
-			
-			if not allowed then
+			if ( !table.HasValue( CATEGORY.AllowedUserGroups, LocalPlayer():GetNWString("UserGroup", "user") ) ) then
 				continue
 			end
+		end
+
+		if ( CATEGORY.AllowedCallback and type(CATEGORY.AllowedCallback) == "function" ) then
+			if ( CATEGORY.AllowedCallback( LocalPlayer() ) == false ) then continue end
 		end
 		
 		local ShopCategoryTab = vgui.Create('DPanel')
