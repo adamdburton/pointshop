@@ -163,15 +163,7 @@ function Player:PS_BuyItem(item_id)
 	end
 	
 	if ITEM.AllowedUserGroups and #ITEM.AllowedUserGroups > 0 then
-		local allowed = false
-		
-		for _, ug in pairs(ITEM.AllowedUserGroups) do
-			if self:IsUserGroup(ug) then
-				allowed = true
-			end
-		end
-		
-		if not allowed then
+		if not table.HasValue(ITEM.AllowedUserGroups, self:GetNWString("UserGroup", "user")) then
 			self:PS_Notify('You\'re not in the right group to buy this item!')
 			return false
 		end
@@ -181,16 +173,15 @@ function Player:PS_BuyItem(item_id)
 	local CATEGORY = PS:FindCategoryByName(cat_name)
 	
 	if CATEGORY.AllowedUserGroups and #CATEGORY.AllowedUserGroups > 0 then
-		local allowed = false
-		
-		for _, ug in pairs(CATEGORY.AllowedUserGroups) do
-			if self:IsUserGroup(ug) then
-				allowed = true
-			end
-		end
-		
-		if not allowed then
+		if not table.HasValue(CATEGORY.AllowedUserGroups, self:GetNWString("UserGroup", "user")) then
 			self:PS_Notify('You\'re not in the right group to buy this item!')
+			return false
+		end
+	end
+	
+	if CATEGORY.CanPlayerSee then
+		if not CATEGORY:CanPlayerSee(self) then
+			self:PS_Notify('You\'re not allowed to buy this item!')
 			return false
 		end
 	end

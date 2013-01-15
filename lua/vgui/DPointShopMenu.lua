@@ -47,17 +47,14 @@ function PANEL:Init()
 	
 	-- items
 	for _, CATEGORY in pairs(categories) do
-		
 		if CATEGORY.AllowedUserGroups and #CATEGORY.AllowedUserGroups > 0 then
-			local allowed = false
-			
-			for _, ug in pairs(CATEGORY.AllowedUserGroups) do
-				if LocalPlayer():IsUserGroup(ug) then
-					allowed = true
-				end
+			if not table.HasValue(CATEGORY.AllowedUserGroups, LocalPlayer():GetNWString("UserGroup", "user")) then
+				continue
 			end
-			
-			if not allowed then
+		end
+		
+		if CATEGORY.CanPlayerSee then
+			if not CATEGORY:CanPlayerSee(LocalPlayer()) then
 				continue
 			end
 		end
