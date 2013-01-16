@@ -5,6 +5,8 @@ function PANEL:Init()
 	self:SetSize(300, 144)
 	
 	self:SetDeleteOnClose(true)
+	self:SetBackgroundBlur(true)
+	self:SetDrawOnTop(true)
 	
 	local l1 = vgui.Create("DLabel", self)
 	l1:SetText("Player:")
