@@ -7,11 +7,13 @@ if SERVER then
 	AddCSLuaFile('vgui/DPointShopGivePoints.lua')
 	AddCSLuaFile('sh_pointshop.lua')
 	AddCSLuaFile('sh_config.lua')
+	AddCSLuaFile('sh_player_extension.lua')
 	AddCSLuaFile('cl_player_extension.lua')
 	AddCSLuaFile('cl_pointshop.lua')
 	
 	include('sh_pointshop.lua')
 	include('sh_config.lua')
+	include('sh_player_extension.lua')
 	include('sv_player_extension.lua')
 	include('sv_pointshop.lua')
 end
@@ -24,6 +26,7 @@ if CLIENT then
 	include('vgui/DPointShopGivePoints.lua')
 	include('sh_pointshop.lua')
 	include('sh_config.lua')
+	include('sh_player_extension.lua')
 	include('cl_player_extension.lua')
 	include('cl_pointshop.lua')
 end
