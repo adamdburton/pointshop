@@ -15,6 +15,8 @@ PS.Config.PointsOverTimeAmount = 10 -- And if so, how many points to give after 
 PS.Config.AdminCanAccessAdminTab = true -- Can Admins access the Admin tab?
 PS.Config.SuperAdminCanAccessAdminTab = true -- Can SuperAdmins access the Admin tab?
 
+PS.Config.CanPlayersGivePoints = true -- Can players give points away to other players?
+
 -- Edit below if you know what you're doing
 
 PS.Config.CalculateBuyPrice = function(ply, item)
