@@ -20,6 +20,17 @@ net.Receive('PS_ModifyItem', function(length, ply)
 	ply:PS_ModifyItem(net.ReadString(), net.ReadTable())
 end)
 
+net.Receive('PS_SendPoints', function(length, ply)
+	local other = net.ReadEntity()
+	local points = net.ReadInt(32)
+	
+	if ( other and points and IsValid(other) and other:IsPlayer() and ply and IsValid(ply) and ply:IsPlayer() and ply:PS_HasPoints(points) ) then
+		other:PS_GivePoints(points)
+		ply:PS_TakePoints(points)
+		other:PS_Notify(ply:Nick(), ' gave you ', points, ' points.')
+	end
+end)
+
 net.Receive('PS_GivePoints', function(length, ply)
 	local other = net.ReadEntity()
 	local points = net.ReadInt(32)
@@ -102,6 +113,7 @@ util.AddNetworkString('PS_SellItem')
 util.AddNetworkString('PS_EquipItem')
 util.AddNetworkString('PS_HolsterItem')
 util.AddNetworkString('PS_ModifyItem')
+util.AddNetworkString('PS_SendPoints')
 util.AddNetworkString('PS_GivePoints')
 util.AddNetworkString('PS_TakePoints')
 util.AddNetworkString('PS_SetPoints')
