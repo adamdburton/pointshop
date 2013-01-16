@@ -48,7 +48,7 @@ function PANEL:Init()
 	-- items
 	for _, CATEGORY in pairs(categories) do
 		if CATEGORY.AllowedUserGroups and #CATEGORY.AllowedUserGroups > 0 then
-			if not table.HasValue(CATEGORY.AllowedUserGroups, LocalPlayer():GetNWString("UserGroup", "user")) then
+			if not table.HasValue(CATEGORY.AllowedUserGroups, LocalPlayer():PS_GetUsergroup()) then
 				continue
 			end
 		end
