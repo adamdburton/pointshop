@@ -167,8 +167,15 @@ function PANEL:Init()
 	preview:Dock(FILL)
 	
 	local previewpanel = vgui.Create('DPointShopPreview', preview)
-	
 	previewpanel:Dock(FILL)
+
+	local givebutton = vgui.Create('DButton', preview)
+	givebutton:SetText("Give Points")
+	givebutton:DockMargin(8, 8, 8, 8)
+	givebutton:Dock(BOTTOM)
+	givebutton.DoClick = function()
+		vgui.Create('DPointShopGivePoints')
+	end
 end
 
 function PANEL:Think()
