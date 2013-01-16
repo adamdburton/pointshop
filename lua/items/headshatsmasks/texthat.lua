@@ -1,6 +1,7 @@
 ITEM.Name = 'Text Hat'
 ITEM.Price = 1000
 ITEM.Model = 'models/extras/info_speech.mdl'
+ITEM.NoPreview = true
 
 function ITEM:PostPlayerDraw(ply, modifications, ply2)
 	if not ply == ply2 then return end

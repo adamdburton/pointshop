@@ -89,8 +89,8 @@ function PANEL:DrawOtherModels()
 	if PS.HoverModel then
 		local ITEM = PS.Items[PS.HoverModel]
 		
+		if ITEM.NoPreview then return end -- don't show
 		if ITEM.WeaponClass then return end -- hack for weapons
-		if ITEM.PostPlayerDraw then return end -- hack for text hat
 		
 		if not ITEM.Attachment and not ITEM.Bone then -- must be a playermodel?
 			self:SetModel(ITEM.Model)

@@ -80,6 +80,7 @@ function PS:LoadItems()
 					ITEM.AdminOnly = false
 					ITEM.AllowedUserGroups = {} -- this will fail the #ITEM.AllowedUserGroups test and continue
 					ITEM.SingleUse = false
+					ITEM.NoPreview = false
 					
 					ITEM.OnBuy = function() end
 					ITEM.OnSell = function() end
