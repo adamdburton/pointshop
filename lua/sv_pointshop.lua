@@ -26,7 +26,7 @@ net.Receive('PS_SendPoints', function(length, ply)
 	
 	if PS.Config.CanPlayersGivePoints and other and points and IsValid(other) and other:IsPlayer() and ply and IsValid(ply) and ply:IsPlayer() and ply:PS_HasPoints(points) then
 		ply:PS_TakePoints(points)
-		ply:PS_Notify('You gave you ', other:Nick(), ' ', points, ' of your points.')
+		ply:PS_Notify('You gave ', other:Nick(), ' ', points, ' of your points.')
 		
 		other:PS_GivePoints(points)
 		other:PS_Notify(ply:Nick(), ' gave you ', points, ' of their points.')
