@@ -18,7 +18,7 @@ function ITEM:PostPlayerDraw(ply, modifications, ply2)
 	ang:RotateAroundAxis(ang:Right(), 90)
 	
 	cam.Start3D2D(pos, Angle(0, ang.y, 90), 0.1)
-		draw.DrawText(modifications.text or ply:Nick(), "PS_Heading", 2, 2, modifications.color or Color(255, 255, 255, 255), TEXT_ALIGN_CENTER)
+		draw.DrawText(string.sub(modifications.text or ply:Nick(), 1, MaxTextLength), "PS_Heading", 2, 2, modifications.color or Color(255, 255, 255, 255), TEXT_ALIGN_CENTER)
 	cam.End3D2D()
 end
 
