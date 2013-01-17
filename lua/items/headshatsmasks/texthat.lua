@@ -3,6 +3,8 @@ ITEM.Price = 1000
 ITEM.Model = 'models/extras/info_speech.mdl'
 ITEM.NoPreview = true
 
+local TextMaxLength = 24
+
 function ITEM:PostPlayerDraw(ply, modifications, ply2)
 	if not ply == ply2 then return end
 	if not ply:Alive() then return end
@@ -22,7 +24,7 @@ end
 
 function ITEM:Modify(modifications)
 	Derma_StringRequest("Text", "What text do you want your hat to say?", "", function(text)
-		modifications.text = text
+		modifications.text = string.sub(text, 0, TextMaxLength)
 		PS:ShowColorChooser(self, modifications)
 	end)
 end
