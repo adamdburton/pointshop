@@ -2,6 +2,29 @@ surface.CreateFont('PS_Heading', { font = 'coolvetica', size = 64 })
 surface.CreateFont('PS_Heading2', { font = 'coolvetica', size = 24 })
 surface.CreateFont('PS_Heading3', { font = 'coolvetica', size = 19 })
 
+local ALL_ITEMS = 1
+local OWNED_ITEMS = 2
+local UNOWNED_ITEMS = 3
+
+local function BuildItemMenu(menu, ply, itemstype, callback)
+	local plyitems = ply:PS_GetItems()
+	
+	for category_id, CATEGORY in pairs(PS.Categories) do
+		
+		local catmenu = menu:AddSubMenu(CATEGORY.Name)
+		
+		table.SortByMember(PS.Items, "Name", function(a, b) return a > b end)
+		
+		for item_id, ITEM in pairs(PS.Items) do
+			if ITEM.Category == CATEGORY.Name then
+				if itemstype == 1 or (itemstype == 2 and plyitems[item_id]) or (itemstype == 3 and not plyitems[item_id]) then
+					catmenu:AddOption(ITEM.Name, function() callback(item_id) end)
+				end
+			end
+		end
+	end
+end
+
 local PANEL = {}
 
 function PANEL:Init()
@@ -149,6 +172,22 @@ function PANEL:Init()
 						net.SendToServer()
 					end
 				)
+			end)
+			
+			menu:AddSpacer()
+			
+			BuildItemMenu(menu:AddSubMenu('Give Item'), ply, 3, function(item_id)
+				net.Start('PS_GiveItem')
+					net.WriteEntity(ply)
+					net.WriteString(item_id)
+				net.SendToServer()
+			end)
+			
+			BuildItemMenu(menu:AddSubMenu('Take Item'), ply, 2, function(item_id)
+				net.Start('PS_TakeItem')
+					net.WriteEntity(ply)
+					net.WriteString(item_id)
+				net.SendToServer()
 			end)
 			
 			menu:Open()
