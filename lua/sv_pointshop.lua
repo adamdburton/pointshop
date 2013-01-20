@@ -210,8 +210,8 @@ local function CompareVersions()
 end
 
 function PS:CheckVersion()
-	if ( file.Exists( "pointshop_build.txt", "DATA" ) ) then
-		PS.CurrentBuild = tonumber(file.Read( "pointshop_build.txt", "DATA" ))
+	if ( file.Exists( "data/pointshop_build.txt", "GAME" ) ) then
+		PS.CurrentBuild = tonumber(file.Read( "data/pointshop_build.txt", "GAME" ))
 	end
 
 	local url = self.Config.Branch .. "data/pointshop_build.txt"
