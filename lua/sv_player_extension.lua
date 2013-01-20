@@ -63,6 +63,12 @@ function Player:PS_PlayerInitialSpawn()
 			self:PS_Notify('You have ' .. self:PS_GetPoints() .. ' points to spend!')
 		end)
 	end
+
+	if PS.Config.CheckVersion and PS.BuildOutdated and self:IsAdmin() then
+		timer.Simple(5, function()
+			self:PS_Notify("Pointshop is out of date, please tell the server owner!")
+		end)
+	end
 	
 	if PS.Config.PointsOverTime then
 		timer.Create('PS_PointsOverTime_' .. self:UniqueID(), PS.Config.PointsOverTimeDelay * 60, 0, function()

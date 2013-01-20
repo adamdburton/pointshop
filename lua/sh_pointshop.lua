@@ -38,6 +38,12 @@ function PS:FindCategoryByName(cat_name)
 	return false
 end
 
+-- Initialization
+
+function PS:Initialize()
+	if SERVER and self.Config.CheckVersion then self:CheckVersion() end
+end
+
 -- Loading
 
 function PS:LoadItems()	

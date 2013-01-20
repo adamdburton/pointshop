@@ -31,4 +31,5 @@ if CLIENT then
 	include('cl_pointshop.lua')
 end
 
+PS:Initialize()
 PS:LoadItems()

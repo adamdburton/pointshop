@@ -17,7 +17,7 @@ local function BuildItemMenu(menu, ply, itemstype, callback)
 		
 		for item_id, ITEM in pairs(PS.Items) do
 			if ITEM.Category == CATEGORY.Name then
-				if itemstype == 1 or (itemstype == 2 and plyitems[item_id]) or (itemstype == 3 and not plyitems[item_id]) then
+				if itemstype == ALL_ITEMS or (itemstype == OWNED_ITEMS and plyitems[item_id]) or (itemstype == UNOWNED_ITEMS and not plyitems[item_id]) then
 					catmenu:AddOption(ITEM.Name, function() callback(item_id) end)
 				end
 			end
@@ -28,7 +28,7 @@ end
 local PANEL = {}
 
 function PANEL:Init()
-	self:SetSize(1024, 768)
+	self:SetSize( math.Clamp( 1024, 0, ScrW() ), math.Clamp( 768, 0, ScrH() ) )
 	self:SetPos((ScrW() / 2) - (self:GetWide() / 2), (ScrH() / 2) - (self:GetTall() / 2))
 	
 	-- close button
@@ -176,14 +176,14 @@ function PANEL:Init()
 			
 			menu:AddSpacer()
 			
-			BuildItemMenu(menu:AddSubMenu('Give Item'), ply, 3, function(item_id)
+			BuildItemMenu(menu:AddSubMenu('Give Item'), ply, UNOWNED_ITEMS, function(item_id)
 				net.Start('PS_GiveItem')
 					net.WriteEntity(ply)
 					net.WriteString(item_id)
 				net.SendToServer()
 			end)
 			
-			BuildItemMenu(menu:AddSubMenu('Take Item'), ply, 2, function(item_id)
+			BuildItemMenu(menu:AddSubMenu('Take Item'), ply, OWNED_ITEMS, function(item_id)
 				net.Start('PS_TakeItem')
 					net.WriteEntity(ply)
 					net.WriteString(item_id)

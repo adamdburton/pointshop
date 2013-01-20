@@ -191,3 +191,38 @@ concommand.Add('ps_clear_items', function(ply, cmd, args)
 	
 	sql.Query("DELETE FROM playerpdata WHERE infoid LIKE '%PS_Items%'")
 end)
+
+-- version checker
+
+PS.CurrentBuild = 0
+PS.LatestBuild = 0
+PS.BuildOutdated = false
+
+local function CompareVersions()
+	if ( PS.CurrentBuild < PS.LatestBuild ) then
+		print( "Pointshop is out of date!" )
+		print( "Local version: " .. PS.CurrentBuild .. " Latest version: " .. PS.LatestBuild )
+
+		PS.BuildOutdated = true
+	else
+		print( "Pointshop is on the latest version." )
+	end
+end
+
+function PS:CheckVersion()
+	if ( file.Exists( "pointshop_build.txt", "DATA" ) ) then
+		PS.CurrentBuild = tonumber(file.Read( "pointshop_build.txt", "DATA" ))
+	end
+
+	local url = self.Config.Branch .. "data/pointshop_build.txt"
+	http.Fetch( url,
+		function( content ) -- onSuccess
+			PS.LatestBuild = tonumber( content )
+			CompareVersions()
+		end,
+		function( failCode ) -- onFailure
+			print( "Pointshop couldn't check version." )
+			print( url, " returned ", failCode )
+		end
+	)
+end
