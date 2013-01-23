@@ -45,7 +45,11 @@ function PANEL:Init()
 	
 	local tabs = vgui.Create('DPropertySheet', self)
 	
-	tabs:DockMargin(10, 80, 410, 10)
+	if PS.Config.DisplayPreviewInMenu then
+		tabs:DockMargin(10, 80, 410, 10)
+	else
+		tabs:DockMargin(10, 80, 10, 10)
+	end
 	tabs:Dock(FILL)
 	
 	tabs:SetSize(self:GetWide() - 60, self:GetTall() - 150)
@@ -199,21 +203,28 @@ function PANEL:Init()
 	end
 	
 	-- preview panel
-	
-	local preview = vgui.Create('DPanel', self)
-	
-	preview:DockMargin(self:GetWide() - 400, 100, 10, 10)
-	preview:Dock(FILL)
-	
-	local previewpanel = vgui.Create('DPointShopPreview', preview)
-	previewpanel:Dock(FILL)
+
+	local preview
+	if PS.Config.DisplayPreviewInMenu then
+		preview = vgui.Create('DPanel', self)
+		
+		preview:DockMargin(self:GetWide() - 400, 100, 10, 10)
+		preview:Dock(FILL)
+		
+		local previewpanel = vgui.Create('DPointShopPreview', preview)
+		previewpanel:Dock(FILL)
+	end
 	
 	-- give points button
 	
 	if PS.Config.CanPlayersGivePoints then
-		local givebutton = vgui.Create('DButton', preview)
+		local givebutton = vgui.Create('DButton', preview or self)
 		givebutton:SetText("Give Points")
-		givebutton:DockMargin(8, 8, 8, 8)
+		if PS.Config.DisplayPreviewInMenu then
+			givebutton:DockMargin(8, 8, 8, 8)
+		else
+			givebutton:DockMargin(8, 0, 8, 8)
+		end
 		givebutton:Dock(BOTTOM)
 		givebutton.DoClick = function()
 			vgui.Create('DPointShopGivePoints')

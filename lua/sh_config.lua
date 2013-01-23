@@ -19,6 +19,7 @@ PS.Config.AdminCanAccessAdminTab = true -- Can Admins access the Admin tab?
 PS.Config.SuperAdminCanAccessAdminTab = true -- Can SuperAdmins access the Admin tab?
 
 PS.Config.CanPlayersGivePoints = true -- Can players give points away to other players?
+PS.Config.DisplayPreviewInMenu = true -- Can players see the preview of their items in the menu?
 
 -- Edit below if you know what you're doing
 
