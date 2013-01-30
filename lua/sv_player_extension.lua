@@ -27,16 +27,10 @@ function Player:PS_PlayerDeath()
 end
 
 function Player:PS_PlayerInitialSpawn()
-	self.PS_Items = {}
-	self.PS_Points = 0
-	
-	self.PS_Items = PS:ValidateItems(util.JSONToTable(self:GetPData('PS_Items', '[]')))
-	self.PS_Points = PS:ValidatePoints(tonumber(self:GetPData('PS_Points')))
+	self:PS_LoadData()
 	
 	-- Send stuff
 	timer.Simple(1, function()
-		self:PS_SendItems()
-		self:PS_SendPoints()
 		self:PS_SendClientsideModels()
 	end)
 	
@@ -66,7 +60,7 @@ function Player:PS_PlayerInitialSpawn()
 
 	if PS.Config.CheckVersion and PS.BuildOutdated and self:IsAdmin() then
 		timer.Simple(5, function()
-			self:PS_Notify("Pointshop is out of date, please tell the server owner!")
+			self:PS_Notify("PointShop is out of date, please tell the server owner!")
 		end)
 	end
 	
@@ -88,8 +82,20 @@ function Player:PS_PlayerDisconnected()
 end
 
 function Player:PS_Save()
-	self:SetPData('PS_Items', util.TableToJSON(self.PS_Items))
-	self:SetPData('PS_Points', self.PS_Points)
+	PS:SetPlayerData(self, self.PS_Points, self.PS_Items)
+end
+
+function Player:PS_LoadData()
+	self.PS_Points = 0
+	self.PS_Items = {}
+	
+	PS:GetPlayerData(self, function(points, items)
+		self.PS_Points = points
+		self.PS_Items = items
+		
+		self:PS_SendPoints()
+		self:PS_SendItems()
+	end)
 end
 
 function Player:PS_CanPerformAction()
@@ -357,7 +363,7 @@ end
 
 -- send stuff
 
-function Player:PS_SendPoints()
+function Player:PS_SendPoints(wat)
 	self:PS_Save()
 	
 	net.Start('PS_Points')
@@ -366,7 +372,7 @@ function Player:PS_SendPoints()
 	net.Broadcast()
 end
 
-function Player:PS_SendItems()
+function Player:PS_SendItems(wat)
 	self:PS_Save()
 	
 	net.Start('PS_Items')

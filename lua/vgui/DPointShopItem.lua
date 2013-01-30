@@ -24,14 +24,18 @@ function PANEL:DoClick()
 	
 	if LocalPlayer():PS_HasItem(self.Data.ID) then
 		menu:AddOption('Sell', function()
-			LocalPlayer():PS_SellItem(self.Data.ID)
+			Derma_Query('Are you sure you want to sell ' .. self.Data.Name .. '?', 'Sell Item',
+				'Yes', function() LocalPlayer():PS_SellItem(self.Data.ID) end,
+				'No', function() end
+			)
 		end)
 	elseif LocalPlayer():PS_HasPoints(points) then
-		if not self.Data.AdminOnly or (self.Data.AdminOnly and LocalPlayer():IsAdmin()) then
-			menu:AddOption('Buy', function()
-				LocalPlayer():PS_BuyItem(self.Data.ID)
-			end)
-		end
+		menu:AddOption('Buy', function()
+			Derma_Query('Are you sure you want to buy ' .. self.Data.Name .. '?', 'Buy Item',
+				'Yes', function() LocalPlayer():PS_BuyItem(self.Data.ID) end,
+				'No', function() end
+			)
+		end)
 	end
 	
 	if LocalPlayer():PS_HasItem(self.Data.ID) then
