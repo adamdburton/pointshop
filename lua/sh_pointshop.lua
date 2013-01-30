@@ -89,11 +89,13 @@ function PS:LoadItems()
 					ITEM.SingleUse = false
 					ITEM.NoPreview = false
 					
+					ITEM.CanPlayerBuy = true
+					ITEM.CanPlayerSell = true
+
 					ITEM.OnBuy = function() end
 					ITEM.OnSell = function() end
 					ITEM.OnEquip = function() end
 					ITEM.OnHolster = function() end
-					ITEM.CanPlayerBuy = function() return true end
 					ITEM.OnModify = function() end
 					ITEM.ModifyClientsideModel = function(ITEM, ply, model, pos, ang)
 						return model, pos, ang

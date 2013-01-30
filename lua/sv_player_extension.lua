@@ -200,7 +200,12 @@ function Player:PS_BuyItem(item_id)
 	end
 	
 	if ITEM.CanPlayerBuy then -- should exist but we'll check anyway
-		local allowed, message = ITEM:CanPlayerBuy(self)
+		local allowed, message
+		if ( type(ITEM.CanPlayerBuy) == "function" ) then
+			allowed, message = ITEM:CanPlayerBuy(self)
+		elseif ( type(ITEM.CanPlayerBuy) == "boolean" ) then
+			allowed = ITEM.CanPlayerBuy
+		end
 		
 		if not allowed then
 			self:PS_Notify(message or 'You\'re not allowed to buy this item!')
@@ -228,8 +233,22 @@ function Player:PS_SellItem(item_id)
 	if not self:PS_HasItem(item_id) then return false end
 	
 	local ITEM = PS.Items[item_id]
-	local points = PS.Config.CalculateSellPrice(self, ITEM)
 	
+	if ITEM.CanPlayerSell then -- should exist but we'll check anyway
+		local allowed, message
+		if ( type(ITEM.CanPlayerSell) == "function" ) then
+			allowed, message = ITEM:CanPlayerSell(self)
+		elseif ( type(ITEM.CanPlayerSell) == "boolean" ) then
+			allowed = ITEM.CanPlayerSell
+		end
+		
+		if not allowed then
+			self:PS_Notify(message or 'You\'re not allowed to sell this item!')
+			return false
+		end
+	end
+
+	local points = PS.Config.CalculateSellPrice(self, ITEM)
 	self:PS_GivePoints(points)
 	
 	ITEM:OnHolster(self)
