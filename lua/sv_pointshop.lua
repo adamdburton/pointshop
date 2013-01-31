@@ -221,8 +221,8 @@ function PS:CheckVersion()
 			CompareVersions()
 		end,
 		function(failCode) -- onFailure
-			print('PointShop couldn\'t check version.')
-			print(url, ' returned ', failCode)
+			MsgN('PointShop couldn\'t check version.')
+			MsgN(url, ' returned ', failCode)
 		end
 	)
 end
@@ -253,13 +253,23 @@ end
 function PS:GetPlayerData(ply, callback)
 	local provider = self.DataProviders[self.Config.DataProvider]
 	
+	if not provider or not self.Config.DataProvider then
+		Error('PointShop: Missing provider. Update ALL files when there is an update.')
+		return
+	end
+	
 	provider:GetData(ply, function(points, items)
-		callback(tonumber(points), items)	
+		callback(PS:ValidatePoints(tonumber(points)), PS:ValidateItems(items))
 	end)
 end
 
 function PS:SetPlayerData(ply, points, items)
 	local provider = self.DataProviders[self.Config.DataProvider]
+	
+	if not provider or not self.Config.DataProvider then
+		Error('PointShop: Missing provider. Update ALL files when there is an update.')
+		return
+	end
 	
 	provider:SetData(ply, points, items)
 end
