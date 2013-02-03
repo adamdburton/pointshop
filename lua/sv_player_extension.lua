@@ -27,10 +27,12 @@ function Player:PS_PlayerDeath()
 end
 
 function Player:PS_PlayerInitialSpawn()
-	self:PS_LoadData()
+	self.PS_Points = 0
+	self.PS_Items = {}
 	
 	-- Send stuff
 	timer.Simple(1, function()
+		self:PS_LoadData()
 		self:PS_SendClientsideModels()
 	end)
 	
