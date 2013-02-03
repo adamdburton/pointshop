@@ -24,7 +24,7 @@ end)
 
 net.Receive('PS_SendPoints', function(length, ply)
 	local other = net.ReadEntity()
-	local points = net.ReadInt(32)
+	local points = math.Clamp(net.ReadInt(32), 0, 1000000)
 	
 	if PS.Config.CanPlayersGivePoints and other and points and IsValid(other) and other:IsPlayer() and ply and IsValid(ply) and ply:IsPlayer() and ply:PS_HasPoints(points) then
 		ply:PS_TakePoints(points)
