@@ -62,11 +62,12 @@ function PANEL:Init()
 		table.insert(categories, i)
 	end
 	
-	sort(categories, function(a, b) 
+	table.sort(categories, function(a, b) 
 		if a.Order == b.Order then 
-			return a.Name > b.Name
+			return a.Name < b.Name
 		else
-			return a.Order > b.Order
+			return a.Order < b.Order
+		end
 	end)
 	
 	local items = {}
