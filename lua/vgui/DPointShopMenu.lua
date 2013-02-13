@@ -62,7 +62,13 @@ function PANEL:Init()
 		table.insert(categories, i)
 	end
 	
-	table.SortByMember(categories, "Name", function(a, b) return a > b end)
+	table.sort(categories, function(a, b) 
+		if a.Order == b.Order then 
+			return a.Name < b.Name
+		else
+			return a.Order < b.Order
+		end
+	end)
 	
 	local items = {}
 	
