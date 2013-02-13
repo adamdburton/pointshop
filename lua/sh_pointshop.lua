@@ -58,6 +58,7 @@ function PS:LoadItems()
 			
 			CATEGORY.Name = ''
 			CATEGORY.Icon = ''
+			CATEGORY.Order = 0
 			CATEGORY.AllowedEquipped = -1
 			CATEGORY.AllowedUserGroups = {}
 			CATEGORY.CanPlayerSee = function() return true end
