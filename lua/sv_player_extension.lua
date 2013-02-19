@@ -32,8 +32,10 @@ function Player:PS_PlayerInitialSpawn()
 	
 	-- Send stuff
 	timer.Simple(1, function()
-		self:PS_LoadData()
-		self:PS_SendClientsideModels()
+		if IsValid(self) then
+			self:PS_LoadData()
+			self:PS_SendClientsideModels()
+		end
 	end)
 	
 	if PS.Config.NotifyOnJoin then
