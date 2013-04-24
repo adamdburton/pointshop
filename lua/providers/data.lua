@@ -5,18 +5,21 @@ function PROVIDER:GetData(ply, callback)
 	
 	local points, items
 	
-	local filename = string.replace(ply:SteamID(), ':', '_')
+	local filename = string.Replace(ply:SteamID(), ':', '_')
 	
-	if not file.Exists('pointshop/' .. filename .. '.txt') then
-		file.Create('pointshop/' .. filename .. '.txt')
+	if not file.Exists('pointshop/' .. filename .. '.txt', 'DATA') then
+		file.Write('pointshop/' .. filename .. '.txt', util.TableToJSON({
+			Points = 0,
+			Items = {}
+		}))
 		
 		points = 0
 		items = {}
 	else
-		local data = util.KeyValuesToTable(file.Read('pointshop/' .. filename .. '.txt', 'DATA'))
+		local data = util.JSONToTable(file.Read('pointshop/' .. filename .. '.txt', 'DATA'))
 		
-		points = data.Points
-		items = util.JSONToTable(data.Items)
+		points = data.Points or 0
+		items = data.Items or {}
 	end
 	
 	return callback(points, items)
@@ -27,10 +30,10 @@ function PROVIDER:SetData(ply, points, items)
 		file.CreateDir('pointshop')
 	end
 	
-	local filename = string.replace(ply:SteamID(), ':', '_')
+	local filename = string.Replace(ply:SteamID(), ':', '_')
 	
-	file.Write('pointshop/' .. filename .. '.txt', util.TableToKeyValues({
+	file.Write('pointshop/' .. filename .. '.txt', util.TableToJSON({
 		Points = points,
-		Items = util.TableToJSON(items)
-	})
+		Items = items
+	}))
 end
