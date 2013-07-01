@@ -41,30 +41,40 @@ function Player:PS_PlayerInitialSpawn()
 	if PS.Config.NotifyOnJoin then
 		if PS.Config.ShopKey ~= '' then
 			timer.Simple(5, function() -- Give them time to load up
-				self:PS_Notify('Press ' .. PS.Config.ShopKey .. ' to open PointShop!')
+				if IsValid(self) then
+					self:PS_Notify('Press ' .. PS.Config.ShopKey .. ' to open PointShop!')
+				end
 			end)
 		end
 		
 		if PS.Config.ShopCommand ~= '' then
 			timer.Simple(5, function() -- Give them time to load up
-				self:PS_Notify('Type ' .. PS.Config.ShopCommand .. ' in console to open PointShop!')
+				if IsValid(self) then
+					self:PS_Notify('Type ' .. PS.Config.ShopCommand .. ' in console to open PointShop!')
+				end
 			end)
 		end
 		
 		if PS.Config.ShopChatCommand ~= '' then
 			timer.Simple(5, function() -- Give them time to load up
-				self:PS_Notify('Type ' .. PS.Config.ShopChatCommand .. ' in chat to open PointShop!')
+				if IsValid(self) then
+					self:PS_Notify('Type ' .. PS.Config.ShopChatCommand .. ' in chat to open PointShop!')
+				end
 			end)
 		end
 		
 		timer.Simple(10, function() -- Give them time to load up
-			self:PS_Notify('You have ' .. self:PS_GetPoints() .. ' points to spend!')
+			if IsValid(self) then
+				self:PS_Notify('You have ' .. self:PS_GetPoints() .. ' points to spend!')
+			end
 		end)
 	end
 
 	if PS.Config.CheckVersion and PS.BuildOutdated and self:IsAdmin() then
 		timer.Simple(5, function()
-			self:PS_Notify("PointShop is out of date, please tell the server owner!")
+			if IsValid(self) then
+				self:PS_Notify("PointShop is out of date, please tell the server owner!")
+			end
 		end)
 	end
 	
