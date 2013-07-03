@@ -19,7 +19,7 @@ end
 
 function Player:PS_BuyItem(item_id)
 	if self:PS_HasItem(item_id) then return false end
-	if not self:PS_HasPoints(PS.Items[item_id].Price) then return false end
+	if not self:PS_HasPoints(PS.Config.CalculateBuyPrice(self, PS.Items[item_id])) then return false end
 	
 	net.Start('PS_BuyItem')
 		net.WriteString(item_id)
