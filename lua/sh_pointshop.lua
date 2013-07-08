@@ -141,6 +141,8 @@ function PS:LoadItems()
 					ITEM = nil
 				end
 			end
+			
+			CATEGORY = nil
 		end
 	end
 end

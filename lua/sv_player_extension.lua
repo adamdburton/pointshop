@@ -396,7 +396,7 @@ end
 
 -- send stuff
 
-function Player:PS_SendPoints(wat)
+function Player:PS_SendPoints()
 	self:PS_Save()
 	
 	net.Start('PS_Points')
@@ -405,7 +405,7 @@ function Player:PS_SendPoints(wat)
 	net.Broadcast()
 end
 
-function Player:PS_SendItems(wat)
+function Player:PS_SendItems()
 	self:PS_Save()
 	
 	net.Start('PS_Items')

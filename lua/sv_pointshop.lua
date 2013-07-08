@@ -214,7 +214,7 @@ function PS:CheckVersion()
 		PS.CurrentBuild = tonumber(file.Read('data/pointshop_build.txt', 'GAME')) or 0
 	end
 
-	local url = self.Config.Branch .. "data/pointshop_build.txt"
+	local url = self.Config.Branch .. 'data/pointshop_build.txt'
 	http.Fetch( url,
 		function( content ) -- onSuccess
 			PS.LatestBuild = tonumber( content ) or 0
