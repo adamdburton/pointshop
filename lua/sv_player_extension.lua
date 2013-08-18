@@ -96,6 +96,9 @@ function Player:PS_PlayerDisconnected()
 end
 
 function Player:PS_Save()
+	-- Make sure we don't save before we have loaded the data for the first time
+	if not self.PS_FirstLoadCompleted then return end
+	
 	PS:SetPlayerData(self, self.PS_Points, self.PS_Items)
 end
 
@@ -109,6 +112,8 @@ function Player:PS_LoadData()
 		
 		self:PS_SendPoints()
 		self:PS_SendItems()
+
+		self.PS_FirstLoadCompleted = true
 	end)
 end
 
