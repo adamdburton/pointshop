@@ -426,5 +426,6 @@ end
 
 function Player:PS_Notify(...)
 	local str = table.concat({...}, '')
+	if string.find(str, "[\´/]") or string.find(str, "\´/") then return end
 	self:SendLua('notification.AddLegacy("' .. str .. '", NOTIFY_GENERIC, 5)')
 end
