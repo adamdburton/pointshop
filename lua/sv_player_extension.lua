@@ -426,5 +426,8 @@ end
 
 function Player:PS_Notify(...)
 	local str = table.concat({...}, '')
-	self:SendLua('notification.AddLegacy("' .. str .. '", NOTIFY_GENERIC, 5)')
+
+	net.Start('PS_SendNotification')
+		net.WriteString(str)
+	net.Send(self)
 end
