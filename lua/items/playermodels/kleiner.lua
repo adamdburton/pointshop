@@ -15,3 +15,7 @@ function ITEM:OnHolster(ply)
 		ply:SetModel(ply._OldModel)
 	end
 end
+
+function ITEM:PlayerSetModel(ply)
+	ply:SetModel(self.Model)
+end
