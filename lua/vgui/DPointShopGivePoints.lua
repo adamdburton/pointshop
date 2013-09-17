@@ -1,7 +1,7 @@
 local PANEL = {}
 
 function PANEL:Init()
-	self:SetTitle("PointShop Give Points")
+	self:SetTitle("PointShop Give "..PS.Config.PointsName)
 	self:SetSize(300, 144)
 	
 	self:SetDeleteOnClose(true)
@@ -23,7 +23,7 @@ function PANEL:Init()
 	self:FillPlayers()
 
 	local l2 = vgui.Create("DLabel", self)
-	l2:SetText("Points:")
+	l2:SetText(PS.Config.PointsName..":")
 	l2:Dock(TOP)
 	l2:DockMargin(4, 2, 4, 4)
 	l2:SizeToContents()
