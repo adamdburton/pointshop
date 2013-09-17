@@ -17,7 +17,7 @@ function PANEL:DoClick()
 	local points = PS.Config.CalculateBuyPrice(LocalPlayer(), self.Data)
 	
 	if not LocalPlayer():PS_HasItem(self.Data.ID) and not LocalPlayer():PS_HasPoints(points) then
-		notification.AddLegacy("You don't have enough points for this!", NOTIFY_GENERIC, 5)
+		notification.AddLegacy("You don't have enough "..PS.Config.PointsName.." for this!", NOTIFY_GENERIC, 5)
 	end
 
 	local menu = DermaMenu(self)

@@ -63,7 +63,7 @@ function Player:PS_PlayerInitialSpawn()
 		
 		timer.Simple(10, function() -- Give them time to load up
 			if !IsValid(self) then return end
-			self:PS_Notify('You have ' .. self:PS_GetPoints() .. ' points to spend!')
+			self:PS_Notify('You have ' .. self:PS_GetPoints() .. ' ' .. PS.Config.PointsName .. ' to spend!')
 		end)
 	end
 
@@ -78,7 +78,7 @@ function Player:PS_PlayerInitialSpawn()
 		timer.Create('PS_PointsOverTime_' .. self:UniqueID(), PS.Config.PointsOverTimeDelay * 60, 0, function()
 			if !IsValid(self) then return end
 			self:PS_GivePoints(PS.Config.PointsOverTimeAmount)
-			self:PS_Notify("You've been given ", PS.Config.PointsOverTimeAmount, " points for playing on the server!")
+			self:PS_Notify("You've been given ", PS.Config.PointsOverTimeAmount, " ", PS.Config.PointsName, " for playing on the server!")
 		end)
 	end
 end
@@ -231,7 +231,7 @@ function Player:PS_BuyItem(item_id)
 	
 	self:PS_TakePoints(points)
 	
-	self:PS_Notify('Bought ', ITEM.Name, ' for ', points, ' points.')
+	self:PS_Notify('Bought ', ITEM.Name, ' for ', points, ' ', PS.Config.PointsName)
 	
 	ITEM:OnBuy(self)
 	
@@ -270,7 +270,7 @@ function Player:PS_SellItem(item_id)
 	ITEM:OnHolster(self)
 	ITEM:OnSell(self)
 	
-	self:PS_Notify('Sold ', ITEM.Name, ' for ', points, ' points.')
+	self:PS_Notify('Sold ', ITEM.Name, ' for ', points, ' ', PS.Config.PointsName)
 	
 	return self:PS_TakeItem(item_id)
 end

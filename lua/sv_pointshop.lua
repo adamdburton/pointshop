@@ -28,10 +28,10 @@ net.Receive('PS_SendPoints', function(length, ply)
 	
 	if PS.Config.CanPlayersGivePoints and other and points and IsValid(other) and other:IsPlayer() and ply and IsValid(ply) and ply:IsPlayer() and ply:PS_HasPoints(points) then
 		ply:PS_TakePoints(points)
-		ply:PS_Notify('You gave ', other:Nick(), ' ', points, ' of your points.')
+		ply:PS_Notify('You gave ', other:Nick(), ' ', points, ' of your ', PS.Config.PointsName, '.')
 		
 		other:PS_GivePoints(points)
-		other:PS_Notify(ply:Nick(), ' gave you ', points, ' of their points.')
+		other:PS_Notify(ply:Nick(), ' gave you ', points, ' of their ', PS.Config.PointsName, '.')
 	end
 end)
 
@@ -48,7 +48,7 @@ net.Receive('PS_GivePoints', function(length, ply)
 	
 	if (admin_allowed or super_admin_allowed) and other and points and IsValid(other) and other:IsPlayer() then
 		other:PS_GivePoints(points)
-		other:PS_Notify(ply:Nick(), ' gave you ', points, ' points.')
+		other:PS_Notify(ply:Nick(), ' gave you ', points, ' ', PS.Config.PointsName, '.')
 	end
 end)
 
@@ -63,7 +63,7 @@ net.Receive('PS_TakePoints', function(length, ply)
 	
 	if (admin_allowed or super_admin_allowed) and other and points and IsValid(other) and other:IsPlayer() then
 		other:PS_TakePoints(points)
-		other:PS_Notify(ply:Nick(), ' took ', points, ' points from you.')
+		other:PS_Notify(ply:Nick(), ' took ', points, ' ', PS.Config.PointsName, ' from you.')
 	end
 end)
 
@@ -78,7 +78,7 @@ net.Receive('PS_SetPoints', function(length, ply)
 	
 	if (admin_allowed or super_admin_allowed) and other and points and IsValid(other) and other:IsPlayer() then
 		other:PS_SetPoints(points)
-		other:PS_Notify(ply:Nick(), ' set your points to ', points, '.')
+		other:PS_Notify(ply:Nick(), ' set your ', PS.Config.PointsName, ' to ', points, '.')
 	end
 end)
 
