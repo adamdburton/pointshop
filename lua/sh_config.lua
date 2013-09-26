@@ -24,6 +24,7 @@ PS.Config.CanPlayersGivePoints = true -- Can players give points away to other p
 PS.Config.DisplayPreviewInMenu = true -- Can players see the preview of their items in the menu?
 
 PS.Config.PointsName = 'Points' -- What are the points called?
+PS.Config.SortItemsBy = 'Name' -- How are items sorted? Set to 'Price' to sort by price.
 
 -- Edit below if you know what you're doing
 
