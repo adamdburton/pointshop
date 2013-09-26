@@ -13,7 +13,7 @@ local function BuildItemMenu(menu, ply, itemstype, callback)
 		
 		local catmenu = menu:AddSubMenu(CATEGORY.Name)
 		
-		table.SortByMember(PS.Items, "Name", function(a, b) return a > b end)
+		table.SortByMember(PS.Items, PS.Config.SortItemsBy, function(a, b) return a > b end)
 		
 		for item_id, ITEM in pairs(PS.Items) do
 			if ITEM.Category == CATEGORY.Name then
@@ -76,7 +76,7 @@ function PANEL:Init()
 		table.insert(items, i)
 	end
 	
-	table.SortByMember(items, "Name", function(a, b) return a > b end)
+	table.SortByMember(items, PS.Config.SortItemsBy, function(a, b) return a > b end)
 	
 	-- items
 	for _, CATEGORY in pairs(categories) do
