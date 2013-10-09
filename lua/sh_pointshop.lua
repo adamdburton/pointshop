@@ -79,7 +79,7 @@ function PS:LoadItems()
 					ITEM = {}
 					
 					ITEM.__index = ITEM
-					ITEM.ID = string.gsub(name, '.lua', '')
+					ITEM.ID = string.gsub(string.lower(name), '.lua', '')
 					ITEM.Category = CATEGORY.Name
 					ITEM.Price = 0
 					
