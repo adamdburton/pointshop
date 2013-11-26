@@ -307,6 +307,17 @@ function Player:PS_EquipItem(item_id)
 	
 	local ITEM = PS.Items[item_id]
 	
+	if type(ITEM.CanPlayerEquip) == 'function' then
+		allowed, message = ITEM:CanPlayerEquip(self)
+	elseif type(ITEM.CanPlayerEquip) == 'boolean' then
+		allowed = ITEM.CanPlayerEquip
+	end
+	
+	if not allowed then
+		self:PS_Notify(message or 'You\'re not allowed to equip this item!')
+		return false
+	end
+	
 	local cat_name = ITEM.Category
 	local CATEGORY = PS:FindCategoryByName(cat_name)
 	
@@ -334,6 +345,18 @@ function Player:PS_HolsterItem(item_id)
 	self.PS_Items[item_id].Equipped = false
 	
 	local ITEM = PS.Items[item_id]
+	
+	if type(ITEM.CanPlayerHolster) == 'function' then
+		allowed, message = ITEM:CanPlayerHolster(self)
+	elseif type(ITEM.CanPlayerHolster) == 'boolean' then
+		allowed = ITEM.CanPlayerHolster
+	end
+	
+	if not allowed then
+		self:PS_Notify(message or 'You\'re not allowed to holster this item!')
+		return false
+	end
+	
 	ITEM:OnHolster(self)
 	
 	self:PS_Notify('Holstered ', ITEM.Name, '.')

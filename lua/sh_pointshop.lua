@@ -92,6 +92,9 @@ function PS:LoadItems()
 					
 					ITEM.CanPlayerBuy = true
 					ITEM.CanPlayerSell = true
+					
+					ITEM.CanPlayerEquip = true
+					ITEM.CanPlayerHolster = true
 
 					ITEM.OnBuy = function() end
 					ITEM.OnSell = function() end
