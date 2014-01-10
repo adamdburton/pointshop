@@ -94,16 +94,16 @@ function PANEL:Init()
 		
 		local ShopCategoryTab = vgui.Create('DPanel')
 		
-		local DScrollPanel = vgui.Create('DScrollPanel', ShopCategoryTab)
-		DScrollPanel:Dock(FILL)
+		ShopCategoryTab.DScrollPanel = vgui.Create('DScrollPanel', ShopCategoryTab)
+		ShopCategoryTab.DScrollPanel:Dock(FILL)
 		
-		local ShopCategoryTabLayout = vgui.Create('DIconLayout', DScrollPanel)
-		ShopCategoryTabLayout:Dock(FILL)
-		ShopCategoryTabLayout:SetBorder(10)
-		ShopCategoryTabLayout:SetSpaceX(10)
-		ShopCategoryTabLayout:SetSpaceY(10)
+		ShopCategoryTab.DIconLayout = vgui.Create('DIconLayout', ShopCategoryTab.DScrollPanel)
+		ShopCategoryTab.DIconLayout:Dock(FILL)
+		ShopCategoryTab.DIconLayout:SetBorder(10)
+		ShopCategoryTab.DIconLayout:SetSpaceX(10)
+		ShopCategoryTab.DIconLayout:SetSpaceY(10)
 		
-		DScrollPanel:AddItem(ShopCategoryTabLayout)
+		ShopCategoryTab.DScrollPanel:AddItem(ShopCategoryTab.DIconLayout)
 		
 		for _, ITEM in pairs(items) do
 			if ITEM.Category == CATEGORY.Name then
@@ -111,8 +111,12 @@ function PANEL:Init()
 				model:SetData(ITEM)
 				model:SetSize(126, 126)
 				
-				ShopCategoryTabLayout:Add(model)
+				ShopCategoryTab.DIconLayout:Add(model)
 			end
+		end
+		
+		if CATEGORY.ModifyTab then
+			CATEGORY:ModifyTab(ShopCategoryTab)
 		end
 		
 		tabs:AddSheet(CATEGORY.Name, ShopCategoryTab, 'icon16/' .. CATEGORY.Icon .. '.png', false, false, '')
