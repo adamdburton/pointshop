@@ -274,3 +274,69 @@ function PS:SetPlayerData(ply, points, items)
 	
 	provider:SetData(ply, points, items)
 end
+
+function PS:SetPlayerPoints(ply, points)
+	local provider = self.DataProviders[self.Config.DataProvider]
+	
+	if not provider or not self.Config.DataProvider then
+		Error('PointShop: Missing provider. Update ALL files when there is an update.')
+		return
+	end
+	
+	provider:SetPoints(ply, points)
+end
+
+function PS:GivePlayerPoints(ply, points)
+	local provider = self.DataProviders[self.Config.DataProvider]
+	
+	if not provider or not self.Config.DataProvider then
+		Error('PointShop: Missing provider. Update ALL files when there is an update.')
+		return
+	end
+	
+	provider:GivePoints(ply, points, items)
+end
+
+function PS:TakePlayerPoints(ply, points)
+	local provider = self.DataProviders[self.Config.DataProvider]
+	
+	if not provider or not self.Config.DataProvider then
+		Error('PointShop: Missing provider. Update ALL files when there is an update.')
+		return
+	end
+	
+	provider:TakePoints(ply, points)
+end
+
+function PS:SavePlayerItem(ply, item_id, data)
+	local provider = self.DataProviders[self.Config.DataProvider]
+	
+	if not provider or not self.Config.DataProvider then
+		Error('PointShop: Missing provider. Update ALL files when there is an update.')
+		return
+	end
+	
+	provider:SaveItem(ply, item_id, data)
+end
+
+function PS:GivePlayerItem(ply, item_id, data)
+	local provider = self.DataProviders[self.Config.DataProvider]
+	
+	if not provider or not self.Config.DataProvider then
+		Error('PointShop: Missing provider. Update ALL files when there is an update.')
+		return
+	end
+	
+	provider:GiveItem(ply, item_id, data)
+end
+
+function PS:TakePlayerItem(ply, item_id)
+	local provider = self.DataProviders[self.Config.DataProvider]
+	
+	if not provider or not self.Config.DataProvider then
+		Error('PointShop: Missing provider. Update ALL files when there is an update.')
+		return
+	end
+	
+	provider:TakeItem(ply, item_id)
+end
