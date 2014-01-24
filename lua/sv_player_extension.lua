@@ -84,6 +84,7 @@ function Player:PS_PlayerInitialSpawn()
 end
 
 function Player:PS_PlayerDisconnected()
+	self:PS_Save()
 	PS.ClientsideModels[self] = nil
 	
 	if timer.Exists('PS_PointsOverTime_' .. self:UniqueID()) then
@@ -91,7 +92,10 @@ function Player:PS_PlayerDisconnected()
 	end
 end
 
-function Player:PS_Save()	
+function Player:PS_Save()
+	-- Make sure we don't save before we have loaded the data for the first time
+	if not self.PS_FirstLoadCompleted then return end
+	
 	PS:SetPlayerData(self, self.PS_Points, self.PS_Items)
 end
 
@@ -105,6 +109,8 @@ function Player:PS_LoadData()
 		
 		self:PS_SendPoints()
 		self:PS_SendItems()
+
+		self.PS_FirstLoadCompleted = true
 	end)
 end
 
@@ -125,19 +131,16 @@ end
 
 function Player:PS_GivePoints(points)
 	self.PS_Points = self.PS_Points + points
-	PS:GivePlayerPoints(self, points)
 	self:PS_SendPoints()
 end
 
 function Player:PS_TakePoints(points)
 	self.PS_Points = self.PS_Points - points >= 0 and self.PS_Points - points or 0
-	PS:TakePlayerPoints(self, points)
 	self:PS_SendPoints()
 end
 
 function Player:PS_SetPoints(points)
 	self.PS_Points = points
-	PS:SetPlayerPoints(self, points)
 	self:PS_SendPoints()
 end
 
@@ -153,11 +156,9 @@ end
 
 function Player:PS_GiveItem(item_id)
 	if not PS.Items[item_id] then return false end
-
+	
 	self.PS_Items[item_id] = { Modifiers = {}, Equipped = false }
 	
-	PS:GivePlayerItem(self, item_id, self.PS_Items[item_id])
-
 	self:PS_SendItems()
 	
 	return true
@@ -168,8 +169,6 @@ function Player:PS_TakeItem(item_id)
 	if not self:PS_HasItem(item_id) then return false end
 	
 	self.PS_Items[item_id] = nil
-
-	PS:GivePlayerItem(self, item_id)
 	
 	self:PS_SendItems()
 	
@@ -334,8 +333,6 @@ function Player:PS_EquipItem(item_id)
 	ITEM:OnEquip(self, self.PS_Items[item_id].Modifiers)
 	
 	self:PS_Notify('Equipped ', ITEM.Name, '.')
-
-	PS:SavePlayerItem(self, item_id, self.PS_Items[item_id])
 	
 	self:PS_SendItems()
 end
@@ -363,8 +360,6 @@ function Player:PS_HolsterItem(item_id)
 	ITEM:OnHolster(self)
 	
 	self:PS_Notify('Holstered ', ITEM.Name, '.')
-
-	PS:SavePlayerItem(self, item_id, self.PS_Items[item_id])
 	
 	self:PS_SendItems()
 end
@@ -384,8 +379,6 @@ function Player:PS_ModifyItem(item_id, modifications)
 	end
 	
 	ITEM:OnModify(self, self.PS_Items[item_id].Modifiers)
-
-	PS:SavePlayerItem(self, item_id, self.PS_Items[item_id])
 	
 	self:PS_SendItems()
 end
@@ -429,6 +422,8 @@ end
 -- send stuff
 
 function Player:PS_SendPoints()
+	self:PS_Save()
+	
 	net.Start('PS_Points')
 		net.WriteEntity(self)
 		net.WriteInt(self.PS_Points, 32)
@@ -436,6 +431,8 @@ function Player:PS_SendPoints()
 end
 
 function Player:PS_SendItems()
+	self:PS_Save()
+	
 	net.Start('PS_Items')
 		net.WriteEntity(self)
 		net.WriteTable(self.PS_Items)
