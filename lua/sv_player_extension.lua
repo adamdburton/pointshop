@@ -328,6 +328,24 @@ function Player:PS_EquipItem(item_id)
 		end
 	end
 	
+	if CATEGORY.SharedCategory then
+		local NumEquipped = self.PS_NumItemsEquippedFromCategory
+		for id, item in pairs(self.PS_Items) do
+			if not self:PS_HasItemEquipped(id) then continue end
+			local CatName = PS.Items[id].Category
+			local Cat = PS:FindCategoryByName( CatName )
+			if not Cat.SharedCategory then continue end
+			if Cat.SharedCategory == CATEGORY.Name then
+				if Cat.AllowedEquipped > -1 and CATEGORY.AllowedEquipped > -1 then
+					if NumEquipped(self,CatName) + NumEquipped(self,CATEGORY.Name) + 1 > Cat.AllowedEquipped then
+						self:PS_Notify('Only ' .. Cat.AllowedEquipped .. ' item'.. (Cat.AllowedEquipped == 1 and '' or 's') ..' can be equipped over ' .. CatName .. ' and ' .. CATEGORY.Name .. '!')
+						return false
+					end
+				end
+			end
+		end
+	end
+	
 	self.PS_Items[item_id].Equipped = true
 	
 	ITEM:OnEquip(self, self.PS_Items[item_id].Modifiers)
