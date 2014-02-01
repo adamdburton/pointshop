@@ -328,7 +328,7 @@ function Player:PS_EquipItem(item_id)
 		end
 	end
 	
-	if CATEGORY.SharedCategories and istable(CATEGORY.SharedCategories) then
+	if CATEGORY.SharedCategories then
 		local ConCatCats = ""
 		for p, c in pairs( CATEGORY.SharedCategories ) do
 			if p ~= #CATEGORY.SharedCategories then
