@@ -329,12 +329,16 @@ function Player:PS_EquipItem(item_id)
 	end
 	
 	if CATEGORY.SharedCategories then
-		local ConCatCats = ""
+		local ConCatCats = CATEGORY.Name
 		for p, c in pairs( CATEGORY.SharedCategories ) do
 			if p ~= #CATEGORY.SharedCategories then
-				ConCatCats = ConCatCats .. c
+				ConCatCats = ConCatCats .. ', ' .. c
 			else
-				ConCatCats = ConCatCats .. ', and ' .. c
+				if #CATEGORY.SharedCategories ~= 1 then
+					ConCatCats = ConCatCats .. ', and ' .. c
+				else
+					ConCatCats = ConCatCats .. ' and ' .. c
+				end
 			end
 		end
 		local NumEquipped = self.PS_NumItemsEquippedFromCategory
@@ -347,7 +351,7 @@ function Player:PS_EquipItem(item_id)
 				if SharedCategory == CATEGORY.Name then
 					if Cat.AllowedEquipped > -1 and CATEGORY.AllowedEquipped > -1 then
 						if NumEquipped(self,CatName) + NumEquipped(self,CATEGORY.Name) + 1 > Cat.AllowedEquipped then
-							self:PS_Notify('Only ' .. Cat.AllowedEquipped .. ' item'.. (Cat.AllowedEquipped == 1 and '' or 's') ..' can be equipped over ' .. CATEGORY.Name .. ', ' .. ConCatCats .. '!')
+							self:PS_Notify('Only ' .. Cat.AllowedEquipped .. ' item'.. (Cat.AllowedEquipped == 1 and '' or 's') ..' can be equipped over ' .. ConCatCats .. '!')
 							return false
 						end
 					end
