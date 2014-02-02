@@ -118,7 +118,7 @@ function Player:PS_CanPerformAction(itemname)
 	local allowed = true
 	local excepted = false
 	
-	for i = 1, #PS.Config.ExceptedItems do
+	for i = 1, #PS.Config.ExceptedItems do --Is it an excepted item?
 		if itemname == tostring(PS.Config.ExceptedItems[i]) then excepted = true end
 	end
 	
