@@ -26,11 +26,6 @@ PS.Config.DisplayPreviewInMenu = true -- Can players see the preview of their it
 PS.Config.PointsName = 'Points' -- What are the points called?
 PS.Config.SortItemsBy = 'Name' -- How are items sorted? Set to 'Price' to sort by price.
 
-PS.Config.ExceptedItems = { --What can be bought when alive or dead. Do not add hats or playermodels.
---"example1", --Use name of item file, i.e. example1.lua is example1. Passive Items only
---"example2"
-}
-
 -- Edit below if you know what you're doing
 
 PS.Config.CalculateBuyPrice = function(ply, item)
