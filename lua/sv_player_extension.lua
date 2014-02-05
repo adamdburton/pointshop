@@ -116,7 +116,8 @@ end
 
 function Player:PS_CanPerformAction(itemname)
 	local allowed = true
-	if not itemname then local itemexcept = false else itemexcept = PS.Items[itemname].Except end
+	local itemexcept = false
+	if itemname then itemexcept = PS.Items[itemname].Except end
 
 	if (self.IsSpec and self:IsSpec()) and not itemexcept then allowed = false end
 	if not self:Alive() and not itemexcept then allowed = false end
