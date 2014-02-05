@@ -328,6 +328,38 @@ function Player:PS_EquipItem(item_id)
 		end
 	end
 	
+	if CATEGORY.SharedCategories then
+		local ConCatCats = CATEGORY.Name
+		for p, c in pairs( CATEGORY.SharedCategories ) do
+			if p ~= #CATEGORY.SharedCategories then
+				ConCatCats = ConCatCats .. ', ' .. c
+			else
+				if #CATEGORY.SharedCategories ~= 1 then
+					ConCatCats = ConCatCats .. ', and ' .. c
+				else
+					ConCatCats = ConCatCats .. ' and ' .. c
+				end
+			end
+		end
+		local NumEquipped = self.PS_NumItemsEquippedFromCategory
+		for id, item in pairs(self.PS_Items) do
+			if not self:PS_HasItemEquipped(id) then continue end
+			local CatName = PS.Items[id].Category
+			local Cat = PS:FindCategoryByName( CatName )
+			if not Cat.SharedCategories then continue end
+			for _, SharedCategory in pairs( Cat.SharedCategories ) do
+				if SharedCategory == CATEGORY.Name then
+					if Cat.AllowedEquipped > -1 and CATEGORY.AllowedEquipped > -1 then
+						if NumEquipped(self,CatName) + NumEquipped(self,CATEGORY.Name) + 1 > Cat.AllowedEquipped then
+							self:PS_Notify('Only ' .. Cat.AllowedEquipped .. ' item'.. (Cat.AllowedEquipped == 1 and '' or 's') ..' can be equipped over ' .. ConCatCats .. '!')
+							return false
+						end
+					end
+				end
+			end
+		end
+	end
+	
 	self.PS_Items[item_id].Equipped = true
 	
 	ITEM:OnEquip(self, self.PS_Items[item_id].Modifiers)
