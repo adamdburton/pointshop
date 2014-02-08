@@ -114,11 +114,14 @@ function Player:PS_LoadData()
 	end)
 end
 
-function Player:PS_CanPerformAction()
+function Player:PS_CanPerformAction(itemname)
 	local allowed = true
+	local itemexcept = false
+	if itemname then itemexcept = PS.Items[itemname].Except end
+
+	if (self.IsSpec and self:IsSpec()) and not itemexcept then allowed = false end
+	if not self:Alive() and not itemexcept then allowed = false end
 	
-	if self.IsSpec and self:IsSpec() then allowed = false end
-	if not self:Alive() then allowed = false end
 	
 	if not allowed then
 		self:PS_Notify('You\'re not allowed to do that at the moment!')
@@ -184,7 +187,7 @@ function Player:PS_BuyItem(item_id)
 	local points = PS.Config.CalculateBuyPrice(self, ITEM)
 	
 	if not self:PS_HasPoints(points) then return false end
-	if not self:PS_CanPerformAction() then return end
+	if not self:PS_CanPerformAction(item_id) then return end
 	
 	if ITEM.AdminOnly and not self:IsAdmin() then
 		self:PS_Notify('This item is Admin only!')
@@ -303,7 +306,7 @@ end
 function Player:PS_EquipItem(item_id)
 	if not PS.Items[item_id] then return false end
 	if not self:PS_HasItem(item_id) then return false end
-	if not self:PS_CanPerformAction() then return false end
+	if not self:PS_CanPerformAction(item_id) then return false end
 	
 	local ITEM = PS.Items[item_id]
 	
@@ -372,7 +375,7 @@ end
 function Player:PS_HolsterItem(item_id)
 	if not PS.Items[item_id] then return false end
 	if not self:PS_HasItem(item_id) then return false end
-	if not self:PS_CanPerformAction() then return false end
+	if not self:PS_CanPerformAction(item_id) then return false end
 	
 	self.PS_Items[item_id].Equipped = false
 	
@@ -402,7 +405,7 @@ function Player:PS_ModifyItem(item_id, modifications)
 	if not PS.Items[item_id] then return false end
 	if not self:PS_HasItem(item_id) then return false end
 	if not type(modifications) == "table" then return false end
-	if not self:PS_CanPerformAction() then return false end
+	if not self:PS_CanPerformAction(item_id) then return false end
 	
 	local ITEM = PS.Items[item_id]
 	
