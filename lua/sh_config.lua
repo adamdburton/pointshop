@@ -17,6 +17,8 @@ PS.Config.PointsOverTime = true -- Should players be given points over time?
 PS.Config.PointsOverTimeDelay = 1 -- If so, how many minutes apart?
 PS.Config.PointsOverTimeAmount = 10 -- And if so, how many points to give after the time?
 
+PS.Config.InitialPoints = 100 -- The number of points a player starts off with
+
 PS.Config.AdminCanAccessAdminTab = true -- Can Admins access the Admin tab?
 PS.Config.SuperAdminCanAccessAdminTab = true -- Can SuperAdmins access the Admin tab?
 
