@@ -5,6 +5,7 @@ function PROVIDER:GetData(ply, callback)
 	
 	local points, items
 	
+	local new = false
 	local filename = string.Replace(ply:SteamID(), ':', '_')
 	
 	if not file.Exists('pointshop/' .. filename .. '.txt', 'DATA') then
@@ -13,6 +14,7 @@ function PROVIDER:GetData(ply, callback)
 			Items = {}
 		}))
 		
+		new = true;
 		points = 0
 		items = {}
 	else
@@ -22,7 +24,7 @@ function PROVIDER:GetData(ply, callback)
 		items = data.Items or {}
 	end
 	
-	return callback(points, items)
+	return callback(points, items, new)
 end
 
 function PROVIDER:SetData(ply, points, items)
