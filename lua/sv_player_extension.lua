@@ -104,7 +104,6 @@ function Player:PS_LoadData()
 	self.PS_Items = {}
 	
 	PS:GetPlayerData(self, function(points, items, new)
-		print(new)
 		if not new then
 			self.PS_Points = points
 		else
