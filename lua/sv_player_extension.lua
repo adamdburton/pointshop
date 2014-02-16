@@ -103,8 +103,14 @@ function Player:PS_LoadData()
 	self.PS_Points = 0
 	self.PS_Items = {}
 	
-	PS:GetPlayerData(self, function(points, items)
-		self.PS_Points = points
+	PS:GetPlayerData(self, function(points, items, new)
+		print(new)
+		if not new then
+			self.PS_Points = points
+		else
+			self.PS_Points = PS.Config.InitialPoints || points
+		end
+
 		self.PS_Items = items
 		
 		self:PS_SendPoints()
@@ -299,6 +305,10 @@ function Player:PS_NumItemsEquippedFromCategory(cat_name)
 	end
 	
 	return count
+end
+
+function Player:PS_Exists()
+    return self:GetPData('PS_Points') != nil
 end
 
 -- equip/hoster items

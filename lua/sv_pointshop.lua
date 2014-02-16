@@ -259,8 +259,8 @@ function PS:GetPlayerData(ply, callback)
 		return
 	end
 	
-	provider:GetData(ply, function(points, items)
-		callback(PS:ValidatePoints(tonumber(points)), PS:ValidateItems(items))
+	provider:GetData(ply, function(points, items, new)
+		callback(PS:ValidatePoints(tonumber(points)), PS:ValidateItems(items), new)
 	end)
 end
 

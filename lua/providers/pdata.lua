@@ -1,5 +1,5 @@
 function PROVIDER:GetData(ply, callback)
-	return callback(ply:GetPData('PS_Points', 0), util.JSONToTable(ply:GetPData('PS_Items', '{}')))
+	return callback(ply:GetPData('PS_Points', 0), util.JSONToTable(ply:GetPData('PS_Items', '{}')), !ply:PS_Exists())
 end
 
 function PROVIDER:SetData(ply, points, items)
