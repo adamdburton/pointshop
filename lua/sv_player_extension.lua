@@ -198,8 +198,14 @@ function Player:PS_BuyItem(item_id)
 		self:PS_Notify('This item is Admin only!')
 		return false
 	end
-	
-	if ITEM.AllowedUserGroups and #ITEM.AllowedUserGroups > 0 then
+
+	local purchasable = hook.Call("PS_Purchase", nil, self, points, ITEM)
+
+	if purchasable == false then
+		self:PS_Notify('You can\'t buy this item!')
+
+		return false
+	elseif ITEM.AllowedUserGroups and #ITEM.AllowedUserGroups > 0 then
 		if not table.HasValue(ITEM.AllowedUserGroups, self:PS_GetUsergroup()) then
 			self:PS_Notify('You\'re not in the right group to buy this item!')
 			return false
@@ -307,7 +313,7 @@ function Player:PS_NumItemsEquippedFromCategory(cat_name)
 end
 
 function Player:PS_Exists()
-    return self:GetPData('PS_Points') != nil
+	return self:GetPData('PS_Points') != nil
 end
 
 -- equip/hoster items
