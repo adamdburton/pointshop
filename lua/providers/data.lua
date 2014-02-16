@@ -2,10 +2,10 @@ function PROVIDER:GetData(ply, callback)
 	if not file.IsDir('pointshop', 'DATA') then
 		file.CreateDir('pointshop')
 	end
-    
+	
 	local points, items
 	
-    local new = false;
+	local new = false
 	local filename = string.Replace(ply:SteamID(), ':', '_')
 	
 	if not file.Exists('pointshop/' .. filename .. '.txt', 'DATA') then
