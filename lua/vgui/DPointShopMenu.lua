@@ -92,7 +92,14 @@ function PANEL:Init()
 			end
 		end
 		
-		local ShopCategoryTab = vgui.Create('DPanel')
+		--Allow addons to create custom Category display types
+		local ShopCategoryTab = hook.Run( "PS_CustomCategoryTab", CATEGORY )
+		if IsValid( ShopCategoryTab ) then
+			tabs:AddSheet(CATEGORY.Name, ShopCategoryTab, 'icon16/' .. CATEGORY.Icon .. '.png', false, false, '')
+			continue
+		else
+			ShopCategoryTab = vgui.Create('DPanel')
+		end
 		
 		ShopCategoryTab.DScrollPanel = vgui.Create('DScrollPanel', ShopCategoryTab)
 		ShopCategoryTab.DScrollPanel:Dock(FILL)
