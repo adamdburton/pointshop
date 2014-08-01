@@ -145,7 +145,7 @@ function PANEL:SetData(data)
 		end
 	end
 	
-	if self.Description then
+	if data.Description then
 		self:SetTooltip(data.Description)
 	end
 end
