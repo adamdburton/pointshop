@@ -122,16 +122,13 @@ function PANEL:Init()
 			end
 		end
 		
-		local itemDescription = ''
-		if CATEGORY.Description then
-			itemDescription = CATEGORY.Description
-		end
+		local categoryDescription = CATEGORY.Description or ''
 		
 		if CATEGORY.ModifyTab then
 			CATEGORY:ModifyTab(ShopCategoryTab)
 		end
 		
-		tabs:AddSheet(CATEGORY.Name, ShopCategoryTab, 'icon16/' .. CATEGORY.Icon .. '.png', false, false, itemDescription)
+		tabs:AddSheet(CATEGORY.Name, ShopCategoryTab, 'icon16/' .. CATEGORY.Icon .. '.png', false, false, categoryDescription)
 	end
 	
 	if (PS.Config.AdminCanAccessAdminTab and LocalPlayer():IsAdmin()) or (PS.Config.SuperAdminCanAccessAdminTab and LocalPlayer():IsSuperAdmin()) then
