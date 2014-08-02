@@ -239,47 +239,28 @@ end
 
 -- data providers
 
-PS.DataProviders = {}
-
-function PS:LoadDataProviders()
-	local files, _ = file.Find('pointshop/providers/*', 'LUA')
-	
-	for _, filename in pairs(files) do
-		PROVIDER = {}
-		PROVIDER.__index = {}
-		
-		PROVIDER.ID = string.gsub(filename, '.lua', '')
-		
-		function PROVIDER:GetFallback()
-			return self.DataProviders[self.Fallback]
-		end
-		
-		include('pointshop/providers/' .. filename)
-		
-		self.DataProviders[PROVIDER.ID] = PROVIDER
+function PS:LoadDataProvider()
+	local path = "pointshop/providers/" .. self.Config.DataProvider .. ".lua"
+	if not file.Exists(path, "LUA") then
+		error("Pointshop data provider not found. " .. path)
 	end
+
+	PROVIDER = {}
+	PROVIDER.__index = {}
+	PROVIDER.ID = self.Config.DataProvider
+		
+	include(path)
+		
+	self.DataProvider = PROVIDER
+	PROVIDER = nil
 end
 
 function PS:GetPlayerData(ply, callback)
-	local provider = self.DataProviders[self.Config.DataProvider]
-	
-	if not provider or not self.Config.DataProvider then
-		Error('PointShop: Missing provider. Update ALL files when there is an update.')
-		return
-	end
-	
-	provider:GetData(ply, function(points, items)
+	self.DataProvider:GetData(ply, function(points, items)
 		callback(PS:ValidatePoints(tonumber(points)), PS:ValidateItems(items))
 	end)
 end
 
 function PS:SetPlayerData(ply, points, items)
-	local provider = self.DataProviders[self.Config.DataProvider]
-	
-	if not provider or not self.Config.DataProvider then
-		Error('PointShop: Missing provider. Update ALL files when there is an update.')
-		return
-	end
-	
-	provider:SetData(ply, points, items)
+	self.DataProvider:SetData(ply, points, items)
 end

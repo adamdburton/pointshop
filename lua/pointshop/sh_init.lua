@@ -49,7 +49,7 @@ end
 -- Initialization
 
 function PS:Initialize()
-	if SERVER then self:LoadDataProviders() end
+	if SERVER then self:LoadDataProvider() end
 	if SERVER and self.Config.CheckVersion then self:CheckVersion() end
 
 	self:LoadItems()
