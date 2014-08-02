@@ -1,9 +1,17 @@
+--[[
+	pointshop/sh_init.lua
+	first file included on both states.
+]]--
+
 PS = {}
 PS.__index = PS
 
 PS.Items = {}
 PS.Categories = {}
 PS.ClientsideModels = {}
+
+include("sh_config.lua")
+include("sh_player_extension.lua")
 
 -- validation
 
@@ -43,15 +51,17 @@ end
 function PS:Initialize()
 	if SERVER then self:LoadDataProviders() end
 	if SERVER and self.Config.CheckVersion then self:CheckVersion() end
+
+	self:LoadItems()
 end
 
 -- Loading
 
 function PS:LoadItems()	
-	local _, dirs = file.Find('items/*', 'LUA')
+	local _, dirs = file.Find('pointshop/items/*', 'LUA')
 	
 	for _, category in pairs(dirs) do
-		local f, _ = file.Find('items/' .. category .. '/__category.lua', 'LUA')
+		local f, _ = file.Find('pointshop/items/' .. category .. '/__category.lua', 'LUA')
 		
 		if #f > 0 then
 			CATEGORY = {}
@@ -64,18 +74,18 @@ function PS:LoadItems()
 			CATEGORY.CanPlayerSee = function() return true end
 			CATEGORY.ModifyTab = function(tab) return end
 			
-			if SERVER then AddCSLuaFile('items/' .. category .. '/__category.lua') end
-			include('items/' .. category .. '/__category.lua')
+			if SERVER then AddCSLuaFile('pointshop/items/' .. category .. '/__category.lua') end
+			include('pointshop/items/' .. category .. '/__category.lua')
 			
 			if not PS.Categories[category] then
 				PS.Categories[category] = CATEGORY
 			end
 			
-			local files, _ = file.Find('items/' .. category .. '/*.lua', 'LUA')
+			local files, _ = file.Find('pointshop/items/' .. category .. '/*.lua', 'LUA')
 			
 			for _, name in pairs(files) do
 				if name ~= '__category.lua' then
-					if SERVER then AddCSLuaFile('items/' .. category .. '/' .. name) end
+					if SERVER then AddCSLuaFile('pointshop/items/' .. category .. '/' .. name) end
 					
 					ITEM = {}
 					
@@ -106,7 +116,7 @@ function PS:LoadItems()
 						return model, pos, ang
 					end
 					
-					include('items/' .. category .. '/' .. name)
+					include('pointshop/items/' .. category .. '/' .. name)
 					
 					if not ITEM.Name then
 						ErrorNoHalt("[POINTSHOP] Item missing name: " .. category .. '/' .. name .. "\n")

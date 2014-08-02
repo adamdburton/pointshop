@@ -1,3 +1,12 @@
+--[[
+	pointshop/sv_init.lua
+	first file included serverside.
+]]--
+
+include "sh_init.lua"
+include "sv_player_extension.lua"
+include "sv_manifest.lua"
+
 -- net hooks
 
 net.Receive('PS_BuyItem', function(length, ply)
@@ -233,7 +242,7 @@ end
 PS.DataProviders = {}
 
 function PS:LoadDataProviders()
-	local files, _ = file.Find('providers/*', 'LUA')
+	local files, _ = file.Find('pointshop/providers/*', 'LUA')
 	
 	for _, filename in pairs(files) do
 		PROVIDER = {}
@@ -245,7 +254,7 @@ function PS:LoadDataProviders()
 			return self.DataProviders[self.Fallback]
 		end
 		
-		include('providers/' .. filename)
+		include('pointshop/providers/' .. filename)
 		
 		self.DataProviders[PROVIDER.ID] = PROVIDER
 	end

@@ -1,3 +1,17 @@
+--[[
+	pointshop/cl_init.lua
+	first file included clientside.
+]]--
+
+include "sh_init.lua"
+include "cl_player_extension.lua"
+
+include "vgui/DPointShopMenu.lua"
+include "vgui/DPointShopItem.lua"
+include "vgui/DPointShopPreview.lua"
+include "vgui/DPointShopColorChooser.lua"
+include "vgui/DPointShopGivePoints.lua"
+
 PS.ShopMenu = nil
 PS.ClientsideModels = {}
 
