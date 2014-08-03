@@ -279,3 +279,27 @@ end
 function PS:SetPlayerData(ply, points, items)
 	self.DataProvider:SetData(ply, points, items)
 end
+
+function PS:SetPlayerPoints(ply, points)
+	self.DataProvider:SetPoints(ply, points)
+end
+
+function PS:GivePlayerPoints(ply, points)
+	self.DataProvider:GivePoints(ply, points, items)
+end
+
+function PS:TakePlayerPoints(ply, points)
+	self.DataProvider:TakePoints(ply, points)
+end
+
+function PS:SavePlayerItem(ply, item_id, data)
+	self.DataProvider:SaveItem(ply, item_id, data)
+end
+
+function PS:GivePlayerItem(ply, item_id, data)
+	self.DataProvider:GiveItem(ply, item_id, data)
+end
+
+function PS:TakePlayerItem(ply, item_id)
+	self.DataProvider:TakeItem(ply, item_id)
+end
