@@ -2,9 +2,48 @@ surface.CreateFont('PS_Heading', { font = 'coolvetica', size = 64 })
 surface.CreateFont('PS_Heading2', { font = 'coolvetica', size = 24 })
 surface.CreateFont('PS_Heading3', { font = 'coolvetica', size = 19 })
 
+surface.CreateFont( "PS_Default", {
+	font = system.IsOSX() and "Helvetica" or "Tahoma",
+	size = 13, weight = 500, antialias = true,
+})
+
+surface.CreateFont( "PS_DefaultBold", {
+	font = system.IsOSX() and "Helvetica" or "Tahoma",
+	size = 13, weight = 800, antialias = true,
+})
+
+surface.CreateFont( "PS_Heading1", {
+	font = system.IsOSX() and "Helvetica" or "Tahoma",
+	size = 18, weight = 500, antialias = true,
+})
+
+surface.CreateFont( "PS_Heading1Bold", {
+	font = system.IsOSX() and "Helvetica" or "Tahoma",
+	size = 18, weight = 800, antialias = true,
+})
+
+surface.CreateFont( "PS_ButtonText1", {
+	font = "Roboto",
+	size = 22, weight = 700, antialias = true,
+})
+
+surface.CreateFont( "PS_ItemText", {
+	font = system.IsOSX() and "Helvetica" or "Tahoma",
+	size = 11, weight = 500, antialias = true,
+})
+
+surface.CreateFont( "PS_LargeTitle", {
+	font = "Roboto",
+	size = 32, weight = 500, antialias = true,
+})
+
 local ALL_ITEMS = 1
 local OWNED_ITEMS = 2
 local UNOWNED_ITEMS = 3
+
+local BGColor1 = Color(52, 73, 94)
+local BGColor2 = Color(40, 40, 40)
+local BGColor3 = Color(57, 56, 54)
 
 local function BuildItemMenu(menu, ply, itemstype, callback)
 	local plyitems = ply:PS_GetItems()
@@ -35,26 +74,103 @@ function PANEL:Init()
 	local closeButton = vgui.Create('DButton', self)
 	closeButton:SetFont('marlett')
 	closeButton:SetText('r')
+	closeButton.Paint = function() end
 	closeButton:SetColor(Color(255, 255, 255))
-	closeButton:SetSize(15, 15)
-	closeButton:SetDrawBackground(false)
-	closeButton:SetPos(self:GetWide() - 25, 10)
+	closeButton:SetSize(32, 32)
+	closeButton:SetPos(self:GetWide() - 40, 8)
 	closeButton.DoClick = function()
 		PS:ToggleMenu()
 	end
-	
-	local tabs = vgui.Create('DPropertySheet', self)
+
+	local buttonContainer = vgui.Create("DPanel", self)
+	buttonContainer:SetTall(28)
+	buttonContainer:Dock(TOP)
+	buttonContainer:DockMargin(0, 48, 0, 0)
+
+	local container = vgui.Create("DPanel", self)
 	
 	if PS.Config.DisplayPreviewInMenu then
-		tabs:DockMargin(10, 80, 410, 10)
+		container:DockMargin(0, 0, 320, 0)
 	else
-		tabs:DockMargin(10, 80, 10, 10)
+		container:DockMargin(0, 0, 0, 0)
 	end
-	tabs:Dock(FILL)
+	container:Dock(FILL)
 	
-	tabs:SetSize(self:GetWide() - 60, self:GetTall() - 150)
-	tabs:SetPos((self:GetWide() / 2) - (tabs:GetWide() / 2), 120)
-	
+	container:SetSize(self:GetWide() - 60, self:GetTall() - 150)
+	container:SetPos((self:GetWide() / 2) - (container:GetWide() / 2), 120)
+
+	local btns = {}
+	local firstBtn = true
+	local function createBtn(text, material, panel, align)
+		panel:SetParent(container)
+		panel:Dock(FILL)
+		panel.Paint = function(pnl, w, h) surface.SetDrawColor(232, 232, 232, 255) surface.DrawRect(0, 0, w, h) end
+
+		if firstBtn then
+			panel:SetZPos(100)
+			panel:SetVisible(true)
+		else
+			panel:SetZPos(1)
+			panel:SetVisible(false)
+		end
+
+		local btn = vgui.Create("DButton", buttonContainer)
+		btn:Dock(align or LEFT)
+		btn:SetText(text)
+		btn:SetFont("DermaDefault")
+		btn:SetImage(material)
+
+		btn.Paint = function(pnl, w, h)
+			surface.SetDrawColor(218, 218, 218, 255)
+			surface.DrawOutlinedRect(0, 0, w, h)
+
+			if pnl:GetActive() then
+				surface.SetDrawColor(BGColor1)
+				surface.DrawRect(0, h-3, w, 3)
+			end
+		end
+		btn.UpdateColours = function(pnl)
+			if pnl:GetActive() then return pnl:SetTextColor(Color(105, 105, 105, 255)) end
+			if pnl.Hovered then return pnl:SetTextColor(Color(120, 120, 120, 255)) end
+			pnl:SetTextColor(Color(140, 140, 140, 255))
+		end
+		btn.PerformLayout = function(pnl)
+			pnl:SizeToContents() pnl:SetWide(pnl:GetWide() + 12) pnl:SetTall( pnl:GetParent():GetTall() ) DLabel.PerformLayout(pnl)
+
+			pnl.m_Image:SetSize(16, 16)
+			pnl.m_Image:SetPos( 8, (pnl:GetTall() - pnl.m_Image:GetTall()) * 0.5 )
+			pnl:SetContentAlignment(4)
+			pnl:SetTextInset( pnl.m_Image:GetWide() + 16, 0 )
+		end
+
+		btn.GetActive = function(pnl) return pnl.Active or false end
+		btn.SetActive = function(pnl, state) pnl.Active = state end
+
+		if firstBtn then firstBtn = false; btn:SetActive(true) end
+
+		btn.DoClick = function(pnl)
+			for k, v in pairs(btns) do v:SetActive(false) v:OnDeactivate() end
+			pnl:SetActive(true) pnl:OnActivate()
+		end
+
+		btn.OnDeactivate = function()
+			panel:SetVisible(false)
+			panel:SetZPos(1)
+		end
+		btn.OnActivate = function()
+			panel:SetVisible(true)
+			panel:SetZPos(100)
+		end
+
+		table.insert(btns, btn)
+
+		return btn
+	end
+
+	--local btnShop = createBtn("Heads, Hats and Masks",	"hats",			vgui.Create("DPanel"))
+	--local btnInventory = createBtn("Accessories", 		"accessories",	vgui.Create("DPanel"))
+	--local btnTrade = createBtn("Trails",				"trails",		vgui.Create("DPanel"))
+
 	-- sorting
 	local categories = {}
 	
@@ -77,6 +193,26 @@ function PANEL:Init()
 	end
 	
 	table.SortByMember(items, PS.Config.SortItemsBy, function(a, b) return a > b end)
+
+	-- ready for the worst sorting ever??
+
+	local tbl1 = {}
+	local tbl2 = {}
+	local tbl3 = {}
+
+	for _, i in pairs(items) do
+		local points = PS.Config.CalculateBuyPrice(LocalPlayer(), i)
+
+		if 		( LocalPlayer():PS_HasItem(i.ID) ) then table.insert(tbl3, i)
+		elseif	( LocalPlayer():PS_HasPoints(points) ) then table.insert(tbl1, i)
+		else	table.insert(tbl2, i) end
+	end
+
+	items = {}
+
+	for _, i in pairs(tbl1) do table.insert(items, i) end
+	for _, i in pairs(tbl2) do table.insert(items, i) end
+	for _, i in pairs(tbl3) do table.insert(items, i) end
 	
 	-- items
 	for _, CATEGORY in pairs(categories) do
@@ -92,45 +228,32 @@ function PANEL:Init()
 			end
 		end
 		
-		--Allow addons to create custom Category display types
-		local ShopCategoryTab = hook.Run( "PS_CustomCategoryTab", CATEGORY )
-		if IsValid( ShopCategoryTab ) then
-			tabs:AddSheet(CATEGORY.Name, ShopCategoryTab, 'icon16/' .. CATEGORY.Icon .. '.png', false, false, '')
-			continue
-		else
-			ShopCategoryTab = vgui.Create('DPanel')
-		end
+		local ShopCategoryTab = vgui.Create('DPanel')
 		
-		ShopCategoryTab.DScrollPanel = vgui.Create('DScrollPanel', ShopCategoryTab)
-		ShopCategoryTab.DScrollPanel:Dock(FILL)
+		local DScrollPanel = vgui.Create('DScrollPanel', ShopCategoryTab)
+		DScrollPanel:Dock(FILL)
 		
-		ShopCategoryTab.DIconLayout = vgui.Create('DIconLayout', ShopCategoryTab.DScrollPanel)
-		ShopCategoryTab.DIconLayout:Dock(FILL)
-		ShopCategoryTab.DIconLayout:SetBorder(10)
-		ShopCategoryTab.DIconLayout:SetSpaceX(10)
-		ShopCategoryTab.DIconLayout:SetSpaceY(10)
+		local ShopCategoryTabLayout = vgui.Create('DIconLayout', DScrollPanel)
+		ShopCategoryTabLayout:Dock(FILL)
+		ShopCategoryTabLayout:SetBorder(8)
+		ShopCategoryTabLayout:SetSpaceX(8)
+		ShopCategoryTabLayout:SetSpaceY(8)
 		
-		ShopCategoryTab.DScrollPanel:AddItem(ShopCategoryTab.DIconLayout)
+		DScrollPanel:AddItem(ShopCategoryTabLayout)
 		
 		for _, ITEM in pairs(items) do
 			if ITEM.Category == CATEGORY.Name then
 				local model = vgui.Create('DPointShopItem')
 				model:SetData(ITEM)
-				model:SetSize(126, 126)
+				model:SetSize(128, 128)
 				
-				ShopCategoryTab.DIconLayout:Add(model)
+				ShopCategoryTabLayout:Add(model)
 			end
 		end
 		
-		local categoryDescription = CATEGORY.Description or ''
-		
-		if CATEGORY.ModifyTab then
-			CATEGORY:ModifyTab(ShopCategoryTab)
-		end
-		
-		tabs:AddSheet(CATEGORY.Name, ShopCategoryTab, 'icon16/' .. CATEGORY.Icon .. '.png', false, false, categoryDescription)
+		createBtn(CATEGORY.Name, 'icon16/' .. CATEGORY.Icon .. '.png', ShopCategoryTab)
 	end
-	
+
 	if (PS.Config.AdminCanAccessAdminTab and LocalPlayer():IsAdmin()) or (PS.Config.SuperAdminCanAccessAdminTab and LocalPlayer():IsSuperAdmin()) then
 		-- admin tab
 		local AdminTab = vgui.Create('DPanel')
@@ -217,8 +340,8 @@ function PANEL:Init()
 		end
 		
 		self.ClientsList = ClientsList
-		
-		tabs:AddSheet('Admin', AdminTab, 'icon16/shield.png', false, false, '')
+
+		createBtn("Admin", 'icon16/shield.png', AdminTab, RIGHT)
 	end
 	
 	-- preview panel
@@ -227,7 +350,7 @@ function PANEL:Init()
 	if PS.Config.DisplayPreviewInMenu then
 		preview = vgui.Create('DPanel', self)
 		
-		preview:DockMargin(self:GetWide() - 400, 100, 10, 10)
+		preview:DockMargin(self:GetWide() - 320, 0, 0, 0)
 		preview:Dock(FILL)
 		
 		local previewpanel = vgui.Create('DPointShopPreview', preview)
@@ -283,14 +406,24 @@ function PANEL:Think()
 	end
 end
 
-function PANEL:Paint()
+function PANEL:Paint(w, h)
 	Derma_DrawBackgroundBlur(self)
 	
-	draw.RoundedBox(10, 0, 0, self:GetWide(), self:GetTall(), Color(0, 0, 0, 150))
+	surface.SetDrawColor(40, 40, 40, 255)
+	surface.DrawRect(0, 0, w, h)
+
+	--surface.SetDrawColor(60, 80, 104, 255)
+	surface.SetDrawColor(BGColor1)
+	surface.DrawRect(0, 0, w, 48)
+
+	if PS.Config.CommunityName then
+		draw.SimpleText(PS.Config.CommunityName .. " PointShop", 'PS_LargeTitle', 16, 8, color_white)
+	else
+		draw.SimpleText("PointShop", 'PS_LargeTitle', 16, 8, color_white)
+	end
+
+	draw.SimpleText('You have ' .. LocalPlayer():PS_GetPoints() .. ' ' .. PS.Config.PointsName, 'PS_Heading3', self:GetWide() - 40, 24, color_white, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 	
-	draw.SimpleText('PointShop', 'PS_Heading', 20, 10, color_white)
-	draw.SimpleText('by _Undefined', 'PS_Heading2', 275, 50, color_white)
-	draw.SimpleText('You have ' .. LocalPlayer():PS_GetPoints() .. ' ' .. PS.Config.PointsName, 'PS_Heading3', self:GetWide() - 10, 60, color_white, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
 end
 
 vgui.Register('DPointShopMenu', PANEL)

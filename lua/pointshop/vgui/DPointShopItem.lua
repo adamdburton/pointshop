@@ -129,6 +129,7 @@ function PANEL:SetData(data)
 	else
 		local DImageButton = vgui.Create('DImageButton', self)
 		DImageButton:SetMaterial(data.Material)
+		DImageButton.m_Image.FrameTime = 0
 		
 		DImageButton:Dock(FILL)
 		
@@ -142,6 +143,15 @@ function PANEL:SetData(data)
 		
 		function DImageButton:OnCursorExited()
 			self:GetParent():OnCursorExited()
+		end
+
+		function DImageButton.m_Image:Paint(w, h)
+			if self:GetParent():GetParent().Hovered then
+				self.FrameTime = self.FrameTime + 1
+			end
+
+			self:PaintAt( 0, self.FrameTime % self:GetTall() - self:GetTall() , self:GetWide(), self:GetTall() )
+			self:PaintAt( 0, self.FrameTime % self:GetTall(), 					self:GetWide(), self:GetTall() )
 		end
 	end
 	
