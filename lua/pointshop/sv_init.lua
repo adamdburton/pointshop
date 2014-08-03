@@ -35,13 +35,28 @@ net.Receive('PS_SendPoints', function(length, ply)
 	local other = net.ReadEntity()
 	local points = math.Clamp(net.ReadInt(32), 0, 1000000)
 	
-	if PS.Config.CanPlayersGivePoints and other and points and IsValid(other) and other:IsPlayer() and ply and IsValid(ply) and ply:IsPlayer() and ply:PS_HasPoints(points) then
-		ply:PS_TakePoints(points)
-		ply:PS_Notify('You gave ', other:Nick(), ' ', points, ' of your ', PS.Config.PointsName, '.')
-		
-		other:PS_GivePoints(points)
-		other:PS_Notify(ply:Nick(), ' gave you ', points, ' of their ', PS.Config.PointsName, '.')
+	if not PS.Config.CanPlayersGivePoints then return end
+	if not points or points == 0 then return end
+	if not other or not IsValid(other) or not other:IsPlayer() then return end
+	if not ply or not IsValid(ply) or not ply:IsPlayer() then return end
+	if not ply:PS_HasPoints(points) then
+		ply:PS_Notify("You can't afford to give away ", points, " of your ", PS.Config.PointsName, ".")
+		return
 	end
+
+	ply.PS_LastGavePoints = ply.PS_LastGavePoints or 0
+	if ply.PS_LastGavePoints + 5 > CurTime() then
+		ply:PS_Notify("Slow down! You can't give away points that fast.")
+		return
+	end
+
+	ply:PS_TakePoints(points)
+	ply:PS_Notify("You gave ", other:Nick(), " ", points, " of your ", PS.Config.PointsName, ".")
+		
+	other:PS_GivePoints(points)
+	other:PS_Notify(ply:Nick(), " gave you ", points, " of their ", PS.Config.PointsName, ".")
+
+	ply.PS_LastGavePoints = CurTime()
 end)
 
 -- admin points
