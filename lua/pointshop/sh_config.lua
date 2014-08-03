@@ -2,6 +2,8 @@ PS.Config = {}
 
 -- Edit below
 
+PS.Config.CommunityName = "My Community"
+
 PS.Config.DataProvider = 'pdata'
 
 PS.Config.Branch = 'https://raw.github.com/adamdburton/pointshop/master/' -- Master is most stable, used for version checking.
