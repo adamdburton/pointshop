@@ -101,7 +101,7 @@ function PANEL:Init()
 
 	local btns = {}
 	local firstBtn = true
-	local function createBtn(text, material, panel, align)
+	local function createBtn(text, material, panel, align, description)
 		panel:SetParent(container)
 		panel:Dock(FILL)
 		panel.Paint = function(pnl, w, h) surface.SetDrawColor(232, 232, 232, 255) surface.DrawRect(0, 0, w, h) end
@@ -119,7 +119,10 @@ function PANEL:Init()
 		btn:SetText(text)
 		btn:SetFont("DermaDefault")
 		btn:SetImage(material)
-
+		if description then
+			btn:SetToolTip(description)
+		end
+		
 		btn.Paint = function(pnl, w, h)
 			surface.SetDrawColor(218, 218, 218, 255)
 			surface.DrawOutlinedRect(0, 0, w, h)
@@ -251,7 +254,7 @@ function PANEL:Init()
 			end
 		end
 		
-		createBtn(CATEGORY.Name, 'icon16/' .. CATEGORY.Icon .. '.png', ShopCategoryTab)
+		createBtn(CATEGORY.Name, 'icon16/' .. CATEGORY.Icon .. '.png', ShopCategoryTab, nil, CATEGORY.Description)
 	end
 
 	if (PS.Config.AdminCanAccessAdminTab and LocalPlayer():IsAdmin()) or (PS.Config.SuperAdminCanAccessAdminTab and LocalPlayer():IsSuperAdmin()) then
