@@ -119,7 +119,7 @@ function PANEL:Init()
 		btn:SetText(text)
 		btn:SetFont("DermaDefault")
 		btn:SetImage(material)
-		if description then
+		if description and description ~= '' then
 			btn:SetToolTip(description)
 		end
 		
@@ -230,7 +230,7 @@ function PANEL:Init()
 		--Allow addons to create custom Category display types
  		local ShopCategoryTab = hook.Run( "PS_CustomCategoryTab", CATEGORY )
 		if IsValid( ShopCategoryTab ) then
-			createBtn(CATEGORY.Name, 'icon16/' .. CATEGORY.Icon .. '.png', ShopCategoryTab, nil, CATEGORY.Description or '')
+			createBtn(CATEGORY.Name, 'icon16/' .. CATEGORY.Icon .. '.png', ShopCategoryTab, nil, CATEGORY.Description)
 			continue
 		else
 			ShopCategoryTab = vgui.Create('DPanel')
@@ -261,7 +261,7 @@ function PANEL:Init()
 			CATEGORY:ModifyTab(ShopCategoryTab)
 		end
 		
-		createBtn(CATEGORY.Name, 'icon16/' .. CATEGORY.Icon .. '.png', ShopCategoryTab, nil, CATEGORY.Description or '')
+		createBtn(CATEGORY.Name, 'icon16/' .. CATEGORY.Icon .. '.png', ShopCategoryTab, nil, CATEGORY.Description)
 	end
 
 	if (PS.Config.AdminCanAccessAdminTab and LocalPlayer():IsAdmin()) or (PS.Config.SuperAdminCanAccessAdminTab and LocalPlayer():IsSuperAdmin()) then
