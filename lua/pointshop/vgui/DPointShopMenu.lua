@@ -170,10 +170,6 @@ function PANEL:Init()
 		return btn
 	end
 
-	--local btnShop = createBtn("Heads, Hats and Masks",	"hats",			vgui.Create("DPanel"))
-	--local btnInventory = createBtn("Accessories", 		"accessories",	vgui.Create("DPanel"))
-	--local btnTrade = createBtn("Trails",				"trails",		vgui.Create("DPanel"))
-
 	-- sorting
 	local categories = {}
 	
@@ -231,7 +227,14 @@ function PANEL:Init()
 			end
 		end
 		
-		local ShopCategoryTab = vgui.Create('DPanel')
+		--Allow addons to create custom Category display types
+ 		local ShopCategoryTab = hook.Run( "PS_CustomCategoryTab", CATEGORY )
+		if IsValid( ShopCategoryTab ) then
+			createBtn(CATEGORY.Name, 'icon16/' .. CATEGORY.Icon .. '.png', ShopCategoryTab, nil, CATEGORY.Description or '')
+			continue
+		else
+			ShopCategoryTab = vgui.Create('DPanel')
+		end
 		
 		local DScrollPanel = vgui.Create('DScrollPanel', ShopCategoryTab)
 		DScrollPanel:Dock(FILL)
@@ -253,8 +256,12 @@ function PANEL:Init()
 				ShopCategoryTabLayout:Add(model)
 			end
 		end
+
+		if CATEGORY.ModifyTab then
+			CATEGORY:ModifyTab(ShopCategoryTab)
+		end
 		
-		createBtn(CATEGORY.Name, 'icon16/' .. CATEGORY.Icon .. '.png', ShopCategoryTab, nil, CATEGORY.Description)
+		createBtn(CATEGORY.Name, 'icon16/' .. CATEGORY.Icon .. '.png', ShopCategoryTab, nil, CATEGORY.Description or '')
 	end
 
 	if (PS.Config.AdminCanAccessAdminTab and LocalPlayer():IsAdmin()) or (PS.Config.SuperAdminCanAccessAdminTab and LocalPlayer():IsSuperAdmin()) then
