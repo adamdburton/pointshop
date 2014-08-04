@@ -3,22 +3,22 @@ surface.CreateFont('PS_Heading2', { font = 'coolvetica', size = 24 })
 surface.CreateFont('PS_Heading3', { font = 'coolvetica', size = 19 })
 
 surface.CreateFont( "PS_Default", {
-	font = system.IsOSX() and "Helvetica" or "Tahoma",
+	font = system.IsLinux() and "Arial" or "Tahoma",
 	size = 13, weight = 500, antialias = true,
 })
 
 surface.CreateFont( "PS_DefaultBold", {
-	font = system.IsOSX() and "Helvetica" or "Tahoma",
+	font = system.IsLinux() and "Arial" or "Tahoma",
 	size = 13, weight = 800, antialias = true,
 })
 
 surface.CreateFont( "PS_Heading1", {
-	font = system.IsOSX() and "Helvetica" or "Tahoma",
+	font = system.IsLinux() and "Arial" or "Tahoma",
 	size = 18, weight = 500, antialias = true,
 })
 
 surface.CreateFont( "PS_Heading1Bold", {
-	font = system.IsOSX() and "Helvetica" or "Tahoma",
+	font = system.IsLinux() and "Arial" or "Tahoma",
 	size = 18, weight = 800, antialias = true,
 })
 
@@ -28,7 +28,7 @@ surface.CreateFont( "PS_ButtonText1", {
 })
 
 surface.CreateFont( "PS_ItemText", {
-	font = system.IsOSX() and "Helvetica" or "Tahoma",
+	font = system.IsLinux() and "Arial" or "Tahoma",
 	size = 11, weight = 500, antialias = true,
 })
 
