@@ -75,8 +75,8 @@ function Player:PS_PlayerInitialSpawn()
 	end
 	
 	if PS.Config.PointsOverTime then
-		local potd = 10
-		local pota = 1
+		local potd = 1
+		local pota = 10
 		
 		for k, v in pairs(PS.Config.PointsOverTimeDelay) do
 			if self:IsUserGroup(k) then
