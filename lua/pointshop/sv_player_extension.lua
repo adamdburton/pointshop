@@ -75,10 +75,27 @@ function Player:PS_PlayerInitialSpawn()
 	end
 	
 	if PS.Config.PointsOverTime then
-		timer.Create('PS_PointsOverTime_' .. self:UniqueID(), PS.Config.PointsOverTimeDelay * 60, 0, function()
+		local potd = 10
+		local pota = 1
+		
+		for k, v in pairs(PS.Config.PointsOverTimeDelay) do
+			if self:IsUserGroup(k) then
+				potd = v
+				break
+			end
+		end
+		
+		for k, v in pairs(PS.Config.PointsOverTimeAmount) do
+			if self:IsUserGroup(k) then
+				pota = v
+				break
+			end
+		end
+		
+		timer.Create('PS_PointsOverTime_' .. self:UniqueID(), potd * 60, 0, function()
 			if !IsValid(self) then return end
-			self:PS_GivePoints(PS.Config.PointsOverTimeAmount)
-			self:PS_Notify("You've been given ", PS.Config.PointsOverTimeAmount, " ", PS.Config.PointsName, " for playing on the server!")
+			self:PS_GivePoints(pota)
+			self:PS_Notify("You've been given ", pota, " ", PS.Config.PointsName, " for playing on the server ", potd, " minute(s)!")
 		end)
 	end
 end
