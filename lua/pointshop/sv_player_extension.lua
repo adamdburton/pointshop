@@ -95,7 +95,7 @@ function Player:PS_PlayerInitialSpawn()
 		timer.Create('PS_PointsOverTime_' .. self:UniqueID(), potd * 60, 0, function()
 			if !IsValid(self) then return end
 			self:PS_GivePoints(pota)
-			self:PS_Notify("You've been given ", pota, " ", PS.Config.PointsName, " for playing on the server ", potd, " minute(s)!")
+			self:PS_Notify("You've been given ", pota, " ", PS.Config.PointsName, " after playing on the server for ", potd, " minute(s)!")
 		end)
 	end
 end
