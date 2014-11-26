@@ -15,7 +15,7 @@ Have a bug or a feature request? [Please open a new issue](https://github.com/ad
 
 ## Documentation
 
-See the wiki pages.
+http://pointshop.burt0n.net
 
 ## Contributing
 
