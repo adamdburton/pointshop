@@ -365,6 +365,38 @@ function PANEL:Init()
 		
 		local previewpanel = vgui.Create('DPointShopPreview', preview)
 		previewpanel:Dock(FILL)
+		
+		--- Drag Rotate
+		previewpanel.Angles = Angle( 0, 0, 0 )
+
+		function previewpanel:DragMousePress()
+			self.PressX, self.PressY = gui.MousePos()
+			self.Pressed = true
+		end
+
+		function previewpanel:DragMouseRelease()
+			self.Pressed = false
+			self.lastPressed = RealTime()
+		end
+		
+		function previewpanel:LayoutEntity( thisEntity )
+			if ( self.bAnimated ) then self:RunAnimation() end
+			
+			if ( self.Pressed ) then
+				local mx, my = gui.MousePos()
+				self.Angles = self.Angles - Angle( 0, ( self.PressX or mx ) - mx, 0 )
+				self.PressX, self.PressY = gui.MousePos()
+			end
+			
+			if ( RealTime() - ( self.lastPressed or 0 ) ) < 4 or self.Pressed then
+				thisEntity:SetAngles( self.Angles )
+			else	
+				self.Angles.y = math.NormalizeAngle(self.Angles.y + (RealFrameTime() * 21))
+				thisEntity:SetAngles( Angle( 0, self.Angles.y ,  0) )
+			end
+			
+		end
+		
 	end
 	
 	-- give points button
