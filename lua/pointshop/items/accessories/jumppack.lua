@@ -18,8 +18,8 @@ function ITEM:ModifyClientsideModel(ply, model, pos, ang)
 	return model, pos, ang
 end
 
-function ITEM:Think(ply, modifications)
+function ITEM:PlayerTick(ply, modifications)
 	if ply:KeyDown(IN_JUMP) then
-		ply:SetVelocity(ply:GetUp() * 6)
+		ply:SetVelocity(ply:GetUp() * 12)
 	end
 end
