@@ -102,30 +102,7 @@ function PANEL:SetData(data)
 		function DModelPanel:OnCursorExited()
 			self:GetParent():OnCursorExited()
 		end
-		
-		local oldPaint = DModelPanel.Paint
-		
-		function DModelPanel:Paint()
-			local x, y = self:LocalToScreen( 0, 0 )
-			local w, h = self:GetSize()
-			 
-			local sl, st, sr, sb = x, y, x + w, y + h
-			 
-			local p = self
-			while p:GetParent() do
-				p = p:GetParent()
-				local pl, pt = p:LocalToScreen( 0, 0 )
-				local pr, pb = pl + p:GetWide(), pt + p:GetTall()
-				sl = sl < pl and pl or sl
-				st = st < pt and pt or st
-				sr = sr > pr and pr or sr
-				sb = sb > pb and pb or sb
-			end
-			 
-			render.SetScissorRect( sl, st, sr, sb, true )
-				oldPaint(self)
-			render.SetScissorRect( 0, 0, 0, 0, false )
-		end
+
 	else
 		local DImageButton = vgui.Create('DImageButton', self)
 		DImageButton:SetMaterial(data.Material)
