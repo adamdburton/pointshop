@@ -1,3 +1,7 @@
+if ITEM == nil then
+	ITEM = {}
+end
+
 ITEM.Name = 'Crowbar'
 ITEM.Price = 200
 ITEM.Model = 'models/weapons/w_crowbar.mdl'

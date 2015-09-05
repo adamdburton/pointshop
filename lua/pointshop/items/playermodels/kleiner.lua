@@ -1,3 +1,7 @@
+if ITEM == nil then
+	ITEM = {}
+end
+
 ITEM.Name = 'Kleiner'
 ITEM.Price = 250
 ITEM.Model = 'models/player/kleiner.mdl'

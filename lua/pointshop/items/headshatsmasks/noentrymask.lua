@@ -1,3 +1,7 @@
+if ITEM == nil then
+	ITEM = {}
+end
+
 ITEM.Name = 'No Entry Mask'
 ITEM.Price = 50
 ITEM.Model = 'models/props_c17/streetsign004f.mdl'

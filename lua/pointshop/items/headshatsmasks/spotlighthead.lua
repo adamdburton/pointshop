@@ -1,3 +1,7 @@
+if ITEM == nil then
+	ITEM = {}
+end
+
 ITEM.Name = 'Spotlight Head'
 ITEM.Price = 100
 ITEM.Model = 'models/props_wasteland/light_spotlight01_lamp.mdl'

@@ -1,3 +1,7 @@
+if ITEM == nil then
+	ITEM = {}
+end
+
 ITEM.Name = 'Backpack'
 ITEM.Price = 100
 ITEM.Model = 'models/props_c17/SuitCase_Passenger_Physics.mdl'

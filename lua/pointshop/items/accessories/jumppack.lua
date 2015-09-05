@@ -1,3 +1,7 @@
+if ITEM == nil then
+	ITEM = {}
+end
+
 ITEM.Name = 'Jump Pack'
 ITEM.Price = 1000
 ITEM.Model = 'models/xqm/jetengine.mdl'

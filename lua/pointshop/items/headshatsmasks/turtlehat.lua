@@ -1,3 +1,7 @@
+if ITEM == nil then
+	ITEM = {}
+end
+
 ITEM.Name = 'Turtle Hat'
 ITEM.Price = 100
 ITEM.Model = 'models/props/de_tides/Vending_turtle.mdl'

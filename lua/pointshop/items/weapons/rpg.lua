@@ -1,3 +1,7 @@
+if ITEM == nil then
+	ITEM = {}
+end
+
 ITEM.Name = 'RPG'
 ITEM.Price = 200
 ITEM.Model = 'models/weapons/w_rocket_launcher.mdl'

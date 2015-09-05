@@ -1,3 +1,7 @@
+if ITEM == nil then
+	ITEM = {}
+end
+
 ITEM.Name = 'Afro'
 ITEM.Price = 200
 ITEM.Model = 'models/dav0r/hoverball.mdl'

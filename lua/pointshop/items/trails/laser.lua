@@ -1,3 +1,7 @@
+if ITEM == nil then
+	ITEM = {}
+end
+
 ITEM.Name = 'Laser Trail'
 ITEM.Price = 150
 ITEM.Material = 'trails/laser.vmt'

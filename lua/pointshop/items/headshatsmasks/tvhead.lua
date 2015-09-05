@@ -1,3 +1,7 @@
+if ITEM == nil then
+	ITEM = {}
+end
+
 ITEM.Name = 'TV Head'
 ITEM.Price = 100
 ITEM.Model = 'models/props_c17/tv_monitor01.mdl'

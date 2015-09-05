@@ -1,3 +1,7 @@
+if ITEM == nil then
+	ITEM = {}
+end
+
 ITEM.Name = 'Melon Head'
 ITEM.Price = 100
 ITEM.Model = 'models/props_junk/watermelon01.mdl'

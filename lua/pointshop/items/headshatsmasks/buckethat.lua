@@ -1,3 +1,7 @@
+if ITEM == nil then
+	ITEM = {}
+end
+
 ITEM.Name = 'Bucket Hat'
 ITEM.Price = 100
 ITEM.Model = 'models/props_junk/MetalBucket01a.mdl'
