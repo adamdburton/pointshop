@@ -1,7 +1,7 @@
 local PANEL = {}
 
 function PANEL:Init()
-	self:SetTitle("PointShop Give "..PS.Config.PointsName)
+	self:SetTitle("Передача очков")
 	self:SetSize(300, 144)
 	
 	self:SetDeleteOnClose(true)
@@ -9,13 +9,13 @@ function PANEL:Init()
 	self:SetDrawOnTop(true)
 	
 	local l1 = vgui.Create("DLabel", self)
-	l1:SetText("Player:")
+	l1:SetText("Игрок:")
 	l1:Dock(TOP)
 	l1:DockMargin(4, 0, 4, 4)
 	l1:SizeToContents()
 
 	local pselect = vgui.Create("DComboBox", self)
-	pselect:SetValue("Select A Player")
+	pselect:SetValue("Выберите игрока")
 	pselect:SetTall(24)
 	pselect:Dock(TOP)
 	self.playerselect = pselect

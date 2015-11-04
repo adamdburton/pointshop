@@ -1,2 +1,2 @@
-CATEGORY.Name = 'Powerups'
+CATEGORY.Name = 'Зелья'
 CATEGORY.Icon = 'star'

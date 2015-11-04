@@ -1,2 +1,2 @@
-CATEGORY.Name = 'Accessories'
+CATEGORY.Name = 'Аксессуары'
 CATEGORY.Icon = 'add'

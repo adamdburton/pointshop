@@ -1,3 +1,3 @@
-CATEGORY.Name = 'Hats, Heads and Masks'
+CATEGORY.Name = 'Шапки и маски'
 CATEGORY.Icon = 'emoticon_smile'
 CATEGORY.AllowedEquipped = 2

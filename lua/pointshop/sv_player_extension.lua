@@ -47,34 +47,34 @@ function Player:PS_PlayerInitialSpawn()
 		if PS.Config.ShopKey ~= '' then
 			timer.Simple(5, function() -- Give them time to load up
 				if !IsValid(self) then return end
-				self:PS_Notify('Press ' .. PS.Config.ShopKey .. ' to open PointShop!')
+				self:PS_Notify('Нажмите ' .. PS.Config.ShopKey .. ' чтобы открыть PointShop!')
 			end)
 		end
 
 		if PS.Config.ShopCommand ~= '' then
 			timer.Simple(5, function() -- Give them time to load up
 				if !IsValid(self) then return end
-				self:PS_Notify('Type ' .. PS.Config.ShopCommand .. ' in console to open PointShop!')
+				self:PS_Notify('Напишите ' .. PS.Config.ShopCommand .. ' в консоль чтобы открыть PointShop!')
 			end)
 		end
 
 		if PS.Config.ShopChatCommand ~= '' then
 			timer.Simple(5, function() -- Give them time to load up
 				if !IsValid(self) then return end
-				self:PS_Notify('Type ' .. PS.Config.ShopChatCommand .. ' in chat to open PointShop!')
+				self:PS_Notify('Напишите ' .. PS.Config.ShopChatCommand .. ' в чат чтобы открыть PointShop!')
 			end)
 		end
 
 		timer.Simple(10, function() -- Give them time to load up
 			if !IsValid(self) then return end
-			self:PS_Notify('You have ' .. self:PS_GetPoints() .. ' ' .. PS.Config.PointsName .. ' to spend!')
+			self:PS_Notify('У вас есть ' .. self:PS_GetPoints() .. ' очков!')
 		end)
 	end
 
 	if PS.Config.CheckVersion and PS.BuildOutdated and self:IsAdmin() then
 		timer.Simple(5, function()
 			if !IsValid(self) then return end
-			self:PS_Notify("PointShop is out of date, please tell the server owner!")
+			self:PS_Notify("PointShop имеет старую версию, пожалуйста свяжитесь с админом!")
 		end)
 	end
 
@@ -82,7 +82,7 @@ function Player:PS_PlayerInitialSpawn()
 		timer.Create('PS_PointsOverTime_' .. self:UniqueID(), PS.Config.PointsOverTimeDelay * 60, 0, function()
 			if !IsValid(self) then return end
 			self:PS_GivePoints(PS.Config.PointsOverTimeAmount)
-			self:PS_Notify("You've been given ", PS.Config.PointsOverTimeAmount, " ", PS.Config.PointsName, " for playing on the server!")
+			self:PS_Notify("Вы получили ", PS.Config.PointsOverTimeAmount, " очков за игру на сервере!")
 		end)
 	end
 end
@@ -122,7 +122,7 @@ function Player:PS_CanPerformAction(itemname)
 
 
 	if not allowed then
-		self:PS_Notify('You\'re not allowed to do that at the moment!')
+		self:PS_Notify('Это действие в данный момент недоступно!')
 	end
 
 	return allowed
@@ -195,13 +195,13 @@ function Player:PS_BuyItem(item_id)
 	if not self:PS_CanPerformAction(item_id) then return end
 
 	if ITEM.AdminOnly and not self:IsAdmin() then
-		self:PS_Notify('This item is Admin only!')
+		self:PS_Notify('Только для админов!')
 		return false
 	end
 
 	if ITEM.AllowedUserGroups and #ITEM.AllowedUserGroups > 0 then
 		if not table.HasValue(ITEM.AllowedUserGroups, self:PS_GetUsergroup()) then
-			self:PS_Notify('You\'re not in the right group to buy this item!')
+			self:PS_Notify('Для покупки данного предмета необходим премиум!')
 			return false
 		end
 	end
@@ -211,14 +211,14 @@ function Player:PS_BuyItem(item_id)
 
 	if CATEGORY.AllowedUserGroups and #CATEGORY.AllowedUserGroups > 0 then
 		if not table.HasValue(CATEGORY.AllowedUserGroups, self:PS_GetUsergroup()) then
-			self:PS_Notify('You\'re not in the right group to buy this item!')
+			self:PS_Notify('Для покупки данного предмета необходим премиум!')
 			return false
 		end
 	end
 
 	if CATEGORY.CanPlayerSee then
 		if not CATEGORY:CanPlayerSee(self) then
-			self:PS_Notify('You\'re not allowed to buy this item!')
+			self:PS_Notify('Для покупки данного предмета необходим премиум!')
 			return false
 		end
 	end
@@ -232,14 +232,14 @@ function Player:PS_BuyItem(item_id)
 		end
 
 		if not allowed then
-			self:PS_Notify(message or 'You\'re not allowed to buy this item!')
+			self:PS_Notify(message or 'Для покупки данного предмета необходим премиум!')
 			return false
 		end
 	end
 
 	self:PS_TakePoints(points)
 
-	self:PS_Notify('Bought ', ITEM.Name, ' for ', points, ' ', PS.Config.PointsName)
+	self:PS_Notify(ITEM.Name, ' куплен за ', points, ' очков')
 
 	ITEM:OnBuy(self)
 
@@ -267,7 +267,7 @@ function Player:PS_SellItem(item_id)
 		end
 
 		if not allowed then
-			self:PS_Notify(message or 'You\'re not allowed to sell this item!')
+			self:PS_Notify(message or 'Для покупки данного предмета необходим премиум!')
 			return false
 		end
 	end
@@ -278,7 +278,7 @@ function Player:PS_SellItem(item_id)
 	ITEM:OnHolster(self)
 	ITEM:OnSell(self)
 
-	self:PS_Notify('Sold ', ITEM.Name, ' for ', points, ' ', PS.Config.PointsName)
+	self:PS_Notify(ITEM.Name, ' продан за ', points, ' очков')
 
 	return self:PS_TakeItem(item_id)
 end
@@ -322,7 +322,7 @@ function Player:PS_EquipItem(item_id)
 	end
 
 	if not allowed then
-		self:PS_Notify(message or 'You\'re not allowed to equip this item!')
+		self:PS_Notify(message or 'Недостаточно прав для экипирования этой вещи!')
 		return false
 	end
 
@@ -372,7 +372,7 @@ function Player:PS_EquipItem(item_id)
 
 	ITEM:OnEquip(self, self.PS_Items[item_id].Modifiers)
 
-	self:PS_Notify('Equipped ', ITEM.Name, '.')
+	self:PS_Notify(ITEM.Name, ' экипирован.')
 
 	PS:SavePlayerItem(self, item_id, self.PS_Items[item_id])
 
@@ -395,13 +395,13 @@ function Player:PS_HolsterItem(item_id)
 	end
 
 	if not allowed then
-		self:PS_Notify(message or 'You\'re not allowed to holster this item!')
+		self:PS_Notify(message or 'Недостаточно прав для убирания этой вещи!')
 		return false
 	end
 
 	ITEM:OnHolster(self)
 
-	self:PS_Notify('Holstered ', ITEM.Name, '.')
+	self:PS_Notify(ITEM.Name, ' спрятан.')
 
 	PS:SavePlayerItem(self, item_id, self.PS_Items[item_id])
 
