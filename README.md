@@ -1,49 +1,19 @@
 # Pointshop
 
-Pointshop is a shop system for Garry's Mod, created and maintained by [Adam '_Undefined' Burton](http://burt0n.net/) and ['Handsome' Matt Stevens](http://handsomematt.co.uk).
+Pointshop - это система магазинов для Garry's Mod, создана [Adam '_Undefined' Burton](http://burt0n.net/) и ['Handsome' Matt Stevens](http://handsomematt.co.uk).
+Русский перевод сделал Tengz.
 
-## Quick start
-
-Two quick start options are available:
-
-* [Download the latest release](https://github.com/adamdburton/pointshop/releases/tag/v1.0.0).
-* Clone the repo: `git clone https://github.com/adamdburton/pointshop.git`.
-
-## Bugs and feature requests
-
-Have a bug or a feature request? [Please open a new issue](https://github.com/adamdburton/pointshop/issues). Make sure you follow our [contributing guidelines](https://github.com/adamdburton/pointshop/blob/master/CONTRIBUTING.md).
-
-## Documentation
+## Документация
 
 http://pointshop.burt0n.net
 
-## Contributing
+## Связь
 
-Please read through our [contributing guidelines](https://github.com/adamdburton/pointshop/blob/master/CONTRIBUTING.md). Included are directions for opening issues, coding standards, and notes on development.
+* [@adamdburton on Twitter](https://twitter.com/adamdburton).
+* [@_HandsomeMatt on Twitter](https://twitter.com/_HandsomeMatt).
+* У вас есть вопрос или вы нашли баг? [Спросите в теме Facepunch.](http://facepunch.com/threads/1286577)
 
-## Community
-
-* Follow [@adamdburton on Twitter](https://twitter.com/adamdburton).
-* Follow [@_HandsomeMatt on Twitter](https://twitter.com/_HandsomeMatt).
-* Have a question that's not a feature request or bug report? [Ask on the Facepunch thread.](http://facepunch.com/threads/1286577)
-
-## Versioning
-
-For transparency and insight into our release cycle, and for striving to maintain backward compatibility, Pointshop will be maintained under the Semantic Versioning guidelines as much as possible.
-
-Releases will be numbered with the following format:
-
-`<major>.<minor>.<patch>`
-
-And constructed with the following guidelines:
-
-* Breaking backward compatibility bumps the major (and resets the minor and patch)
-* New additions without breaking backward compatibility bumps the minor (and resets the patch)
-* Bug fixes and misc changes bumps the patch
-
-For more information on SemVer, please visit [http://semver.org/](http://semver.org/).
-
-## Authors
+## Авторы
 
 **Adam '_Undefined' Burton**
 
@@ -57,6 +27,12 @@ For more information on SemVer, please visit [http://semver.org/](http://semver.
 + [http://twitter.com/_HandsomeMatt](http://twitter.com/_HandsomeMatt)
 + [http://github.com/HandsomeMatt](http://github.com/HandsomeMatt)
 
-## Copyright and license
+**Tengz**
+
++ [https://github.com/tengzl33t](https://github.com/tengzl33t)
++ [http://steamcommunity.com/groups/l33tRS](http://steamcommunity.com/groups/l33tRS)
++ [http://steamcommunity.com/id/Tengz/](http://steamcommunity.com/id/Tengz/)
+
+## Правообладание и лицензия
 
 Copyright 2014 Adam Burton under [the MIT license](LICENSE).

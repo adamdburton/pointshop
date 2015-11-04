@@ -17,23 +17,23 @@ function PANEL:DoClick()
 	local points = PS.Config.CalculateBuyPrice(LocalPlayer(), self.Data)
 	
 	if not LocalPlayer():PS_HasItem(self.Data.ID) and not LocalPlayer():PS_HasPoints(points) then
-		notification.AddLegacy("You don't have enough "..PS.Config.PointsName.." for this!", NOTIFY_GENERIC, 5)
+		notification.AddLegacy("У вас недостаточно очков для покупки этого предмета!", NOTIFY_GENERIC, 5)
 	end
 
 	local menu = DermaMenu(self)
 	
 	if LocalPlayer():PS_HasItem(self.Data.ID) then
-		menu:AddOption('Sell', function()
-			Derma_Query('Are you sure you want to sell ' .. self.Data.Name .. '?', 'Sell Item',
-				'Yes', function() LocalPlayer():PS_SellItem(self.Data.ID) end,
-				'No', function() end
+		menu:AddOption('Продать', function()
+			Derma_Query('Вы уверены что хотите продать ' .. self.Data.Name .. '?', 'Продажа вещи',
+				'Да', function() LocalPlayer():PS_SellItem(self.Data.ID) end,
+				'Нет', function() end
 			)
 		end)
 	elseif LocalPlayer():PS_HasPoints(points) then
-		menu:AddOption('Buy', function()
-			Derma_Query('Are you sure you want to buy ' .. self.Data.Name .. '?', 'Buy Item',
-				'Yes', function() LocalPlayer():PS_BuyItem(self.Data.ID) end,
-				'No', function() end
+		menu:AddOption('Купить', function()
+			Derma_Query('Вы уверены что хотите купить ' .. self.Data.Name .. '?', 'Покупка вещи',
+				'Да', function() LocalPlayer():PS_BuyItem(self.Data.ID) end,
+				'Нет', function() end
 			)
 		end)
 	end
@@ -42,11 +42,11 @@ function PANEL:DoClick()
 		menu:AddSpacer()
 		
 		if LocalPlayer():PS_HasItemEquipped(self.Data.ID) then
-			menu:AddOption('Holster', function()
+			menu:AddOption('Спрятать', function()
 				LocalPlayer():PS_HolsterItem(self.Data.ID)
 			end)
 		else
-			menu:AddOption('Equip', function()
+			menu:AddOption('Экипировать', function()
 				LocalPlayer():PS_EquipItem(self.Data.ID)
 			end)
 		end
@@ -54,7 +54,7 @@ function PANEL:DoClick()
 		if LocalPlayer():PS_HasItemEquipped(self.Data.ID) and self.Data.Modify then
 			menu:AddSpacer()
 			
-			menu:AddOption('Modify...', function()
+			menu:AddOption('Модифицировать...', function()
 				PS.Items[self.Data.ID]:Modify(LocalPlayer().PS_Items[self.Data.ID].Modifiers)
 			end)
 		end
