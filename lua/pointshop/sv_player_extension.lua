@@ -340,7 +340,6 @@ function Player:PS_EquipItem(item_id)
 		for id, item in pairs(self.PS_Items) do
 			if item_id != id and PS.Items[id].Slot and PS.Items[id].Slot == PS.Items[item_id].Slot then
 				self:PS_HolsterItem(id)
-				continue
 			end
 		end
 	end
