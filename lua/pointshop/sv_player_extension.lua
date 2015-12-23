@@ -336,6 +336,15 @@ function Player:PS_EquipItem(item_id)
 		end
 	end
 
+	if PS.Items[item_id].Slot then
+		for id, item in pairs(self.PS_Items) do
+			if item_id != id and PS.Items[id].Slot and PS.Items[id].Slot == PS.Items[item_id].Slot and self.PS_Items[id].Equipped then
+				self:PS_HolsterItem(id)
+			end
+		end
+	end
+
+
 	if CATEGORY.SharedCategories then
 		local ConCatCats = CATEGORY.Name
 		for p, c in pairs( CATEGORY.SharedCategories ) do
