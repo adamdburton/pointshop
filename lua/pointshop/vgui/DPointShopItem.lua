@@ -123,7 +123,7 @@ function PANEL:SetData(data)
 		end
 
 		function DImageButton.m_Image:Paint(w, h)
-			if self:GetParent():GetParent().Hovered then
+			if not self:GetParent():GetParent().Data.NoScroll and self:GetParent():GetParent().Hovered then
 				self.FrameTime = self.FrameTime + 1
 			end
 
