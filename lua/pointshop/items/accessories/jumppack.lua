@@ -18,8 +18,9 @@ function ITEM:ModifyClientsideModel(ply, model, pos, ang)
 	return model, pos, ang
 end
 
-function ITEM:Think(ply, modifications)
-	if ply:KeyDown(IN_JUMP) then
-		ply:SetVelocity(ply:GetUp() * 6)
+function ITEM:Move( pl, modifications, ply, data)
+	local bdata = data:GetButtons()
+	if bit.band( bdata, IN_JUMP ) > 0 then
+		data:SetVelocity( data:GetVelocity() + Vector(0,0,100)*FrameTime() )
 	end
 end
