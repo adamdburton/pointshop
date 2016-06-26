@@ -52,7 +52,7 @@ local function MySQL_Query( str, callback, err )
 		if !res.status then
 			local er = err and err( res.error, str )
 			if !err then
-				print( "Pointshop MySQL: " .. res.error .. " on query: " .. str )
+				print( string.format( "Pointshop MySQL: %s on query: %s", res.error, str ) )
 			end
 			return
 		end
@@ -72,7 +72,7 @@ end
 MySQL_CreateDatabase()
 
 function PROVIDER:GetData( ply, callback )
-	MySQL_Query( "SELECT * FROM pointshop_data WHERE uniqueid = '" .. ply:UniqueID() .. "'", function( data )
+	MySQL_Query( string.format( "SELECT * FROM pointshop_data WHERE uniqueid = '%s'", ply:UniqueID() ), function( data )
 		if data and istable( data ) then
 			local row = data[ 1 ]
 			local points = row.points
@@ -86,15 +86,15 @@ function PROVIDER:GetData( ply, callback )
 end
 
 function PROVIDER:SetPoints( ply, points )
-	MySQL_Query( "INSERT INTO pointshop_data ( uniqueid, points, items ) VALUES ( '" .. ply:UniqueID() .. "', '" .. points .. "', '[]' ) ON DUPLICATE KEY UPDATE points = VALUES ( points )" )
+	MySQL_Query( string.format( "INSERT INTO pointshop_data ( uniqueid, points, items ) VALUES ( '%s', '%s', '[]' ) ON DUPLICATE KEY UPDATE points = VALUES ( points )", ply:UniqueID(), points ) )
 end
 
 function PROVIDER:GivePoints( ply, points )
-	MySQL_Query( "INSERT INTO pointshop_data ( uniqueid, points, items ) VALUES ( '" .. ply:UniqueID() .. "', '" .. points .. "', '[]' ) ON DUPLICATE KEY UPDATE points = points + VALUES ( points )" )
+	MySQL_Query( string.format( "INSERT INTO pointshop_data ( uniqueid, points, items ) VALUES ( '%s', '%s', '[]' ) ON DUPLICATE KEY UPDATE points = points + VALUES ( points )", ply:UniqueID(), points ) )
 end
 
 function PROVIDER:TakePoints( ply, points )
-	MySQL_Query( "INSERT INTO pointshop_data ( uniqueid, points, items ) VALUES ( '" .. ply:UniqueID() .. "', '" .. points .. "', '[]' ) ON DUPLICATE KEY UPDATE points = points - VALUES ( points )" )
+	MySQL_Query( string.format( "INSERT INTO pointshop_data ( uniqueid, points, items ) VALUES ( '%s', '%s', '[]' ) ON DUPLICATE KEY UPDATE points = points - VALUES ( points )", ply:UniqueID(), points ) )
 end
 
 function PROVIDER:SaveItem( ply, item_id, data )
@@ -105,16 +105,16 @@ function PROVIDER:GiveItem( ply, item_id, data )
 	local tmp = table.Copy( ply.PS_Items )
 	tmp[ item_id ] = data
 	
-	MySQL_Query( "INSERT INTO pointshop_data ( uniqueid, points, items ) VALUES ( '" .. ply:UniqueID() .. "', '0', '" .. db:Escape( util.TableToJSON( tmp ) ) .. "' ) ON DUPLICATE KEY UPDATE items = VALUES ( items )" )
+	MySQL_Query( string.format( "INSERT INTO pointshop_data ( uniqueid, points, items ) VALUES ( '%s', '0', '%s' ) ON DUPLICATE KEY UPDATE items = VALUES ( items )", ply:UniqueID(), db:Escape( util.TableToJSON( tmp ) ) ) )
 end
 
 function PROVIDER:TakeItem( ply, item_id )
 	local tmp = table.Copy( ply.PS_Items )
 	tmp[ item_id ] = nil
 	
-	MySQL_Query( "INSERT INTO pointshop_data ( uniqueid, points, items ) VALUES ( '" .. ply:UniqueID() .. "', '0', '" .. db:Escape( util.TableToJSON( tmp ) ) .. "' ) ON DUPLICATE KEY UPDATE items = VALUES ( items )" )
+	MySQL_Query( string.format( "INSERT INTO pointshop_data ( uniqueid, points, items ) VALUES ( '%s', '0', '%s' ) ON DUPLICATE KEY UPDATE items = VALUES ( items )", ply:UniqueID(), db:Escape( util.TableToJSON( tmp ) ) ) )
 end
 
 function PROVIDER:SetData( ply, points, items )
-	MySQL_Query( "INSERT INTO pointshop_data ( uniqueid, points, items ) VALUES ( '" .. ply:UniqueID() .. "', '" .. points .. "', '" .. items .."' ) ON DUPLICATE KEY UPDATE points = VALUES ( points ), items = VALUES( items )")
+	MySQL_Query( string.format( "INSERT INTO pointshop_data ( uniqueid, points, items ) VALUES ( '%s', '%s', '%s' ) ON DUPLICATE KEY UPDATE points = VALUES ( points ), items = VALUES( items )", ply:UniqueID(), points, items ) )
 end
