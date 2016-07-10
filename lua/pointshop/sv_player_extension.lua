@@ -445,7 +445,7 @@ function Player:PS_ModifyItem(item_id, modifications)
 
 	ITEM:OnModify(self, self.PS_Items[item_id].Modifiers)
 
-	hook.Call( "PS_ItemUpdated", nil, self, item_id, PS_ITEM_MODIFIED, modifications )
+	hook.Call( "PS_ItemUpdated", nil, self, item_id, PS_ITEM_MODIFY, modifications )
 	
 	PS:SavePlayerItem(self, item_id, self.PS_Items[item_id])
 
