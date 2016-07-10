@@ -1,6 +1,6 @@
 PS_ITEM_EQUIP = 1 or PS_ITEM_EQUIP
 PS_ITEM_HOLSTER = 2 or PS_ITEM_HOLSTER
-PS_ITEM_MODIFIED = 3 or PS_ITEM_MODIFIED
+PS_ITEM_MODIFY = 3 or PS_ITEM_MODIFY
 
 local Player = FindMetaTable('Player')
 
@@ -247,7 +247,7 @@ function Player:PS_BuyItem(item_id)
 
 	ITEM:OnBuy(self)
 	
-	hook.Call( "PS_ItemBought", nil, self, item_id )
+	hook.Call( "PS_ItemPurchased", nil, self, item_id )
 
 	if ITEM.SingleUse then
 		self:PS_Notify('Single use item. You\'ll have to buy this item again next time!')
