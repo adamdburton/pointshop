@@ -1,3 +1,7 @@
+PS_ITEM_EQUIP = 1
+PS_ITEM_HOLSTER = 2
+PS_ITEM_MODIFY = 3
+
 local Player = FindMetaTable('Player')
 
 function Player:PS_PlayerSpawn()
@@ -242,6 +246,8 @@ function Player:PS_BuyItem(item_id)
 	self:PS_Notify('Bought ', ITEM.Name, ' for ', points, ' ', PS.Config.PointsName)
 
 	ITEM:OnBuy(self)
+	
+	hook.Call( "PS_ItemPurchased", nil, self, item_id )
 
 	if ITEM.SingleUse then
 		self:PS_Notify('Single use item. You\'ll have to buy this item again next time!')
@@ -277,6 +283,8 @@ function Player:PS_SellItem(item_id)
 
 	ITEM:OnHolster(self)
 	ITEM:OnSell(self)
+	
+	hook.Call( "PS_ItemSold", nil, self, item_id )
 
 	self:PS_Notify('Sold ', ITEM.Name, ' for ', points, ' ', PS.Config.PointsName)
 
@@ -382,6 +390,8 @@ function Player:PS_EquipItem(item_id)
 	ITEM:OnEquip(self, self.PS_Items[item_id].Modifiers)
 
 	self:PS_Notify('Equipped ', ITEM.Name, '.')
+	
+	hook.Call( "PS_ItemUpdated", nil, self, item_id, PS_ITEM_EQUIP )
 
 	PS:SavePlayerItem(self, item_id, self.PS_Items[item_id])
 
@@ -411,6 +421,8 @@ function Player:PS_HolsterItem(item_id)
 	ITEM:OnHolster(self)
 
 	self:PS_Notify('Holstered ', ITEM.Name, '.')
+	
+	hook.Call( "PS_ItemUpdated", nil, self, item_id, PS_ITEM_HOLSTER )
 
 	PS:SavePlayerItem(self, item_id, self.PS_Items[item_id])
 
@@ -433,6 +445,8 @@ function Player:PS_ModifyItem(item_id, modifications)
 
 	ITEM:OnModify(self, self.PS_Items[item_id].Modifiers)
 
+	hook.Call( "PS_ItemUpdated", nil, self, item_id, PS_ITEM_MODIFY, modifications )
+	
 	PS:SavePlayerItem(self, item_id, self.PS_Items[item_id])
 
 	self:PS_SendItems()
