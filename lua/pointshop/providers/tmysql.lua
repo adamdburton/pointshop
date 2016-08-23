@@ -80,6 +80,8 @@ function PROVIDER:GetData( ply, callback )
 				local items = util.JSONToTable( row.items or "{}" )
 				
 				callback( points, items )
+			else
+				callback( 0, {} )
 			end
 		else
 			callback( 0, {} )
