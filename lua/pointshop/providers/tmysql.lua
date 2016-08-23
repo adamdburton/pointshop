@@ -75,10 +75,12 @@ function PROVIDER:GetData( ply, callback )
 	MySQL_Query( string.format( "SELECT * FROM pointshop_data WHERE uniqueid = '%s'", ply:UniqueID() ), function( data )
 		if data and istable( data ) then
 			local row = data[ 1 ]
-			local points = row.points
-			local items = util.JSONToTable( row.items or "{}" )
-			
-			callback( points, items )
+			if row then
+				local points = row.points
+				local items = util.JSONToTable( row.items or "{}" )
+				
+				callback( points, items )
+			end
 		else
 			callback( 0, {} )
 		end
