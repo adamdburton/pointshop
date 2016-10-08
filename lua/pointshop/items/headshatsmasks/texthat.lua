@@ -24,7 +24,13 @@ end
 
 function ITEM:Modify(modifications)
 	Derma_StringRequest("Text", "What text do you want your hat to say?", "", function(text)
+		
+		if string.find(text, "#") then
+			text = string.gsub(text, "#", "")
+		end
+		
 		modifications.text = string.sub(text, 1, MaxTextLength)
 		PS:ShowColorChooser(self, modifications)
 	end)
 end
+
