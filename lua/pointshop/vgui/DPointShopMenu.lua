@@ -247,8 +247,8 @@ function PANEL:Init()
 		
 		DScrollPanel:AddItem(ShopCategoryTabLayout)
 		
-		-- Create 50ms delay between loading each pointshop item
-		-- This reduces hitching and loading times
+		-- Create 50ms delay before loading the first item 
+		-- Then a 15ms delay between loading each concurrent item
 		local delay = 0.05		
 		for _, ITEM in pairs(items) do				
 			if ITEM.Category == CATEGORY.Name then			
@@ -259,7 +259,7 @@ function PANEL:Init()
 					
 					ShopCategoryTabLayout:Add(model)				
 				end)					
-				delay = delay + 0.05
+				delay = delay + 0.015
 			end
 		end
 
