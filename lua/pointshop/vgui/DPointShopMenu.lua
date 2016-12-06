@@ -464,7 +464,11 @@ function PANEL:Paint(w, h)
 		draw.SimpleText("PointShop", 'PS_LargeTitle', 16, 8, color_white)
 	end
 
-	draw.SimpleText('You have ' .. LocalPlayer():PS_GetPoints() .. ' ' .. PS.Config.PointsName, 'PS_Heading3', self:GetWide() - 40, 24, color_white, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+	if PS.Config.PointsOverTime then
+		draw.SimpleText('You have ' .. LocalPlayer():PS_GetPoints() .. ' ' .. PS.Config.PointsName .. '  |  The ' .. PS.Config.PointsName .. ' gain is ' .. PS.Config.PointsOverTimeAmount .. ' every ' .. PS.Config.PointsOverTimeDelay .. ' minute(s)', 'PS_Heading3', self:GetWide() - 40, 24, color_white, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+	else
+		draw.SimpleText('You have ' .. LocalPlayer():PS_GetPoints() .. ' ' .. PS.Config.PointsName .. '  |  Over time gain disabled', 'PS_Heading3', self:GetWide() - 40, 24, color_white, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+	end
 	
 end
 
