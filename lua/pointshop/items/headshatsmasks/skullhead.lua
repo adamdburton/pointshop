@@ -1,3 +1,7 @@
+if ITEM == nil then
+	ITEM = {}
+end
+
 ITEM.Name = 'Skull Head'
 ITEM.Price = 150
 ITEM.Model = 'models/Gibs/HGIBS.mdl'

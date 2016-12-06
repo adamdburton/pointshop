@@ -1,3 +1,7 @@
+if ITEM == nil then
+	ITEM = {}
+end
+
 ITEM.Name = '357 Magnum'
 ITEM.Price = 200
 ITEM.Model = 'models/weapons/w_357.mdl'

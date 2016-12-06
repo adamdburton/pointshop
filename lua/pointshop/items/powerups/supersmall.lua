@@ -1,3 +1,7 @@
+if ITEM == nil then
+	ITEM = {}
+end
+
 ITEM.Name = 'Super Small'
 ITEM.Price = 1000
 ITEM.Model = 'models/props_junk/garbage_glassbottle003a.mdl'

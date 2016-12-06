@@ -1,3 +1,7 @@
+if ITEM == nil then
+	ITEM = {}
+end
+
 ITEM.Name = 'Snowman Head'
 ITEM.Price = 200
 ITEM.Model = 'models/props/cs_office/Snowman_face.mdl'

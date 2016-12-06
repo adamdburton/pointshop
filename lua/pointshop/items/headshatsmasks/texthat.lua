@@ -1,3 +1,7 @@
+if ITEM == nil then
+	ITEM = {}
+end
+
 ITEM.Name = 'Text Hat'
 ITEM.Price = 1000
 ITEM.Model = 'models/extras/info_speech.mdl'

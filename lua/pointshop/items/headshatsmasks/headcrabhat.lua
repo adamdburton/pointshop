@@ -1,3 +1,7 @@
+if ITEM == nil then
+	ITEM = {}
+end
+
 ITEM.Name = 'Headcrab Hat'
 ITEM.Price = 100
 ITEM.Model = 'models/headcrabclassic.mdl'

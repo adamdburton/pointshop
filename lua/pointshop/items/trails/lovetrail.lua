@@ -1,3 +1,7 @@
+if ITEM == nil then
+	ITEM = {}
+end
+
 ITEM.Name = 'Love Trail'
 ITEM.Price = 150
 ITEM.Material = 'trails/love.vmt'

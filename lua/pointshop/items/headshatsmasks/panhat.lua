@@ -1,3 +1,7 @@
+if ITEM == nil then
+	ITEM = {}
+end
+
 ITEM.Name = 'Pan Hat'
 ITEM.Price = 100
 ITEM.Model = 'models/props_interiors/pot02a.mdl'
