@@ -157,7 +157,7 @@ end)
 -- Ability to use any button to open pointshop.
 local pstoggle = false
 hook.Add("Think", "PS_ToggleKey", function()
-	if PS.Config.ShopKey and PS.Config.ShopKey ~= "" and input.IsKeyDown(_G["KEY_" .. PS.Config.ShopKey]) then
+	if PS.Config.ShopKey and PS.Config.ShopKey ~= "" and input.IsKeyDown(_G["KEY_" .. string.upper(PS.Config.ShopKey)]) then
 		if not pstoggle then
 			pstoggle = true
 			PS:ToggleMenu()
