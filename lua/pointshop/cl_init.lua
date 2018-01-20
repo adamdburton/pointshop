@@ -154,19 +154,6 @@ hook.Add('Think', 'PS_Think', function()
 	end
 end)
 
--- Ability to use any button to open pointshop.
-local pstoggle = false
-hook.Add("Think", "PS_ToggleKey", function()
-	if PS.Config.ShopKey and PS.Config.ShopKey ~= "" and input.IsKeyDown(_G["KEY_" .. string.upper(PS.Config.ShopKey)]) then
-		if not pstoggle then
-			pstoggle = true
-			PS:ToggleMenu()
-		end
-	else
-		pstoggle = false
-	end
-end)
-
 hook.Add('PostPlayerDraw', 'PS_PostPlayerDraw', function(ply)
 	if not ply:Alive() then return end
 	if ply == LocalPlayer() and GetViewEntity():GetClass() == 'player' and (GetConVar('thirdperson') and GetConVar('thirdperson'):GetInt() == 0) then return end

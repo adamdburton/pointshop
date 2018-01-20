@@ -143,6 +143,16 @@ end)
 
 -- hooks
 
+-- Ability to use any button to open pointshop.
+hook.Add("PlayerButtonDown", "PS_ToggleKey", function(ply, btn)
+	if PS.Config.ShopKey and PS.Config.ShopKey ~= "" then
+		local psButton = _G["KEY_" .. string.upper(PS.Config.ShopKey)]
+		if psButton and psButton == btn then
+			ply:PS_ToggleMenu()
+		end
+	end
+end)
+
 hook.Add('PlayerSpawn', 'PS_PlayerSpawn', function(ply) ply:PS_PlayerSpawn() end)
 hook.Add('PlayerDeath', 'PS_PlayerDeath', function(ply) ply:PS_PlayerDeath() end)
 hook.Add('PlayerInitialSpawn', 'PS_PlayerInitialSpawn', function(ply) ply:PS_PlayerInitialSpawn() end)
