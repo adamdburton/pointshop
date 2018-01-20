@@ -143,18 +143,6 @@ end)
 
 -- hooks
 
-local KeyToHook = {
-	F1 = "ShowHelp",
-	F2 = "ShowTeam",
-	F3 = "ShowSpare1",
-	F4 = "ShowSpare2",
-	None = "ThisHookDoesNotExist"
-}
-
-hook.Add(KeyToHook[PS.Config.ShopKey], "PS_ShopKey", function(ply)
-	ply:PS_ToggleMenu()
-end)
-
 hook.Add('PlayerSpawn', 'PS_PlayerSpawn', function(ply) ply:PS_PlayerSpawn() end)
 hook.Add('PlayerDeath', 'PS_PlayerDeath', function(ply) ply:PS_PlayerDeath() end)
 hook.Add('PlayerInitialSpawn', 'PS_PlayerInitialSpawn', function(ply) ply:PS_PlayerInitialSpawn() end)
