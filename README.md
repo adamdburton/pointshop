@@ -5,7 +5,7 @@
 
 ## Synopsis
 
-Pointshop is a shop system for Garry's Mod, created by [Adam '_Undefined' Burton](https://github.com/adamdburton) and maintained by ['Handsome' Matt Stevens](https://github.com/HandsomeMatt).
+Pointshop is a shop system for Garry's Mod, created by [Adam Burton](https://github.com/adamdburton) and maintained by ['Handsome' Matt Stevens](https://github.com/HandsomeMatt).
 
 ## Quick start
 
@@ -42,7 +42,7 @@ For more information on SemVer, please visit [http://semver.org/](http://semver.
 
 ## Authors
 
-**Adam '_Undefined' Burton**
+**Adam Burton**
 
 + [http://burt0n.net](http://burt0n.net/)
 + [https://twitter.com/adamdburton](https://twitter.com/adamdburton)
