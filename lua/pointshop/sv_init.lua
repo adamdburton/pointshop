@@ -143,16 +143,14 @@ end)
 
 -- hooks
 
-local KeyToHook = {
-	F1 = "ShowHelp",
-	F2 = "ShowTeam",
-	F3 = "ShowSpare1",
-	F4 = "ShowSpare2",
-	None = "ThisHookDoesNotExist"
-}
-
-hook.Add(KeyToHook[PS.Config.ShopKey], "PS_ShopKey", function(ply)
-	ply:PS_ToggleMenu()
+-- Ability to use any button to open pointshop.
+hook.Add("PlayerButtonDown", "PS_ToggleKey", function(ply, btn)
+	if PS.Config.ShopKey and PS.Config.ShopKey ~= "" then
+		local psButton = _G["KEY_" .. string.upper(PS.Config.ShopKey)]
+		if psButton and psButton == btn then
+			ply:PS_ToggleMenu()
+		end
+	end
 end)
 
 hook.Add('PlayerSpawn', 'PS_PlayerSpawn', function(ply) ply:PS_PlayerSpawn() end)
