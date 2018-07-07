@@ -436,9 +436,21 @@ function Player:PS_ModifyItem(item_id, modifications)
 	if not self:PS_HasItem(item_id) then return false end
 	if not type(modifications) == "table" then return false end
 	if not self:PS_CanPerformAction(item_id) then return false end
-
+	
 	local ITEM = PS.Items[item_id]
 
+	-- This if block helps prevent someone from sending a table full of random junk that will fill up the server's RAM, be networked to every player, and be stored in the database
+	if ITEM.SanitizeTable then 
+		modifications = ITEM:SanitizeTable(modifications)
+	else
+		local temp = {}
+		local i = 0
+		for k, v in pairs(modifications) do 
+			if i > 20 then break end -- I don't know of any items that would need this many modifications
+			temp[k] = v
+			i = i + 1
+		end
+	end
 	for key, value in pairs(modifications) do
 		self.PS_Items[item_id].Modifiers[key] = value
 	end
