@@ -59,7 +59,8 @@ end
 
 function PS:LoadItems()	
 	local _, dirs = file.Find('pointshop/items/*', 'LUA')
-	
+	local emptyfunc = function() end
+
 	for _, category in pairs(dirs) do
 		local f, _ = file.Find('pointshop/items/' .. category .. '/__category.lua', 'LUA')
 		
@@ -72,7 +73,7 @@ function PS:LoadItems()
 			CATEGORY.AllowedEquipped = -1
 			CATEGORY.AllowedUserGroups = {}
 			CATEGORY.CanPlayerSee = function() return true end
-			CATEGORY.ModifyTab = function(tab) return end
+			CATEGORY.ModifyTab = emptyfunc
 			
 			if SERVER then AddCSLuaFile('pointshop/items/' .. category .. '/__category.lua') end
 			include('pointshop/items/' .. category .. '/__category.lua')
@@ -107,21 +108,16 @@ function PS:LoadItems()
 					ITEM.CanPlayerEquip = true
 					ITEM.CanPlayerHolster = true
 
-					ITEM.OnBuy = function() end
-					ITEM.OnSell = function() end
-					ITEM.OnEquip = function() end
-					ITEM.OnHolster = function() end
-					ITEM.OnModify = function() end
+					ITEM.OnBuy = emptyfunc
+					ITEM.OnSell = emptyfunc
+					ITEM.OnEquip = emptyfunc
+					ITEM.OnHolster = emptyfunc
+					ITEM.OnModify = emptyfunc
 					ITEM.ModifyClientsideModel = function(ITEM, ply, model, pos, ang)
 						return model, pos, ang
 					end
 					
 					include('pointshop/items/' .. category .. '/' .. name)
-					
-					if not ITEM.SanitizeTable then -- If they haven't added it, sucks to be them
-						ErrorNoHalt("Item ".. ITEM.Name .. " doesn't have a SanitizeTable function. This may cause errors if the item has modifications.")
-						ITEM.SanitizeTable = function() return {} end -- Used to prevent someone from filling the modification table with junk data
-					end
 					
 					if not ITEM.Name then
 						ErrorNoHalt("[POINTSHOP] Item missing name: " .. category .. '/' .. name .. "\n")
