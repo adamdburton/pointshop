@@ -429,7 +429,15 @@ function Player:PS_HolsterItem(item_id)
 	self:PS_SendItems()
 end
 
--- modify items
+
+local function Sanitize( modifications ) -- used as a default if an item is missing the SanitizeTable function. Catches colors/text
+	local out = {}
+	if isstring(modifications.text) then out.text = modifications.text end
+	if modifications.color then
+		out.color = Color(modifications.color.r or 255, modifications.color.g or 255, modifications.color.b or 255)
+	end
+	return out
+end
 
 function Player:PS_ModifyItem(item_id, modifications)
 	if not PS.Items[item_id] then return false end
@@ -442,6 +450,8 @@ function Player:PS_ModifyItem(item_id, modifications)
 	-- This if block helps prevent someone from sending a table full of random junk that will fill up the server's RAM, be networked to every player, and be stored in the database
 	if ITEM.SanitizeTable then 
 		modifications = ITEM:SanitizeTable(modifications)
+	else
+		modifications = Sanitize(modifications)
 	end
 
 	for key, value in pairs(modifications) do
