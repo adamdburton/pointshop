@@ -112,11 +112,16 @@ function PS:LoadItems()
 					ITEM.OnEquip = function() end
 					ITEM.OnHolster = function() end
 					ITEM.OnModify = function() end
+					local comp = ITEM.OnModify -- used to check if the item has custom modifications
 					ITEM.ModifyClientsideModel = function(ITEM, ply, model, pos, ang)
 						return model, pos, ang
 					end
 					
 					include('pointshop/items/' .. category .. '/' .. name)
+					
+					if comp == ITEM.OnModify then -- Item doesn't have any modifications
+						ITEM.SanitizeTable = function() return {} end -- Used to prevent someone from filling the modification table with junk data
+					end
 					
 					if not ITEM.Name then
 						ErrorNoHalt("[POINTSHOP] Item missing name: " .. category .. '/' .. name .. "\n")
