@@ -21,5 +21,5 @@ end
 
 -- Since trails allow players to change the color we limit the table to only color for security reasons
 function ITEM:SanitizeTable( modifications )
-	return {color=(IsColor(modifications.color) and modifications.color or Color(255, 255, 255))}
+    return {color=modifications.color and Color(modifications.color.r or 255, modifications.color.g or 255, modifications.color.b or 255) or nil}
 end
