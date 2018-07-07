@@ -34,3 +34,8 @@ function ITEM:Modify(modifications)
 	end)
 end
 
+
+-- Since this item has modifications we return a table of only what should be allowed for security reasons
+function ITEM:SanitizeTable( modifications )
+	return {text=string.sub(modifications.text, 1, MaxTextLength)}
+end
