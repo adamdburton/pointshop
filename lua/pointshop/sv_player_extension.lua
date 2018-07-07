@@ -442,15 +442,8 @@ function Player:PS_ModifyItem(item_id, modifications)
 	-- This if block helps prevent someone from sending a table full of random junk that will fill up the server's RAM, be networked to every player, and be stored in the database
 	if ITEM.SanitizeTable then 
 		modifications = ITEM:SanitizeTable(modifications)
-	else
-		local temp = {}
-		local i = 0
-		for k, v in pairs(modifications) do 
-			if i > 20 then break end -- I don't know of any items that would need this many modifications
-			temp[k] = v
-			i = i + 1
-		end
 	end
+
 	for key, value in pairs(modifications) do
 		self.PS_Items[item_id].Modifiers[key] = value
 	end
