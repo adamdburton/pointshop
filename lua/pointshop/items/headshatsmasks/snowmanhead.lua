@@ -21,3 +21,8 @@ end
 function ITEM:CanPlayerBuy(ply)
 	return os.date("%m") == "12" and true or false, 'It\'s not winter!'
 end
+
+-- This item doesn't have any modifications so we return an empty table
+function ITEM:SanitizeTable( modifications )
+	return {}
+end
