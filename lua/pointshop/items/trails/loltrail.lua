@@ -18,3 +18,8 @@ function ITEM:OnModify(ply, modifications)
 	SafeRemoveEntity(ply.LolTrail)
 	self:OnEquip(ply, modifications)
 end
+
+-- Since trails allow players to change the color we limit the table to only color for security reasons
+function ITEM:SanitizeTable( modifications )
+	return {color=(IsColor(modifications.color) and modifications.color or Color(255, 255, 255))}
+end
