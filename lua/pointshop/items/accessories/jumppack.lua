@@ -25,8 +25,3 @@ function ITEM:Move( pl, modifications, ply, data)
 		data:SetVelocity( data:GetVelocity() + Vector(0,0,100)*FrameTime() )
 	end
 end
-
--- This item doesn't have any modifications so we return an empty table
-function ITEM:SanitizeTable( modifications )
-	return {}
-end
