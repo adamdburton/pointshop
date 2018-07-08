@@ -10,8 +10,3 @@ end
 function ITEM:OnHolster(ply)
 	ply:SetModelScale(1, 1)
 end
-
--- This item doesn't have any modifications so we return an empty table
-function ITEM:SanitizeTable( modifications )
-	return {}
-end
