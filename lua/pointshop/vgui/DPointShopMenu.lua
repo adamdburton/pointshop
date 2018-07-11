@@ -247,19 +247,13 @@ function PANEL:Init()
 		
 		DScrollPanel:AddItem(ShopCategoryTabLayout)
 		
-		-- Create 50ms delay before loading the first item 
-		-- Then a 15ms delay between loading each concurrent item
-		local delay = 0.05		
-		for _, ITEM in pairs(items) do				
-			if ITEM.Category == CATEGORY.Name then			
-				timer.Simple(delay, function()
-					local model = vgui.Create('DPointShopItem')
-					model:SetData(ITEM)
-					model:SetSize(128, 128)
-					
-					ShopCategoryTabLayout:Add(model)				
-				end)					
-				delay = delay + 0.015
+		for _, ITEM in pairs(items) do
+			if ITEM.Category == CATEGORY.Name then
+				local model = vgui.Create('DPointShopItem')
+				model:SetData(ITEM)
+				model:SetSize(128, 128)
+				
+				ShopCategoryTabLayout:Add(model)
 			end
 		end
 
