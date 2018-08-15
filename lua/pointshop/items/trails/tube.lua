@@ -3,7 +3,9 @@ ITEM.Price = 150
 ITEM.Material = 'trails/tube.vmt'
 
 function ITEM:OnEquip(ply, modifications)
-	ply.TubeTrail = util.SpriteTrail(ply, 0, modifications.color, false, 15, 1, 4, 0.125, self.Material)
+	if !IsValid(ply.TubeTrail) then
+		ply.TubeTrail = util.SpriteTrail(ply, 0, modifications.color, false, 15, 1, 4, 0.125, self.Material)
+	end
 end
 
 function ITEM:OnHolster(ply)
