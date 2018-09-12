@@ -10,3 +10,8 @@ end
 function ITEM:OnHolster(ply)
 	ply:PS_RemoveClientsideModel(self.ID)
 end
+
+-- This item doesn't have any modifications so we return an empty table
+function ITEM:SanitizeTable( modifications )
+	return {}
+end
