@@ -14,6 +14,6 @@ end
 function ITEM:ModifyClientsideModel(ply, model, pos, ang)
 	pos = pos + (ang:Forward() * -3)
 	ang:RotateAroundAxis(ang:Up(), -90)
-	
+
 	return model, pos, ang
 end
