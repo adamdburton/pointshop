@@ -14,7 +14,7 @@ end
 function ITEM:ModifyClientsideModel(ply, model, pos, ang)
 	model:SetModelScale(0.5, 0)
 	pos = pos + (ang:Right() * 7) + (ang:Forward() * 6)
-	
+
 	return model, pos, ang
 end
 
@@ -24,9 +24,4 @@ function ITEM:Move( pl, modifications, ply, data)
 	if bit.band( bdata, IN_JUMP ) > 0 then
 		data:SetVelocity( data:GetVelocity() + Vector(0,0,100)*FrameTime() )
 	end
-end
-
--- This item doesn't have any modifications so we return an empty table
-function ITEM:SanitizeTable( modifications )
-	return {}
 end

@@ -16,12 +16,6 @@ function ITEM:ModifyClientsideModel(ply, model, pos, ang)
 	model:SetMaterial('models/weapons/v_stunbaton/w_shaft01a')
 	pos = pos + (ang:Forward() * -7) + (ang:Up() * 8)
 	ang:RotateAroundAxis(ang:Right(), 90)
-	
+
 	return model, pos, ang
-end
-
-
--- This item doesn't have any modifications so we return an empty table
-function ITEM:SanitizeTable( modifications )
-	return {}
 end

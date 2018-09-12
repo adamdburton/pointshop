@@ -14,11 +14,6 @@ end
 function ITEM:ModifyClientsideModel(ply, model, pos, ang)
 	model:SetModelScale(0.75, 0)
 	pos = pos + (ang:Forward() * -5) + (ang:Up() * -5)
-	
-	return model, pos, ang
-end
 
--- This item doesn't have any modifications so we return an empty table
-function ITEM:SanitizeTable( modifications )
-	return {}
+	return model, pos, ang
 end
