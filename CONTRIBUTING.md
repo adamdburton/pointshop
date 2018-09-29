@@ -17,6 +17,7 @@ We only accept issues that are bug reports or feature requests. Bugs must be iso
 
 ## Coding standards
 
+- No "Garry" syntax.
 - No semicolons
 - Four spaces for indentation, never tabs.
 - Use descriptive variable naming, lowerCamelCase for locals, UpperCamelCase for public.
