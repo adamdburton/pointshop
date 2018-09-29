@@ -3,6 +3,7 @@ ITEM.Price = 150
 ITEM.Material = 'trails/love.vmt'
 
 function ITEM:OnEquip(ply, modifications)
+	SafeRemoveEntity(ply.LoveTrail)
 	ply.LoveTrail = util.SpriteTrail(ply, 0, modifications.color, false, 15, 1, 4, 0.125, self.Material)
 end
 
