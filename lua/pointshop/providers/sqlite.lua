@@ -1,5 +1,5 @@
 local function QueryWithInsertOrIgnore(ply, query, ...)
-    local insertOrIgnoreStatement = [[INSERT OR IGNORE INTO `pointshop_data` VALUES ('%s', '0', '0', '[]');]]..query
+    local insertOrIgnoreStatement = [[INSERT OR IGNORE INTO `pointshop_data` VALUES ('%s', '0', '[]');]]..query
     local query = string.format(insertOrIgnoreStatement, ply:SteamID64(), ...)
     return sql.Query(query)
 end
@@ -45,7 +45,7 @@ function PROVIDER:GiveItem(ply, item_id, data)
     local tmp = table.Copy(ply.PS_Items)
     tmp[item_id] = data
 
-    local query = [[UPDATE `pointshop_data` SET items = '%s' WHERE sid64 = '%s']]
+    local query = [[UPDATE `pointshop_data` SET items = %s WHERE sid64 = '%s']]
     QueryWithInsertOrIgnore(ply, query, sql.SQLStr(util.TableToJSON(tmp)), ply:SteamID64())
 end
 
@@ -53,11 +53,11 @@ function PROVIDER:TakeItem(ply, item_id)
     local tmp = table.Copy(ply.PS_Items)
     tmp[item_id] = nil
 
-    local query = [[UPDATE `pointshop_data` SET items = '%s' WHERE sid64 = '%s']]
+    local query = [[UPDATE `pointshop_data` SET items = %s WHERE sid64 = '%s']]
     QueryWithInsertOrIgnore(ply, query, sql.SQLStr(util.TableToJSON(tmp)), ply:SteamID64())
 end
  
 function PROVIDER:SetData(ply, points, items)
-    local query = [[UPDATE `pointshop_data` SET points = '%s', items = '%s' WHERE sid64 = '%s']]
+    local query = [[UPDATE `pointshop_data` SET points = '%s', items = %s WHERE sid64 = '%s']]
     QueryWithInsertOrIgnore(ply, query, points, sql.SQLStr(util.TableToJSON(items)), ply:SteamID64())
 end
