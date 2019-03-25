@@ -9,14 +9,14 @@ function PANEL:Init()
 end
 
 function PANEL:Paint()
-	if ( !IsValid( self.Entity ) ) then return end
+	if ( not IsValid( self.Entity ) ) then return end
 
 	local x, y = self:LocalToScreen( 0, 0 )
 
 	self:LayoutEntity( self.Entity )
 
 	local ang = self.aLookAngle
-	if ( !ang ) then
+	if ( not ang ) then
 		ang = (self.vLookatPos-self.vCamPos):Angle()
 	end
 

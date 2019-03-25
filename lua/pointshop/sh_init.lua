@@ -29,7 +29,7 @@ function PS:ValidateItems(items)
 end
 
 function PS:ValidatePoints(points)
-	if type(points) != 'number' then return 0 end
+	if type(points) ~= 'number' then return 0 end
 	
 	return points >= 0 and points or 0
 end
