@@ -34,7 +34,7 @@ end)
 net.Receive('PS_SendPoints', function(length, ply)
 	local other = net.ReadEntity()
 	local points = math.Clamp(net.ReadInt(32), 0, 1000000)
-	
+
 	if not PS.Config.CanPlayersGivePoints then return end
 	if not points or points == 0 then return end
 	if not other or not IsValid(other) or not other:IsPlayer() then return end
@@ -52,7 +52,7 @@ net.Receive('PS_SendPoints', function(length, ply)
 
 	ply:PS_TakePoints(points)
 	ply:PS_Notify("You gave ", other:Nick(), " ", points, " of your ", PS.Config.PointsName, ".")
-		
+
 	other:PS_GivePoints(points)
 	other:PS_Notify(ply:Nick(), " gave you ", points, " of their ", PS.Config.PointsName, ".")
 
@@ -64,12 +64,12 @@ end)
 net.Receive('PS_GivePoints', function(length, ply)
 	local other = net.ReadEntity()
 	local points = net.ReadInt(32)
-	
+
 	if not PS.Config.AdminCanAccessAdminTab and not PS.Config.SuperAdminCanAccessAdminTab then return end
-	
+
 	local admin_allowed = PS.Config.AdminCanAccessAdminTab and ply:IsAdmin()
 	local super_admin_allowed = PS.Config.SuperAdminCanAccessAdminTab and ply:IsSuperAdmin()
-	
+
 	if (admin_allowed or super_admin_allowed) and other and points and IsValid(other) and other:IsPlayer() then
 		other:PS_GivePoints(points)
 		other:PS_Notify(ply:Nick(), ' gave you ', points, ' ', PS.Config.PointsName, '.')
@@ -79,12 +79,12 @@ end)
 net.Receive('PS_TakePoints', function(length, ply)
 	local other = net.ReadEntity()
 	local points = net.ReadInt(32)
-	
+
 	if not PS.Config.AdminCanAccessAdminTab and not PS.Config.SuperAdminCanAccessAdminTab then return end
-	
+
 	local admin_allowed = PS.Config.AdminCanAccessAdminTab and ply:IsAdmin()
 	local super_admin_allowed = PS.Config.SuperAdminCanAccessAdminTab and ply:IsSuperAdmin()
-	
+
 	if (admin_allowed or super_admin_allowed) and other and points and IsValid(other) and other:IsPlayer() then
 		other:PS_TakePoints(points)
 		other:PS_Notify(ply:Nick(), ' took ', points, ' ', PS.Config.PointsName, ' from you.')
@@ -94,12 +94,12 @@ end)
 net.Receive('PS_SetPoints', function(length, ply)
 	local other = net.ReadEntity()
 	local points = net.ReadInt(32)
-	
+
 	if not PS.Config.AdminCanAccessAdminTab and not PS.Config.SuperAdminCanAccessAdminTab then return end
-	
+
 	local admin_allowed = PS.Config.AdminCanAccessAdminTab and ply:IsAdmin()
 	local super_admin_allowed = PS.Config.SuperAdminCanAccessAdminTab and ply:IsSuperAdmin()
-	
+
 	if (admin_allowed or super_admin_allowed) and other and points and IsValid(other) and other:IsPlayer() then
 		other:PS_SetPoints(points)
 		other:PS_Notify(ply:Nick(), ' set your ', PS.Config.PointsName, ' to ', points, '.')
@@ -111,12 +111,12 @@ end)
 net.Receive('PS_GiveItem', function(length, ply)
 	local other = net.ReadEntity()
 	local item_id = net.ReadString()
-	
+
 	if not PS.Config.AdminCanAccessAdminTab and not PS.Config.SuperAdminCanAccessAdminTab then return end
-	
+
 	local admin_allowed = PS.Config.AdminCanAccessAdminTab and ply:IsAdmin()
 	local super_admin_allowed = PS.Config.SuperAdminCanAccessAdminTab and ply:IsSuperAdmin()
-	
+
 	if (admin_allowed or super_admin_allowed) and other and item_id and PS.Items[item_id] and IsValid(other) and other:IsPlayer() and not other:PS_HasItem(item_id) then
 		other:PS_GiveItem(item_id)
 	end
@@ -125,16 +125,16 @@ end)
 net.Receive('PS_TakeItem', function(length, ply)
 	local other = net.ReadEntity()
 	local item_id = net.ReadString()
-	
+
 	if not PS.Config.AdminCanAccessAdminTab and not PS.Config.SuperAdminCanAccessAdminTab then return end
-	
+
 	local admin_allowed = PS.Config.AdminCanAccessAdminTab and ply:IsAdmin()
 	local super_admin_allowed = PS.Config.SuperAdminCanAccessAdminTab and ply:IsSuperAdmin()
-	
+
 	if (admin_allowed or super_admin_allowed) and other and item_id and PS.Items[item_id] and IsValid(other) and other:IsPlayer() and other:PS_HasItem(item_id) then
 		-- holster it first without notificaiton
 		other.PS_Items[item_id].Equipped = false
-	
+
 		local ITEM = PS.Items[item_id]
 		ITEM:OnHolster(other)
 		other:PS_TakeItem(item_id)
@@ -142,16 +142,6 @@ net.Receive('PS_TakeItem', function(length, ply)
 end)
 
 -- hooks
-
--- Ability to use any button to open pointshop.
-hook.Add("PlayerButtonDown", "PS_ToggleKey", function(ply, btn)
-	if PS.Config.ShopKey and PS.Config.ShopKey ~= "" then
-		local psButton = _G["KEY_" .. string.upper(PS.Config.ShopKey)]
-		if psButton and psButton == btn then
-			ply:PS_ToggleMenu()
-		end
-	end
-end)
 
 hook.Add('PlayerSpawn', 'PS_PlayerSpawn', function(ply) ply:PS_PlayerSpawn() end)
 hook.Add('PlayerDeath', 'PS_PlayerDeath', function(ply) ply:PS_PlayerDeath() end)
@@ -196,22 +186,22 @@ end)
 
 concommand.Add('ps_clear_points', function(ply, cmd, args)
 	if IsValid(ply) then return end -- only allowed from server console
-	
+
 	for _, ply in pairs(player.GetAll()) do
 		ply:PS_SetPoints(0)
 	end
-	
+
 	sql.Query("DELETE FROM playerpdata WHERE infoid LIKE '%PS_Points%'")
 end)
 
 concommand.Add('ps_clear_items', function(ply, cmd, args)
 	if IsValid(ply) then return end -- only allowed from server console
-	
+
 	for _, ply in pairs(player.GetAll()) do
 		ply.PS_Items = {}
 		ply:PS_SendItems()
 	end
-	
+
 	sql.Query("DELETE FROM playerpdata WHERE infoid LIKE '%PS_Items%'")
 end)
 
@@ -261,9 +251,9 @@ function PS:LoadDataProvider()
 	PROVIDER = {}
 	PROVIDER.__index = {}
 	PROVIDER.ID = self.Config.DataProvider
-		
+
 	include(path)
-		
+
 	self.DataProvider = PROVIDER
 	PROVIDER = nil
 end

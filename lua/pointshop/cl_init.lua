@@ -27,7 +27,7 @@ function PS:ToggleMenu()
 		PS.ShopMenu = vgui.Create('DPointShopMenu')
 		PS.ShopMenu:SetVisible(false)
 	end
-	
+
 	if PS.ShopMenu:IsVisible() then
 		PS.ShopMenu:Hide()
 		gui.EnableScreenClicker(false)
@@ -39,10 +39,10 @@ end
 
 function PS:SetHoverItem(item_id)
 	local ITEM = PS.Items[item_id]
-	
+
 	if ITEM.Model then
 		self.HoverModel = item_id
-	
+
 		self.HoverModelClientsideModel = ClientsideModel(ITEM.Model, RENDERGROUP_OPAQUE)
 		self.HoverModelClientsideModel:SetNoDraw(true)
 	end
@@ -59,7 +59,7 @@ function PS:ShowColorChooser(item, modifications)
 	-- TODO: Do this
 	local chooser = vgui.Create('DPointShopColorChooser')
 	chooser:SetColor(modifications.color)
-	
+
 	chooser.OnChoose = function(color)
 		modifications.color = color
 		self:SendModifications(item.ID, modifications)
@@ -94,37 +94,37 @@ end)
 net.Receive('PS_AddClientsideModel', function(length)
 	local ply = net.ReadEntity()
 	local item_id = net.ReadString()
-	
+
 	if not IsValid(ply) then
 		if not invalidplayeritems[ply] then
 			invalidplayeritems[ply] = {}
 		end
-		
+
 		table.insert(invalidplayeritems[ply], item_id)
 		return
 	end
-	
+
 	ply:PS_AddClientsideModel(item_id)
 end)
 
 net.Receive('PS_RemoveClientsideModel', function(length)
 	local ply = net.ReadEntity()
 	local item_id = net.ReadString()
-	
+
 	if not ply or not IsValid(ply) or not ply:IsPlayer() then return end
-	
+
 	ply:PS_RemoveClientsideModel(item_id)
 end)
 
 net.Receive('PS_SendClientsideModels', function(length)
 	local itms = net.ReadTable()
-	
+
 	for ply, items in pairs(itms) do
 		if not IsValid(ply) then -- skip if the player isn't valid yet and add them to the table to sort out later
 			invalidplayeritems[ply] = items
 			continue
 		end
-			
+
 		for _, item_id in pairs(items) do
 			if PS.Items[item_id] then
 				ply:PS_AddClientsideModel(item_id)
@@ -148,7 +148,7 @@ hook.Add('Think', 'PS_Think', function()
 					ply:PS_AddClientsideModel(item_id)
 				end
 			end
-			
+
 			invalidplayeritems[ply] = nil
 		end
 	end
@@ -158,36 +158,36 @@ hook.Add('PostPlayerDraw', 'PS_PostPlayerDraw', function(ply)
 	if not ply:Alive() then return end
 	if ply == LocalPlayer() and GetViewEntity():GetClass() == 'player' and (GetConVar('thirdperson') and GetConVar('thirdperson'):GetInt() == 0) then return end
 	if not PS.ClientsideModels[ply] then return end
-	
+
 	for item_id, model in pairs(PS.ClientsideModels[ply]) do
 		if not PS.Items[item_id] then PS.ClientsideModel[ply][item_id] = nil continue end
-		
+
 		local ITEM = PS.Items[item_id]
-		
+
 		if not ITEM.Attachment and not ITEM.Bone then PS.ClientsideModel[ply][item_id] = nil continue end
-		
+
 		local pos = Vector()
 		local ang = Angle()
-		
+
 		if ITEM.Attachment then
 			local attach_id = ply:LookupAttachment(ITEM.Attachment)
 			if not attach_id then return end
-			
+
 			local attach = ply:GetAttachment(attach_id)
-			
+
 			if not attach then return end
-			
+
 			pos = attach.Pos
 			ang = attach.Ang
 		else
 			local bone_id = ply:LookupBone(ITEM.Bone)
 			if not bone_id then return end
-			
+
 			pos, ang = ply:GetBonePosition(bone_id)
 		end
-		
+
 		model, pos, ang = ITEM:ModifyClientsideModel(ply, model, pos, ang)
-		
+
 		model:SetPos(pos)
 		model:SetAngles(ang)
 
@@ -197,5 +197,20 @@ hook.Add('PostPlayerDraw', 'PS_PostPlayerDraw', function(ply)
 		model:DrawModel()
 		model:SetRenderOrigin()
 		model:SetRenderAngles()
+	end
+end)
+
+-- Ability to use any button to open pointshop.
+hook.Add("PlayerButtonDown", "PS_ToggleKey", function(ply, btn)
+	if not IsFirstTimePredicted() then return end
+	if not IsValid( ply ) or ply ~= LocalPlayer() then return end
+
+	local ShopKey = PS.Config.ShopKey
+	if ShopKey and ShopKey ~= "" then
+
+		local psButton = _G["KEY_" .. string.upper(ShopKey)]
+		if psButton and psButton == btn then
+			PS:ToggleMenu()
+		end
 	end
 end)
