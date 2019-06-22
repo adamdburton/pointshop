@@ -1,13 +1,13 @@
 --[[
 
 	PointShop MySQL Adapter by _Undefined
-	
+
 	Usage:
-	
+
 		First, make sure you have the MySQLOO module installed from:
 			http://www.facepunch.com/showthread.php?t=1220537
 			Installation instructions are in that thread.
-	
+
 		Then configure your MySQL details below and import the following tables into your database:
 
         DROP TABLE IF EXISTS `pointshop_data`;
@@ -17,15 +17,15 @@
          `items` text NOT NULL,
          PRIMARY KEY (`uniqueid`)
         ) ENGINE=MyISAM DEFAULT CHARSET=latin1
-		
+
 		MAKE SURE YOU ALLOW REMOTE ACCESS TO YOUR DATABASE FROM YOUR GMOD SERVERS IP ADDRESS.
-		
+
 		If you're upgrading from the old version, run the following SQL before starting your server and then remove the old tables (pointshop_points and pointshop_items):
-		
+
 			INSERT INTO `pointshop_data` SELECT `pointshop_points`.`uniqueid`, `points`, `items` FROM `pointshop_points` INNER JOIN `pointshop_items` ON `pointshop_items`.`uniqueid` = `pointshop_points`.`uniqueid`
-		
+
 		Once configured, change PS.Config.DataProvider = 'pdata' to PS.Config.DataProvider = 'mysql' in pointshop's sh_config.lua.
-	
+
 ]]--
 
 -- config, change these to match your setup
@@ -60,20 +60,20 @@ function PROVIDER:GetData(ply, callback)
     ]]
     qs = string.format(qs, ply:UniqueID())
     local q = db:query(qs)
-     
+
     function q:onSuccess(data)
         if #data > 0 then
             local row = data[1]
-         
+
             local points = row.points or 0
             local items = util.JSONToTable(row.items or '{}')
- 
+
             callback(points, items)
         else
             callback(0, {})
         end
     end
-     
+
     function q:onError(err, sql)
         if db:status() ~= mysqloo.DATABASE_CONNECTED then
             db:connect()
@@ -87,7 +87,7 @@ function PROVIDER:GetData(ply, callback)
         MsgN('PointShop MySQL: Query Failed: ' .. err .. ' (' .. sql .. ')')
         q:start()
     end
-     
+
     q:start()
 end
 
@@ -95,12 +95,12 @@ function PROVIDER:SetPoints(ply, points)
     local qs = [[
     INSERT INTO `pointshop_data` (uniqueid, points, items)
     VALUES ('%s', '%s', '[]')
-    ON DUPLICATE KEY UPDATE 
+    ON DUPLICATE KEY UPDATE
         points = VALUES(points)
     ]]
     qs = string.format(qs, ply:UniqueID(), points or 0)
     local q = db:query(qs)
-     
+
     function q:onError(err, sql)
         if db:status() ~= mysqloo.DATABASE_CONNECTED then
             db:connect()
@@ -113,7 +113,7 @@ function PROVIDER:SetPoints(ply, points)
         MsgN('PointShop MySQL: Query Failed: ' .. err .. ' (' .. sql .. ')')
         q:start()
     end
-     
+
     q:start()
 end
 
@@ -121,12 +121,12 @@ function PROVIDER:GivePoints(ply, points)
     local qs = [[
     INSERT INTO `pointshop_data` (uniqueid, points, items)
     VALUES ('%s', '%s', '[]')
-    ON DUPLICATE KEY UPDATE 
+    ON DUPLICATE KEY UPDATE
         points = points + VALUES(points)
     ]]
     qs = string.format(qs, ply:UniqueID(), points or 0)
     local q = db:query(qs)
-     
+
     function q:onError(err, sql)
         if db:status() ~= mysqloo.DATABASE_CONNECTED then
             db:connect()
@@ -139,7 +139,7 @@ function PROVIDER:GivePoints(ply, points)
         MsgN('PointShop MySQL: Query Failed: ' .. err .. ' (' .. sql .. ')')
         q:start()
     end
-     
+
     q:start()
 end
 
@@ -147,12 +147,12 @@ function PROVIDER:TakePoints(ply, points)
     local qs = [[
     INSERT INTO `pointshop_data` (uniqueid, points, items)
     VALUES ('%s', '%s', '[]')
-    ON DUPLICATE KEY UPDATE 
+    ON DUPLICATE KEY UPDATE
         points = points - VALUES(points)
     ]]
     qs = string.format(qs, ply:UniqueID(), points or 0)
     local q = db:query(qs)
-     
+
     function q:onError(err, sql)
         if db:status() ~= mysqloo.DATABASE_CONNECTED then
             db:connect()
@@ -165,7 +165,7 @@ function PROVIDER:TakePoints(ply, points)
         MsgN('PointShop MySQL: Query Failed: ' .. err .. ' (' .. sql .. ')')
         q:start()
     end
-     
+
     q:start()
 end
 
@@ -180,12 +180,12 @@ function PROVIDER:GiveItem(ply, item_id, data)
     local qs = [[
     INSERT INTO `pointshop_data` (uniqueid, points, items)
     VALUES ('%s', '0', '%s')
-    ON DUPLICATE KEY UPDATE 
+    ON DUPLICATE KEY UPDATE
         items = VALUES(items)
     ]]
     qs = string.format(qs, ply:UniqueID(), db:escape(util.TableToJSON(tmp)))
     local q = db:query(qs)
-     
+
     function q:onError(err, sql)
         if db:status() ~= mysqloo.DATABASE_CONNECTED then
             db:connect()
@@ -198,7 +198,7 @@ function PROVIDER:GiveItem(ply, item_id, data)
         MsgN('PointShop MySQL: Query Failed: ' .. err .. ' (' .. sql .. ')')
         q:start()
     end
-     
+
     q:start()
 end
 
@@ -209,12 +209,12 @@ function PROVIDER:TakeItem(ply, item_id)
     local qs = [[
     INSERT INTO `pointshop_data` (uniqueid, points, items)
     VALUES ('%s', '0', '%s')
-    ON DUPLICATE KEY UPDATE 
+    ON DUPLICATE KEY UPDATE
         items = VALUES(items)
     ]]
     qs = string.format(qs, ply:UniqueID(), db:escape(util.TableToJSON(tmp)))
     local q = db:query(qs)
-     
+
     function q:onError(err, sql)
         if db:status() ~= mysqloo.DATABASE_CONNECTED then
             db:connect()
@@ -227,21 +227,21 @@ function PROVIDER:TakeItem(ply, item_id)
         MsgN('PointShop MySQL: Query Failed: ' .. err .. ' (' .. sql .. ')')
         q:start()
     end
-     
+
     q:start()
 end
- 
+
 function PROVIDER:SetData(ply, points, items)
     local qs = [[
     INSERT INTO `pointshop_data` (uniqueid, points, items)
     VALUES ('%s', '%s', '%s')
-    ON DUPLICATE KEY UPDATE 
+    ON DUPLICATE KEY UPDATE
         points = VALUES(points),
         items = VALUES(items)
     ]]
     qs = string.format(qs, ply:UniqueID(), points or 0, db:escape(util.TableToJSON(items)))
     local q = db:query(qs)
-     
+
     function q:onError(err, sql)
         if db:status() ~= mysqloo.DATABASE_CONNECTED then
             db:connect()
@@ -254,6 +254,6 @@ function PROVIDER:SetData(ply, points, items)
         MsgN('PointShop MySQL: Query Failed: ' .. err .. ' (' .. sql .. ')')
         q:start()
     end
-     
+
     q:start()
 end

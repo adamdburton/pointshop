@@ -3,11 +3,11 @@ local PANEL = {}
 function PANEL:Init()
 	self:SetTitle("PointShop Give "..PS.Config.PointsName)
 	self:SetSize(300, 144)
-	
+
 	self:SetDeleteOnClose(true)
 	self:SetBackgroundBlur(true)
 	self:SetDrawOnTop(true)
-	
+
 	local l1 = vgui.Create("DLabel", self)
 	l1:SetText("Player:")
 	l1:Dock(TOP)
@@ -33,7 +33,7 @@ function PANEL:Init()
 	pointsselector:SetTall(24)
 	pointsselector:Dock(TOP)
 	self.pselector = pointsselector
-	
+
 	local btnlist = vgui.Create("DPanel", self)
 	btnlist:SetDrawBackground(false)
 	btnlist:DockMargin(0, 5, 0, 0)
@@ -51,7 +51,7 @@ function PANEL:Init()
 	done:DockMargin(0, 0, 4, 0)
 	done:Dock(RIGHT)
 	self.submit = done
-	
+
 	self.selected_uid = nil
 	pselect.OnSelect = function( s, idx, val, data )
 		if data then self.selected_uid = data end
@@ -79,20 +79,20 @@ end
 function PANEL:FillPlayers()
 	for _, ply in pairs(player.GetAll()) do
 		if ply == LocalPlayer() then continue end
-		
+
 		self.playerselect:AddChoice(ply:Nick(), ply:UniqueID())
 	end
 end
 
 function PANEL:Submit()
 	local other = false
-	
+
 	for _, ply in pairs(player.GetAll()) do
 		if tonumber(ply:UniqueID()) == tonumber(self.selected_uid) then
 			other = ply
 		end
 	end
-	
+
 	if not other then return end -- player could have left
 
 	net.Start('PS_SendPoints')
@@ -105,7 +105,7 @@ function PANEL:Update()
 	local disabled = false
 
 	if not self.selected_uid then disabled = true end
-	
+
 	if (self.pselector:GetValue() < 1) or (self.pselector:GetValue() > LocalPlayer():PS_GetPoints()) then
 		disabled = true
 		self.pselector:SetTextColor(Color(180, 0, 0, 255))

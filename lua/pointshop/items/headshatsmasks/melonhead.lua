@@ -13,6 +13,6 @@ end
 
 function ITEM:ModifyClientsideModel(ply, model, pos, ang)
 	pos = pos + (ang:Forward() * -2)
-	
+
 	return model, pos, ang
 end

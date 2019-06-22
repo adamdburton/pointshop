@@ -74,7 +74,7 @@ function PROVIDER:GetData(ply, callback)
 			if row then
 				local points = row.points
 				local items = util.JSONToTable(row.items or "{}")
-				
+
 				callback( points, items )
 			else
 				callback(0, {})

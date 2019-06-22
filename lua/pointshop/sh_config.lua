@@ -33,13 +33,13 @@ PS.Config.SortItemsBy = 'Name' -- How are items sorted? Set to 'Price' to sort b
 PS.Config.CalculateBuyPrice = function(ply, item)
 	-- You can do different calculations here to return how much an item should cost to buy.
 	-- There are a few examples below, uncomment them to use them.
-	
+
 	-- Everything half price for admins:
 	-- if ply:IsAdmin() then return math.Round(item.Price * 0.5) end
-	
+
 	-- 25% off for the 'donators' group
 	-- if ply:IsUserGroup('donators') then return math.Round(item.Price * 0.75) end
-	
+
 	return item.Price
 end
 

@@ -17,20 +17,20 @@ include("sh_player_extension.lua")
 
 function PS:ValidateItems(items)
 	if type(items) ~= 'table' then return {} end
-	
+
 	-- Remove any items that no longer exist
 	for item_id, item in pairs(items) do
 		if not self.Items[item_id] then
 			items[item_id] = nil
 		end
 	end
-	
+
 	return items
 end
 
 function PS:ValidatePoints(points)
 	if type(points) != 'number' then return 0 end
-	
+
 	return points >= 0 and points or 0
 end
 
@@ -42,7 +42,7 @@ function PS:FindCategoryByName(cat_name)
 			return cat
 		end
 	end
-	
+
 	return false
 end
 
@@ -57,16 +57,16 @@ end
 
 -- Loading
 
-function PS:LoadItems()	
+function PS:LoadItems()
 	local _, dirs = file.Find('pointshop/items/*', 'LUA')
 	local emptyfunc = function() end
 
 	for _, category in pairs(dirs) do
 		local f, _ = file.Find('pointshop/items/' .. category .. '/__category.lua', 'LUA')
-		
+
 		if #f > 0 then
 			CATEGORY = {}
-			
+
 			CATEGORY.Name = ''
 			CATEGORY.Icon = ''
 			CATEGORY.Order = 0
@@ -74,37 +74,37 @@ function PS:LoadItems()
 			CATEGORY.AllowedUserGroups = {}
 			CATEGORY.CanPlayerSee = function() return true end
 			CATEGORY.ModifyTab = emptyfunc
-			
+
 			if SERVER then AddCSLuaFile('pointshop/items/' .. category .. '/__category.lua') end
 			include('pointshop/items/' .. category .. '/__category.lua')
-			
+
 			if not PS.Categories[category] then
 				PS.Categories[category] = CATEGORY
 			end
-			
+
 			local files, _ = file.Find('pointshop/items/' .. category .. '/*.lua', 'LUA')
-			
+
 			for _, name in pairs(files) do
 				if name ~= '__category.lua' then
 					if SERVER then AddCSLuaFile('pointshop/items/' .. category .. '/' .. name) end
-					
+
 					ITEM = {}
-					
+
 					ITEM.__index = ITEM
 					ITEM.ID = string.gsub(string.lower(name), '.lua', '')
 					ITEM.Category = CATEGORY.Name
 					ITEM.Price = 0
-					
+
 					-- model and material are missing but there's no way around it, there's a check below anyway
-					
+
 					ITEM.AdminOnly = false
 					ITEM.AllowedUserGroups = {} -- this will fail the #ITEM.AllowedUserGroups test and continue
 					ITEM.SingleUse = false
 					ITEM.NoPreview = false
-					
+
 					ITEM.CanPlayerBuy = true
 					ITEM.CanPlayerSell = true
-					
+
 					ITEM.CanPlayerEquip = true
 					ITEM.CanPlayerHolster = true
 
@@ -116,9 +116,9 @@ function PS:LoadItems()
 					ITEM.ModifyClientsideModel = function(ITEM, ply, model, pos, ang)
 						return model, pos, ang
 					end
-					
+
 					include('pointshop/items/' .. category .. '/' .. name)
-					
+
 					if not ITEM.Name then
 						ErrorNoHalt("[POINTSHOP] Item missing name: " .. category .. '/' .. name .. "\n")
 						continue
@@ -129,16 +129,16 @@ function PS:LoadItems()
 						ErrorNoHalt("[POINTSHOP] Item missing model or material: " .. category .. '/' .. name .. "\n")
 						continue
 					end
-					
+
 					-- precache
-					
+
 					if ITEM.Model then
 						util.PrecacheModel(ITEM.Model)
 					end
-					
+
 					-- item hooks
 					local item = ITEM
-					
+
 					for prop, val in pairs(item) do
 						if type(val) == "function" then -- although this hooks every function, it doesn't matter because the non-hook functions will never get called
 							hook.Add(prop, 'PS_Item_' .. item.Name .. '_' .. prop, function(...)
@@ -150,13 +150,13 @@ function PS:LoadItems()
 							end)
 						end
 					end
-					
+
 					self.Items[ITEM.ID] = ITEM
-					
+
 					ITEM = nil
 				end
 			end
-			
+
 			CATEGORY = nil
 		end
 	end
