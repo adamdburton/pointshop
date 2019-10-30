@@ -3,6 +3,8 @@ local PANEL = {}
 local adminicon = Material("icon16/shield.png")
 local equippedicon = Material("icon16/eye.png")
 local groupicon = Material("icon16/group.png")
+local modifyicon = Material("icon16/color_wheel.png")
+local bodygroupicon = Material("icon16/cog.png")
 
 local canbuycolor = Color(0, 100, 0, 125)
 local cantbuycolor = Color(100, 0, 0, 125)
@@ -56,6 +58,14 @@ function PANEL:DoClick()
 			
 			menu:AddOption('Modify...', function()
 				PS.Items[self.Data.ID]:Modify(LocalPlayer().PS_Items[self.Data.ID].Modifiers)
+			end)
+		end
+        
+        if LocalPlayer():PS_HasItemEquipped(self.Data.ID) and self.Data.BodyGroup then
+			menu:AddSpacer()
+			
+			menu:AddOption('Body Groups...', function()
+                    PS.Items[self.Data.ID]:BodyGroup(LocalPlayer().PS_Items[self.Data.ID].Modifiers)
 			end)
 		end
 	end
@@ -155,6 +165,18 @@ function PANEL:PaintOver()
 		surface.SetDrawColor(Color(255, 255, 255, 255))
 		surface.DrawTexturedRect(5, self:GetTall() - self.InfoHeight - 5 - 16, 16, 16)
 	end
+    
+    if self.Data.Modify then
+		surface.SetMaterial(modifyicon)
+		surface.SetDrawColor(Color(255, 255, 255, 255))
+		surface.DrawTexturedRect(5, 5, 16, 16)
+	end
+    
+    if self.Data.BodyGroup then
+        surface.SetMaterial(bodygroupicon)
+		surface.SetDrawColor(Color(255, 255, 255, 255))
+		surface.DrawTexturedRect(5, 26, 16, 16)
+    end
 	
 	local points = PS.Config.CalculateBuyPrice(LocalPlayer(), self.Data)
 	

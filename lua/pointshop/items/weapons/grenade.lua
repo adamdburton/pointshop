@@ -5,7 +5,11 @@ ITEM.WeaponClass = 'weapon_frag'
 ITEM.SingleUse = true
 
 function ITEM:OnBuy(ply)
-	ply:Give(self.WeaponClass)
+    if (!ply:HasWeapon(self.WeaponClass)) then
+        ply:Give(self.WeaponClass)
+    else
+        ply:GiveAmmo(1, "Grenade", false)
+    end
 	ply:SelectWeapon(self.WeaponClass)
 end
 
