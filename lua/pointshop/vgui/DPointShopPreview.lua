@@ -2,7 +2,7 @@ local PANEL = {}
 
 function PANEL:Init()
 	self:SetModel(LocalPlayer():GetModel())
-	
+
 	local PrevMins, PrevMaxs = self.Entity:GetRenderBounds()
 	self:SetCamPos(PrevMins:Distance(PrevMaxs) * Vector(0.30, 0.30, 0.25) + Vector(0, 0, 15))
 	self:SetLookAt((PrevMaxs + PrevMins) / 2)
@@ -14,8 +14,18 @@ function PANEL:Paint()
 	local x, y = self:LocalToScreen( 0, 0 )
 
 	self:LayoutEntity( self.Entity )
-
-	local ang = self.aLookAngle
+    function self.Entity:GetPlayerColor() return LocalPlayer():GetPlayerColor() end
+    
+    self.Entity:SetSkin(LocalPlayer():GetSkin())
+    for i = 0, 20 do
+        if LocalPlayer():GetBodygroup(i) ~= nil then
+            self.Entity:SetBodygroup(i, LocalPlayer():GetBodygroup(i))
+        else
+            self.Entity:SetBodygroup(i, 0)
+        end
+    end
+	
+    local ang = self.aLookAngle
 	if ( !ang ) then
 		ang = (self.vLookatPos-self.vCamPos):Angle()
 	end
