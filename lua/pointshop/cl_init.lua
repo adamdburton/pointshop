@@ -65,6 +65,16 @@ function PS:ShowColorChooser(item, modifications)
 		self:SendModifications(item.ID, modifications)
 	end
 end
+function PS:ShowPlyColorChooser(item, modifications)
+	-- TODO: Do this
+	local chooser = vgui.Create('DPointShopColorChooser')
+	chooser:SetColor(modifications.plycolor)
+	
+	chooser.OnChoose = function(color)
+		modifications.plycolor = color
+		self:SendModifications(item.ID, modifications)
+	end
+end
 
 function PS:SendModifications(item_id, modifications)
 	net.Start('PS_ModifyItem')
